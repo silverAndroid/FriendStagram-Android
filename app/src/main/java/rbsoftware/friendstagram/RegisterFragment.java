@@ -27,6 +27,7 @@ public class RegisterFragment extends Fragment {
     private RegisterListener mListener;
 
     // UI references.
+    private View mRegisterFormView;
     private EditText mNameView;
     private EditText mEmailView;
     private EditText mUsernameView;
@@ -126,7 +127,7 @@ public class RegisterFragment extends Fragment {
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !Util.isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password) && !Util.isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;

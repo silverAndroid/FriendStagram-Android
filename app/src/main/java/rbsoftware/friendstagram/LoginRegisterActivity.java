@@ -2,9 +2,8 @@ package rbsoftware.friendstagram;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,15 +29,14 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
      */
     private UserLoginTask mAuthTask = null;
     private View mProgressView;
-    private View mLoginFormView;
-    private View mRegisterFormView;
+    private View mFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_register);
 
-        mLoginFormView = findViewById(R.id.login_form);
+        mFormView = findViewById(R.id.form);
         mProgressView = findViewById(R.id.login_progress);
 
         FragmentManager manager = getSupportFragmentManager();
@@ -96,19 +94,18 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
     /**
      * Shows the progress UI and hides the login form.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+        mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        mFormView.animate().setDuration(shortAnimTime).alpha(
                 show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
             }
         });
 
@@ -167,7 +164,8 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
             showProgress(false);
 
             if (success) {
-                finish();
+                Intent intent = new Intent(LoginRegisterActivity.this, MainActivity.class);
+                startActivity(intent);
             } else {
                 fragment.onWrongPassword();
             }
@@ -175,8 +173,6 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
 
         @Override
         protected void onCancelled() {
-            LoginFragment fragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id
-                    .fragment_container);
             showProgress(false);
         }
     }
