@@ -39,15 +39,6 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.T
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Set<RequestListener> requestListeners = new HashSet<>();
-        requestListeners.add(new RequestLoggingListener());
-        ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
-                .setDownsampleEnabled(true)
-                .setRequestListeners(requestListeners)
-                .build();
-        Fresco.initialize(this, config);
-        FLog.setMinimumLoggingLevel(FLog.VERBOSE);
-
         setContentView(R.layout.activity_main);
 
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottom_bar);
