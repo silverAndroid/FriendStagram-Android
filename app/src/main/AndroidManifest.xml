@@ -16,9 +16,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
         </activity>
-        <activity
-            android:name=".LoginRegisterActivity"
-            android:label="@string/title_activity_login">
+        <activity android:name=".LoginRegisterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
