@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -71,16 +70,7 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
         mFormView = findViewById(R.id.fragment_container);
         mProgressView = findViewById(R.id.login_progress);
 
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-
-        LoginFragment fragment = LoginFragment.newInstance();
-        transaction.add(R.id.fragment_container, fragment);
-        transaction.commit();
-
-        SimpleDraweeView background = (SimpleDraweeView) findViewById(R.id.background);
-        String backgroundURI = "res:/" + R.drawable.login_register_bg;
-        background.setImageURI(Uri.parse(backgroundURI));
+        loadLoginPage();
     }
 
     @Override
@@ -103,11 +93,15 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
         RegisterFragment fragment = RegisterFragment.newInstance();
         transaction.replace(R.id.fragment_container, fragment).addToBackStack("register");
         transaction.commit();
+
+        SimpleDraweeView background = (SimpleDraweeView) findViewById(R.id.background);
+        String backgroundURI = "res:/" + R.drawable.register_bg;
+        background.setImageURI(Uri.parse(backgroundURI));
     }
 
     @Override
     public void loadLoginPage() {
-        FragmentManager manager = getSupportFragmentManager();
+        final FragmentManager manager = getSupportFragmentManager();
         if (manager.getBackStackEntryCount() == 0) {
             FragmentTransaction transaction = manager.beginTransaction();
 
@@ -117,6 +111,23 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
         } else {
             manager.popBackStack();
         }
+
+        manager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if (manager.getBackStackEntryCount() == 0) {
+                    loadLoginBackground();
+                }
+            }
+        });
+
+        loadLoginBackground();
+    }
+
+    private void loadLoginBackground() {
+        SimpleDraweeView background = (SimpleDraweeView) findViewById(R.id.background);
+        String backgroundURI = "res:/" + R.drawable.login_bg;
+        background.setImageURI(Uri.parse(backgroundURI));
     }
 
     /**

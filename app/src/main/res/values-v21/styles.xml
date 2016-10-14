@@ -12,4 +12,9 @@
         <item name="android:colorButtonNormal">@color/colorLoginButton</item>
         <item name="android:textColor">#fff</item>
     </style>
+
+    <style name="AppTheme.RegisterButton" parent="Base.Widget.AppCompat.Button">
+        <item name="android:colorButtonNormal">@color/colorRegisterButton</item>
+        <item name="android:textColor">#fff</item>
+    </style>
 </resources>
