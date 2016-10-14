@@ -46,7 +46,8 @@
                 android:imeActionLabel="@string/action_log_in"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                android:textColor="#fff"/>
 
         </android.support.design.widget.TextInputLayout>
 
