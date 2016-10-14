@@ -56,7 +56,7 @@ public class ProfileAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return /*imageURLs.size() + */1;
+        return imageURLs.size() + 1;
     }
 
     @Override
