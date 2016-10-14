@@ -16,11 +16,6 @@ import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link LoginListener} interface
- * to handle interaction events.
- * Use the {@link LoginFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class LoginFragment extends Fragment {
 
@@ -32,10 +27,6 @@ public class LoginFragment extends Fragment {
 
     public LoginFragment() {
         // Required empty public constructor
-    }
-
-    public static LoginFragment newInstance() {
-        return new LoginFragment();
     }
 
     @Override
