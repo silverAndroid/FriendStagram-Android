@@ -3,13 +3,26 @@ package rbsoftware.friendstagram;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import com.facebook.common.logging.FLog;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
+import com.facebook.imagepipeline.listener.RequestListener;
+import com.facebook.imagepipeline.listener.RequestLoggingListener;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A login screen that offers login via username/password.
@@ -34,9 +47,28 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Set<RequestListener> requestListeners = new HashSet<>();
+        requestListeners.add(new RequestLoggingListener());
+        ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
+                .setDownsampleEnabled(true)
+                .setRequestListeners(requestListeners)
+                .build();
+        Fresco.initialize(this, config);
+        FLog.setMinimumLoggingLevel(FLog.VERBOSE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
+
         setContentView(R.layout.activity_login_register);
 
-        mFormView = findViewById(R.id.form);
+        mFormView = findViewById(R.id.fragment_container);
         mProgressView = findViewById(R.id.login_progress);
 
         FragmentManager manager = getSupportFragmentManager();
@@ -45,6 +77,10 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
         LoginFragment fragment = LoginFragment.newInstance();
         transaction.add(R.id.fragment_container, fragment);
         transaction.commit();
+
+        SimpleDraweeView background = (SimpleDraweeView) findViewById(R.id.background);
+        String backgroundURI = "res:/" + R.drawable.login_register_bg;
+        background.setImageURI(Uri.parse(backgroundURI));
     }
 
     @Override
@@ -61,33 +97,25 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
 
     @Override
     public void loadRegisterPage() {
-        removeCurrentFragment();
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
 
         RegisterFragment fragment = RegisterFragment.newInstance();
-        transaction.add(R.id.fragment_container, fragment);
+        transaction.replace(R.id.fragment_container, fragment).addToBackStack("register");
         transaction.commit();
     }
 
     @Override
     public void loadLoginPage() {
-        removeCurrentFragment();
         FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-
-        LoginFragment fragment = LoginFragment.newInstance();
-        transaction.add(R.id.fragment_container, fragment);
-        transaction.commit();
-    }
-
-    private void removeCurrentFragment() {
-        FragmentManager manager = getSupportFragmentManager();
-        Fragment fragment = manager.findFragmentById(R.id.fragment_container);
-
-        if (fragment != null) {
+        if (manager.getBackStackEntryCount() == 0) {
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.remove(fragment).commit();
+
+            LoginFragment fragment = LoginFragment.newInstance();
+            transaction.add(R.id.fragment_container, fragment);
+            transaction.commit();
+        } else {
+            manager.popBackStack();
         }
     }
 

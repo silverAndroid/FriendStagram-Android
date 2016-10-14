@@ -5,5 +5,11 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="AppTheme.LoginButton" parent="Base.Widget.AppCompat.Button">
+        <item name="android:colorButtonNormal">@color/colorLoginButton</item>
+        <item name="android:textColor">#fff</item>
     </style>
 </resources>
