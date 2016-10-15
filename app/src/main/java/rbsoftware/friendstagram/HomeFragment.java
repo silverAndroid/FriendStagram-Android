@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
 
 import rbsoftware.friendstagram.model.Post;
@@ -20,7 +19,6 @@ import rbsoftware.friendstagram.temp.RandomString;
  */
 public class HomeFragment extends Fragment {
 
-    private RecyclerView recyclerView;
     private String[] images = {
             "http://4.bp.blogspot.com/-F_6SfcFHKRE/UIjJKWfbt8I/AAAAAAAAA6w/AK5H_oGl9io/s1600/nature182.jpg",
             "http://rising.blackstar.com/wp-content/uploads/2012/08/95432c1c89bd11e1a9f71231382044a1_7-450x450.jpg",
@@ -68,7 +66,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rv);
 
         ArrayList<Post> posts = new ArrayList<>();
         for (int i = 0; i < images.length; i++) {
