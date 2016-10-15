@@ -42,9 +42,7 @@
                 <com.facebook.drawee.view.SimpleDraweeView
                     android:id="@+id/profile"
                     android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_height="90dp"/>
 
                 <TextView
                     android:id="@+id/num_posts"
