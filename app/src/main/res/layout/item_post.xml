@@ -6,41 +6,101 @@
               android:layout_marginBottom="16dp"
               android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/profile"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="10dp"
+            app:roundAsCircle="true"/>
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/profile"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/profile"
+            android:layout_toRightOf="@+id/profile"
+            android:textColor="#000"
+            android:textSize="18sp"/>
+    </RelativeLayout>
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="16dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/num_likes"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:drawableLeft="@drawable/heart"
+            android:drawablePadding="4dp"
+            android:text="3 likes"
+            android:textColor="@color/colorLike"
+            android:textSize="16sp"/>
 
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/profile"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_margin="10dp"
-                app:roundAsCircle="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="2 comments"
+            android:textSize="16sp"/>
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/profile"
-                android:layout_marginLeft="28dp"
-                android:layout_marginStart="28dp"
-                android:layout_marginTop="8dp"
-                android:layout_toEndOf="@+id/profile"
-                android:layout_toRightOf="@+id/profile"
-                android:textColor="#000"
-                android:textSize="18sp"/>
-        </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/lighter_gray"/>
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/image"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginTop="16dp"/>
+    <LinearLayout
+        style="?attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <Button
+            style="?attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/heart_outline"
+            android:drawablePadding="-15dp"
+            android:text="@string/like"
+            android:textColor="@android:color/darker_gray"/>
+
+        <Button
+            style="?attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/message_reply_text"
+            android:drawablePadding="-5dp"
+            android:text="@string/comment"
+            android:textColor="@android:color/darker_gray"/>
+
+        <Button
+            style="?attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/share"
+            android:drawablePadding="-10dp"
+            android:text="@string/send"
+            android:textColor="@android:color/darker_gray"/>
     </LinearLayout>
 </LinearLayout>
