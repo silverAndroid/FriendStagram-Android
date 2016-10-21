@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rbsoftware.friendstagram.databinding.HeaderProfileBinding;
+import rbsoftware.friendstagram.model.Post;
 import rbsoftware.friendstagram.model.User;
 
 /**
@@ -25,10 +26,12 @@ public class ProfileAdapter extends RecyclerView.Adapter {
     private static final int ITEM_VIEW_TYPE_ITEM = 1;
     private User user;
     private List<String> imageURLs;
+    private ImageClickListener listener;
 
-    public ProfileAdapter(User user, ArrayList<String> imageURLs) {
+    public ProfileAdapter(User user, ArrayList<String> imageURLs, ImageClickListener imageClickListener) {
         this.user = user;
         this.imageURLs = imageURLs;
+        listener = imageClickListener;
     }
 
     @Override
@@ -50,7 +53,15 @@ public class ProfileAdapter extends RecyclerView.Adapter {
             holder.itemView.setUser(user);
         } else {
             ItemViewHolder holder = (ItemViewHolder) parent;
-            holder.image.setImageURI(Uri.parse(imageURLs.get(position - 1)));
+            final String imageURL = imageURLs.get(position - 1);
+            holder.image.setImageURI(Uri.parse(imageURL));
+            holder.image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Post post = new Post(imageURL, "", user);
+                    listener.onImageClick(post);
+                }
+            });
         }
     }
 
@@ -86,5 +97,9 @@ public class ProfileAdapter extends RecyclerView.Adapter {
             this.itemView = itemView;
             this.itemView.executePendingBindings();
         }
+    }
+
+    interface ImageClickListener {
+        void onImageClick(Post post);
     }
 }

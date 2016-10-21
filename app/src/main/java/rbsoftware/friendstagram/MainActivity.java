@@ -18,22 +18,13 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 
-import com.facebook.common.logging.FLog;
-import com.facebook.common.util.UriUtil;
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.core.ImagePipelineConfig;
-import com.facebook.imagepipeline.listener.RequestListener;
-import com.facebook.imagepipeline.listener.RequestLoggingListener;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-import java.util.HashSet;
-import java.util.Set;
+import rbsoftware.friendstagram.model.Post;
 
-public class MainActivity extends AppCompatActivity implements ProfileFragment.ToolbarUpdateListener {
+public class MainActivity extends AppCompatActivity implements ProfileFragment.UpdateListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,22 +47,27 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.T
 
     private void showHomeFragment() {
         switchToolbar(false);
-        showFragment(new HomeFragment());
+        showFragment(new HomeFragment(), false);
     }
 
     private void showAccountFragment() {
         switchToolbar(true);
-        showFragment(new ProfileFragment());
+        showFragment(new ProfileFragment(), false);
     }
 
-    private void showFragment(Fragment fragment) {
+    private void showPictureFragment(Post post) {
+        switchToolbar(false);
+        showFragment(PictureFragment.newInstance(post), true);
+    }
 
+    private void showFragment(Fragment fragment, boolean addToStack) {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
 
         transaction.replace(R.id.container, fragment);
+        if (addToStack)
+            transaction.addToBackStack(null);
         transaction.commit();
-
     }
 
     @Override
@@ -127,5 +123,10 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.T
         numPosts.setText(postsString);
         numFollowers.setText(followersString);
         numFollowing.setText(followingString);
+    }
+
+    @Override
+    public void onImageClick(Post post) {
+        showPictureFragment(post);
     }
 }

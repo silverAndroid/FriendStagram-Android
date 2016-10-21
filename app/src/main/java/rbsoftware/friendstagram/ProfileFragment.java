@@ -12,9 +12,10 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import rbsoftware.friendstagram.model.Post;
 import rbsoftware.friendstagram.model.User;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements ProfileAdapter.ImageClickListener {
 
     private String[] images = {
             "http://4.bp.blogspot.com/-F_6SfcFHKRE/UIjJKWfbt8I/AAAAAAAAA6w/AK5H_oGl9io/s1600/nature182.jpg",
@@ -35,7 +36,7 @@ public class ProfileFragment extends Fragment {
             "http://s7.favim.com/610/151205/beach-boho-bright-instagram-Favim.com-3708977.jpg"
     };
 
-    private ToolbarUpdateListener mListener;
+    private UpdateListener mListener;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -50,7 +51,7 @@ public class ProfileFragment extends Fragment {
         User user = new User("vemea", "http://tracara.com/wp-content/uploads/2016/04/aleksandar-radojicic-i-aja-e1461054273916.jpg?fa0c3d");
         user.setName("Aleksandar");
         user.setDescription("Time present & time past are both perhaps present in time future");
-        final ProfileAdapter adapter = new ProfileAdapter(user, new ArrayList<>(Arrays.asList(images)));
+        final ProfileAdapter adapter = new ProfileAdapter(user, new ArrayList<>(Arrays.asList(images)), this);
 
         rv.setAdapter(adapter);
         final GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
@@ -67,11 +68,11 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ToolbarUpdateListener) {
-            mListener = (ToolbarUpdateListener) context;
+        if (context instanceof UpdateListener) {
+            mListener = (UpdateListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement ToolbarUpdateListener");
+                    + " must implement UpdateListener");
         }
     }
 
@@ -79,6 +80,11 @@ public class ProfileFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onImageClick(Post post) {
+        mListener.onImageClick(post);
     }
 
     /**
@@ -91,7 +97,8 @@ public class ProfileFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface ToolbarUpdateListener {
+    public interface UpdateListener {
         void update(int posts, int followers, int following);
+        void onImageClick(Post post);
     }
 }
