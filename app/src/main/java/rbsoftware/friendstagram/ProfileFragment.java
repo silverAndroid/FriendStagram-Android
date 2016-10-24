@@ -1,13 +1,23 @@
 package rbsoftware.friendstagram;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +27,7 @@ import rbsoftware.friendstagram.model.User;
 
 public class ProfileFragment extends Fragment implements ProfileAdapter.ImageClickListener {
 
+    private static ToolbarManipulator toolbarManipulator;
     private String[] images = {
             "http://4.bp.blogspot.com/-F_6SfcFHKRE/UIjJKWfbt8I/AAAAAAAAA6w/AK5H_oGl9io/s1600/nature182.jpg",
             "http://rising.blackstar.com/wp-content/uploads/2012/08/95432c1c89bd11e1a9f71231382044a1_7-450x450.jpg",
@@ -42,11 +53,26 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
         // Required empty public constructor
     }
 
+    public static ProfileFragment newInstance(ToolbarManipulator manipulator) {
+        ProfileFragment.toolbarManipulator = manipulator;
+        return new ProfileFragment();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbarManipulator.setToolbar(toolbar);
+
+        SimpleDraweeView backDrop = (SimpleDraweeView) view.findViewById(R.id.backdrop);
+        backDrop.setImageURI(Uri.parse("http://cdn.pcwallart.com/images/cool-backgrounds-hd-space-wallpaper-2.jpg"));
+
+        SimpleDraweeView profilePicture = (SimpleDraweeView) view.findViewById(R.id.profile);
+        profilePicture.setImageURI(Uri.parse("https://premium.wpmudev.org/forums/?bb_attachments=712464&bbat=47619&inline"));
+
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.rv);
         User user = new User("vemea", "http://tracara.com/wp-content/uploads/2016/04/aleksandar-radojicic-i-aja-e1461054273916.jpg?fa0c3d");
         user.setName("Aleksandar");
@@ -62,6 +88,8 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
             }
         });
         rv.setLayoutManager(layoutManager);
+
+        update(25, 34, 10, user.getProfilePictureURL(), view);
         return view;
     }
 
@@ -82,6 +110,34 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
         mListener = null;
     }
 
+    public void update(int posts, int followers, int following, String profilePictureURL, View view) {
+        TextView numPosts = (TextView) view.findViewById(R.id.num_posts);
+        TextView numFollowers = (TextView) view.findViewById(R.id.num_followers);
+        TextView numFollowing = (TextView) view.findViewById(R.id.num_following);
+        SimpleDraweeView profilePicture = (SimpleDraweeView) view.findViewById(R.id.profile);
+
+        SpannableString postsString = new SpannableString(posts + "\nPOSTS");
+        SpannableString followersString = new SpannableString(followers + "\nFOLLOWERS");
+        SpannableString followingString = new SpannableString(following + "\nFOLLOWING");
+        RelativeSizeSpan largerText = new RelativeSizeSpan(2f);
+        StyleSpan boldText = new StyleSpan(Typeface.BOLD);
+        int postsLength = Integer.toString(posts).length();
+        int followersLength = Integer.toString(followers).length();
+        int followingLength = Integer.toString(following).length();
+
+        postsString.setSpan(largerText, 0, postsLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        postsString.setSpan(boldText, 0, postsString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        followersString.setSpan(largerText, 0, followersLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        followersString.setSpan(boldText, 0, followersString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        followingString.setSpan(largerText, 0, followingLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        followingString.setSpan(boldText, 0, followingString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+
+        numPosts.setText(postsString);
+        numFollowers.setText(followersString);
+        numFollowing.setText(followingString);
+        profilePicture.setImageURI(Uri.parse(profilePictureURL));
+    }
+
     @Override
     public void onImageClick(Post post) {
         mListener.onImageClick(post);
@@ -98,7 +154,6 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface UpdateListener {
-        void update(int posts, int followers, int following);
         void onImageClick(Post post);
     }
 }

@@ -36,5 +36,4 @@ public class PictureFragment extends Fragment {
         picture.init(post);
         return view;
     }
-
 }

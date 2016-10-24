@@ -1,10 +1,8 @@
 package rbsoftware.friendstagram;
 
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,16 +13,14 @@ import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.view.Menu;
-import android.view.View;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import rbsoftware.friendstagram.model.Post;
 
-public class MainActivity extends AppCompatActivity implements ProfileFragment.UpdateListener {
+public class MainActivity extends AppCompatActivity implements ProfileFragment.UpdateListener, ToolbarManipulator {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +42,14 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
     }
 
     private void showHomeFragment() {
-        switchToolbar(false);
-        showFragment(new HomeFragment(), false);
+        showFragment(HomeFragment.newInstance(this), false);
     }
 
     private void showAccountFragment() {
-        switchToolbar(true);
-        showFragment(new ProfileFragment(), false);
+        showFragment(ProfileFragment.newInstance(this), false);
     }
 
     private void showPictureFragment(Post post) {
-        switchToolbar(false);
         showFragment(PictureFragment.newInstance(post), true);
     }
 
@@ -77,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
         return true;
     }
 
-    private void switchToolbar(boolean isScrollingFragment) {
+    /*private void switchToolbar(boolean isScrollingFragment) {
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         collapsingToolbar.setVisibility(isScrollingFragment ? View.VISIBLE : View.GONE);
         Toolbar toolbarRegular = (Toolbar) findViewById(R.id.toolbar_regular);
@@ -96,37 +89,16 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
             setSupportActionBar(toolbarRegular);
         }
         getSupportActionBar().setDisplayShowTitleEnabled(!isScrollingFragment);
-    }
-
-    @Override
-    public void update(int posts, int followers, int following) {
-        TextView numPosts = (TextView) findViewById(R.id.num_posts);
-        TextView numFollowers = (TextView) findViewById(R.id.num_followers);
-        TextView numFollowing = (TextView) findViewById(R.id.num_following);
-
-        SpannableString postsString = new SpannableString(posts + "\nPOSTS");
-        SpannableString followersString = new SpannableString(followers + "\nFOLLOWERS");
-        SpannableString followingString = new SpannableString(following + "\nFOLLOWING");
-        RelativeSizeSpan largerText = new RelativeSizeSpan(2f);
-        StyleSpan boldText = new StyleSpan(Typeface.BOLD);
-        int postsLength = Integer.toString(posts).length();
-        int followersLength = Integer.toString(followers).length();
-        int followingLength = Integer.toString(following).length();
-
-        postsString.setSpan(largerText, 0, postsLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-//        postsString.setSpan(boldText, 0, postsString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        followersString.setSpan(largerText, 0, followersLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-//        followersString.setSpan(boldText, 0, followersString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        followingString.setSpan(largerText, 0, followingLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-//        followingString.setSpan(boldText, 0, followingString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-
-        numPosts.setText(postsString);
-        numFollowers.setText(followersString);
-        numFollowing.setText(followingString);
-    }
+    }*/
 
     @Override
     public void onImageClick(Post post) {
         showPictureFragment(post);
+    }
+
+    @Override
+    public void setToolbar(Toolbar toolbar) {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 }
