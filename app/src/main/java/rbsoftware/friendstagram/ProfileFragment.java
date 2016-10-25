@@ -65,6 +65,7 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(0);
         toolbarManipulator.setToolbar(toolbar);
 
         SimpleDraweeView backDrop = (SimpleDraweeView) view.findViewById(R.id.backdrop);
@@ -120,17 +121,13 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
         SpannableString followersString = new SpannableString(followers + "\nFOLLOWERS");
         SpannableString followingString = new SpannableString(following + "\nFOLLOWING");
         RelativeSizeSpan largerText = new RelativeSizeSpan(2f);
-        StyleSpan boldText = new StyleSpan(Typeface.BOLD);
         int postsLength = Integer.toString(posts).length();
         int followersLength = Integer.toString(followers).length();
         int followingLength = Integer.toString(following).length();
 
         postsString.setSpan(largerText, 0, postsLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-//        postsString.setSpan(boldText, 0, postsString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         followersString.setSpan(largerText, 0, followersLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-//        followersString.setSpan(boldText, 0, followersString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         followingString.setSpan(largerText, 0, followingLength, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-//        followingString.setSpan(boldText, 0, followingString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
         numPosts.setText(postsString);
         numFollowers.setText(followersString);
