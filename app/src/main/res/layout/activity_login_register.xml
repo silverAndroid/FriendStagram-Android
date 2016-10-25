@@ -13,7 +13,7 @@
         android:tint="@color/translucent_overlay_2"
         fresco:fadeDuration="@android:integer/config_mediumAnimTime"/>
 
-    <TextView
+    <rbsoftware.friendstagram.workarounds.AppNameTextView
         android:id="@+id/app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
