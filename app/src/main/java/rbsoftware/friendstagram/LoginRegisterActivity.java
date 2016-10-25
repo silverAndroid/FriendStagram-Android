@@ -74,10 +74,6 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
         mFormView = findViewById(R.id.fragment_container);
         mProgressView = findViewById(R.id.login_progress);
 
-        TextView appName = (TextView) findViewById(R.id.app_name);
-        Typeface font = Typeface.createFromAsset(getAssets(), "billabong.ttf");
-        appName.setTypeface(font);
-
         loadLoginPage();
     }
 
