@@ -63,13 +63,6 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
         transaction.commit();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
-        return true;
-    }
-
     /*private void switchToolbar(boolean isScrollingFragment) {
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         collapsingToolbar.setVisibility(isScrollingFragment ? View.VISIBLE : View.GONE);
