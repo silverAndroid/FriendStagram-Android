@@ -225,6 +225,7 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
             if (success) {
                 Intent intent = new Intent(LoginRegisterActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             } else {
                 fragment.onWrongPassword();
             }
