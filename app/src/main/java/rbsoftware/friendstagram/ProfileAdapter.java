@@ -43,7 +43,7 @@ public class ProfileAdapter extends RecyclerView.Adapter {
         }
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_image, parent, false);
-        return new ItemViewHolder(view);
+        return new PictureViewHolder(view);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ProfileAdapter extends RecyclerView.Adapter {
             HeaderViewHolder holder = (HeaderViewHolder) parent;
             holder.itemView.setUser(user);
         } else {
-            ItemViewHolder holder = (ItemViewHolder) parent;
+            PictureViewHolder holder = (PictureViewHolder) parent;
             final String imageURL = imageURLs.get(position - 1);
             holder.image.setImageURI(Uri.parse(imageURL));
             holder.image.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +67,7 @@ public class ProfileAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return imageURLs.size() + 1;
+        return imageURLs.size() + (user != null ? 1 : 0);
     }
 
     @Override
@@ -76,19 +76,10 @@ public class ProfileAdapter extends RecyclerView.Adapter {
     }
 
     boolean isHeader(int position) {
-        return position == 0;
+        return user != null && position == 0;
     }
 
-    private class ItemViewHolder extends RecyclerView.ViewHolder {
-        SimpleDraweeView image;
-
-        ItemViewHolder(View itemView) {
-            super(itemView);
-            image = (SimpleDraweeView) itemView.findViewById(R.id.image);
-        }
-    }
-
-    class HeaderViewHolder extends RecyclerView.ViewHolder {
+    private class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         private final HeaderProfileBinding itemView;
 
