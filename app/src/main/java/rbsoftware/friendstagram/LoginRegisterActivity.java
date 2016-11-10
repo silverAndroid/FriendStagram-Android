@@ -51,15 +51,6 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Set<RequestListener> requestListeners = new HashSet<>();
-        requestListeners.add(new RequestLoggingListener());
-        ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
-                .setDownsampleEnabled(true)
-                .setRequestListeners(requestListeners)
-                .build();
-        Fresco.initialize(this, config);
-        FLog.setMinimumLoggingLevel(FLog.VERBOSE);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
