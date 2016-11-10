@@ -1,6 +1,5 @@
 package rbsoftware.friendstagram;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
@@ -8,12 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
-import android.view.Menu;
-import android.widget.TextView;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -36,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
                     showHomeFragment();
                 } else if (tabId == R.id.tab_account) {
                     showAccountFragment();
+                } else if (tabId == R.id.tab_camera) {
+                    showPicturesFragment();
                 }
             }
         });
@@ -49,8 +44,8 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
         showFragment(ProfileFragment.newInstance(this), false);
     }
 
-    private void showPictureFragment(Post post) {
-        showFragment(PictureFragment.newInstance(post), true);
+    private void showPicturesFragment() {
+        showFragment(PicturesFragment.newInstance(), true);
     }
 
     private void showFragment(Fragment fragment, boolean addToStack) {
@@ -86,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
 
     @Override
     public void onImageClick(Post post) {
-        showPictureFragment(post);
+        showPicturesFragment();
     }
 
     @Override

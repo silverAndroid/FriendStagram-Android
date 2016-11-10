@@ -5,6 +5,10 @@
         id="@+id/tab_home"
         title="@string/tab_home" />
     <tab
+        icon="@drawable/ic_camera"
+        id="@+id/tab_camera"
+        title="Camera"/>
+    <tab
         icon="@drawable/account"
         id="@+id/tab_account"
         title="@string/tab_account" />
