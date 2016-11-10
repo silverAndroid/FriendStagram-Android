@@ -13,7 +13,7 @@ import rbsoftware.friendstagram.model.Post;
  * Created by silver_android on 07/10/16.
  */
 
-public class HomeAdapter extends RecyclerView.Adapter<PictureViewHolder> {
+public class HomeAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     private ArrayList<Post> posts;
 
@@ -22,13 +22,13 @@ public class HomeAdapter extends RecyclerView.Adapter<PictureViewHolder> {
     }
 
     @Override
-    public PictureViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
-        return new PictureViewHolder(view);
+        return new PostViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(PictureViewHolder holder, int position) {
+    public void onBindViewHolder(PostViewHolder holder, int position) {
         Post post = posts.get(position);
         holder.init(post);
     }

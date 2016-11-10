@@ -18,13 +18,13 @@ import rbsoftware.friendstagram.model.Post;
  * Created by silver_android on 17/10/16.
  */
 
-class PictureViewHolder extends RecyclerView.ViewHolder {
+class PostViewHolder extends RecyclerView.ViewHolder {
 
     SimpleDraweeView profilePicture;
     SimpleDraweeView image;
     TextView username;
 
-    PictureViewHolder(View itemView) {
+    PostViewHolder(View itemView) {
         super(itemView);
         profilePicture = (SimpleDraweeView) itemView.findViewById(R.id.profile);
         image = (SimpleDraweeView) itemView.findViewById(R.id.image);

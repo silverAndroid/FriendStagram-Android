@@ -13,17 +13,17 @@ import rbsoftware.friendstagram.model.Post;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PictureFragment extends Fragment {
+public class PostFragment extends Fragment {
 
     private static Post post;
 
-    public PictureFragment() {
+    public PostFragment() {
         // Required empty public constructor
     }
 
-    public static PictureFragment newInstance(Post post) {
-        PictureFragment.post = post;
-        return new PictureFragment();
+    public static PostFragment newInstance(Post post) {
+        PostFragment.post = post;
+        return new PostFragment();
     }
 
     @Override
@@ -32,7 +32,7 @@ public class PictureFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_picture, container, false);
         View pictureView = view.findViewById(R.id.picture);
-        PictureViewHolder picture = new PictureViewHolder(pictureView);
+        PostViewHolder picture = new PostViewHolder(pictureView);
         picture.init(post);
         return view;
     }
