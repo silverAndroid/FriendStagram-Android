@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 public class PicturesAdapter extends RecyclerView.Adapter<PictureViewHolder> {
 
+    private static final String TAG = "PicturesAdapter";
     private ArrayList<String> imageURLs;
 
     public PicturesAdapter(Cursor cursor) {
@@ -40,7 +41,8 @@ public class PicturesAdapter extends RecyclerView.Adapter<PictureViewHolder> {
     }
 
     public void changeCursor(Cursor cursor) {
-        imageURLs = new ArrayList<>();
+        if (cursor == null || imageURLs == null)
+            imageURLs = new ArrayList<>();
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 imageURLs.add("file://" + cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)));
