@@ -2,6 +2,7 @@ package rbsoftware.friendstagram;
 
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,8 +12,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +32,10 @@ import com.karumi.dexter.listener.single.PermissionListener;
  * A simple {@link Fragment} subclass.
  */
 public class PicturesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int EXTERNAL_STORAGE_ID = 0;
+    private static final int INTERNAL_STORAGE_ID = 1;
+    private static final String TAG = "PicturesFragment";
 
     private RecyclerView recyclerView;
     private PicturesAdapter adapter;
@@ -49,7 +56,7 @@ public class PicturesFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv);
@@ -59,34 +66,62 @@ public class PicturesFragment extends Fragment implements LoaderManager.LoaderCa
             recyclerView.setAdapter(adapter);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            Dexter.checkPermission(new PermissionListener() {
-                @Override
-                public void onPermissionGranted(PermissionGrantedResponse response) {
-                    getLoaderManager().initLoader(10, null, PicturesFragment.this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                Dexter.checkPermission(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        Log.d(TAG, "onPermissionGranted: Permission granted");
+                        getLoaderManager().initLoader(EXTERNAL_STORAGE_ID, null, PicturesFragment.this);
+                        getLoaderManager().restartLoader(INTERNAL_STORAGE_ID, null, PicturesFragment.this);
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        Log.d(TAG, "onPermissionDenied: Permission Denied");
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, final PermissionToken token) {
+                        Log.d(TAG, "onPermissionRationaleShouldBeShown: Permission Rationale showing");
+                        new AlertDialog.Builder(getContext())
+                                .setTitle("Permission Request")
+                                .setMessage("Need access to your photos so you can choose which images to post")
+                                .setPositiveButton("Allow", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        token.continuePermissionRequest();
+                                    }
+                                })
+                                .setNegativeButton("Deny", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        token.cancelPermissionRequest();
+                                    }
+                                }).show();
+                    }
+                }, Manifest.permission.READ_EXTERNAL_STORAGE);
+            } catch (IllegalStateException e) {
+                if (e.getMessage().contains("Only one Dexter request at a time")) {
+                    Log.d(TAG, "onViewCreated: Already asked");
+                } else {
+                    throw e;
                 }
-
-                @Override
-                public void onPermissionDenied(PermissionDeniedResponse response) {
-
-                }
-
-                @Override
-                public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-
-                }
-            }, Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
         }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getContext(), MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images
-                .ImageColumns._ID, MediaStore.Images.ImageColumns.DATA}, null, null, MediaStore.Images.ImageColumns._ID + " DESC");
+        Log.d(TAG, "onCreateLoader: Loader ID = " + Integer.toString(id));
+        return new CursorLoader(getContext(), id == EXTERNAL_STORAGE_ID ? MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI : MediaStore
+                .Images.Thumbnails.INTERNAL_CONTENT_URI, new String[]{MediaStore.Images.ImageColumns._ID, MediaStore.Images
+                .ImageColumns.DATA}, null, null, MediaStore.Images.ImageColumns._ID + " DESC");
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.d(TAG, "onLoadFinished: cursor: " + (data == null ? "null" : Integer.toString(data.getCount()) + " elements"));
         if (adapter == null) {
             recyclerView.setAdapter(adapter = new PicturesAdapter(data));
         } else {
@@ -97,6 +132,7 @@ public class PicturesFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         if (adapter != null) {
+            Log.i(TAG, "onLoaderReset: Resetting loader");
             adapter.changeCursor(null);
         }
     }
