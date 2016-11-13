@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,7 +63,12 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        return inflater.inflate(R.layout.fragment_profile, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(0);
@@ -91,7 +97,6 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
         rv.setLayoutManager(layoutManager);
 
         update(25, 34, 10, user.getProfilePictureURL(), view);
-        return view;
     }
 
     @Override

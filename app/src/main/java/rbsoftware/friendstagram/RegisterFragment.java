@@ -2,6 +2,7 @@ package rbsoftware.friendstagram;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -41,7 +42,12 @@ public class RegisterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_register, container, false);
+        return inflater.inflate(R.layout.fragment_register, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         mNameView = (EditText) view.findViewById(R.id.name);
         mEmailView = (EditText) view.findViewById(R.id.email);
@@ -76,7 +82,6 @@ public class RegisterFragment extends Fragment {
                 attemptRegister();
             }
         });
-        return view;
     }
 
     @Override

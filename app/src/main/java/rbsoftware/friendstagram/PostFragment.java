@@ -2,6 +2,7 @@ package rbsoftware.friendstagram;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,10 +31,15 @@ public class PostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_picture, container, false);
+        return inflater.inflate(R.layout.fragment_picture, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         View pictureView = view.findViewById(R.id.picture);
         PostViewHolder picture = new PostViewHolder(pictureView);
         picture.init(post);
-        return view;
     }
 }
