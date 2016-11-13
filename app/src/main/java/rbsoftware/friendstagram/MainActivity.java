@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
     }
 
     private void showPicturesFragment() {
-        showFragment(PicturesFragment.newInstance(), true);
+        showFragment(PicturesFragment.newInstance(), false);
     }
 
     private void showFragment(Fragment fragment, boolean addToStack) {
@@ -57,27 +57,6 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
             transaction.addToBackStack(null);
         transaction.commit();
     }
-
-    /*private void switchToolbar(boolean isScrollingFragment) {
-        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        collapsingToolbar.setVisibility(isScrollingFragment ? View.VISIBLE : View.GONE);
-        Toolbar toolbarRegular = (Toolbar) findViewById(R.id.toolbar_regular);
-        toolbarRegular.setVisibility(isScrollingFragment ? View.GONE : View.VISIBLE);
-        if (isScrollingFragment) {
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-
-            SimpleDraweeView backDrop = (SimpleDraweeView) findViewById(R.id.backdrop);
-            backDrop.setImageURI(Uri.parse("http://cdn.pcwallart.com/images/cool-backgrounds-hd-space-wallpaper-2.jpg"));
-
-            SimpleDraweeView profilePicture = (SimpleDraweeView) findViewById(R.id.profile);
-            profilePicture.setImageURI(Uri.parse("https://premium.wpmudev.org/forums/?bb_attachments=712464&bbat=47619&inline"));
-            update(34, 29, 22);
-        } else {
-            setSupportActionBar(toolbarRegular);
-        }
-        getSupportActionBar().setDisplayShowTitleEnabled(!isScrollingFragment);
-    }*/
 
     @Override
     public void onImageClick(Post post) {
