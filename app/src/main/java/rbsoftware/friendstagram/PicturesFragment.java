@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.karumi.dexter.Dexter;
@@ -128,15 +127,28 @@ public class PicturesFragment extends Fragment implements LoaderManager.LoaderCa
                     throw e;
                 }
             }
+        } else {
+            getLoaderManager().initLoader(EXTERNAL_STORAGE_ID, null, PicturesFragment.this);
+            getLoaderManager().restartLoader(INTERNAL_STORAGE_ID, null, PicturesFragment.this);
         }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Log.d(TAG, "onCreateLoader: Loader ID = " + Integer.toString(id));
-        return new CursorLoader(getContext(), id == EXTERNAL_STORAGE_ID ? MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI : MediaStore
-                .Images.Thumbnails.INTERNAL_CONTENT_URI, new String[]{MediaStore.Images.ImageColumns._ID, MediaStore.Images
-                .ImageColumns.DATA}, null, null, MediaStore.Images.ImageColumns._ID + " DESC");
+        return new CursorLoader(
+                getContext(),
+                id == EXTERNAL_STORAGE_ID ?
+                        MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI :
+                        MediaStore.Images.Thumbnails.INTERNAL_CONTENT_URI,
+                new String[] {
+                        MediaStore.Images.ImageColumns._ID,
+                        MediaStore.Images.ImageColumns.DATA
+                },
+                null,
+                null,
+                MediaStore.Images.ImageColumns._ID + " DESC"
+        );
     }
 
     @Override
