@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -14,17 +13,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.TextView;
 
-import com.facebook.common.logging.FLog;
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.core.ImagePipelineConfig;
-import com.facebook.imagepipeline.listener.RequestListener;
-import com.facebook.imagepipeline.listener.RequestLoggingListener;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * A login screen that offers login via username/password.
@@ -95,7 +85,7 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
         registerFragment = fragment;
 
         SimpleDraweeView background = (SimpleDraweeView) findViewById(R.id.background);
-        String backgroundURI = "res:/" + R.drawable.register_bg;
+        String backgroundURI = "res:/" + R.drawable.bg_register;
         background.setImageURI(Uri.parse(backgroundURI));
     }
 
@@ -115,7 +105,7 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
 
     private void loadLoginBackground() {
         SimpleDraweeView background = (SimpleDraweeView) findViewById(R.id.background);
-        String backgroundURI = "res:/" + R.drawable.login_bg;
+        String backgroundURI = "res:/" + R.drawable.bg_login;
         background.setImageURI(Uri.parse(backgroundURI));
     }
 
