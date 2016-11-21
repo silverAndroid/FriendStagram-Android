@@ -23,4 +23,6 @@
     <string name="like">Like</string>
     <string name="comment">Comment</string>
     <string name="send">Send</string>
+    <string name="description_search">Search</string>
+    <string name="description_notifications">Notifications</string>
 </resources>
