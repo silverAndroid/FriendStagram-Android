@@ -8,7 +8,7 @@
     <color name="colorLoginButton">#FF8A80</color>
     <color name="colorRegisterButton">#80D8FF</color>
     <color name="colorLike">#D50000</color>
-    <color name="translucent_overlay">#66000000</color>
-    <color name="translucent_overlay_2">#44000000</color>
-    <color name="lighter_gray">#DDD</color>
+    <color name="colorTranslucentOverlay">#66000000</color>
+    <color name="colorTranslucentOverlay2">#44000000</color>
+    <color name="colorLighterGray">#DDD</color>
 </resources>
