@@ -10,7 +10,7 @@
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:tint="@color/translucent_overlay_2"
+        android:tint="@color/colorTranslucentOverlay2"
         fresco:fadeDuration="@android:integer/config_mediumAnimTime"/>
 
     <rbsoftware.friendstagram.workarounds.AppNameTextView
