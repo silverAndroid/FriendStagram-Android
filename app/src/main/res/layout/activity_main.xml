@@ -10,14 +10,14 @@
 
     <include layout="@layout/content_main"/>
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_nav"
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_gravity="bottom"
-        app:itemBackground="@color/colorPrimary"
-        app:itemIconTint="@drawable/selected_item"
-        app:itemTextColor="@drawable/selected_item"
-        app:menu="@menu/bottom_bar_tabs"/>
+        android:background="@color/colorPrimary"
+        app:bb_tabXmlResource="@xml/bottom_bar_tabs"
+        app:bb_behavior="shifting"
+        app:bb_activeTabColor="@color/colorAccent"/>
 
 </android.support.design.widget.CoordinatorLayout>

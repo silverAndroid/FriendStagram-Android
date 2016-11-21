@@ -1,6 +1,7 @@
 package rbsoftware.friendstagram;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -8,11 +9,20 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabSelectListener;
 
 import rbsoftware.friendstagram.model.Post;
 
 public class MainActivity extends AppCompatActivity implements ProfileFragment.UpdateListener, ToolbarManipulator {
+
+    private static final String KEY_CURRENT_TAB = "current_tab";
+    private static final String TAG = "MainActivity";
+
+    private int currentTab = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,41 +30,76 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
 
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottom_nav);
-        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottom_bar);
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
+            public void onTabSelected(@IdRes int tabId) {
+
+                switch (tabId) {
                     case R.id.tab_home:
                         showHomeFragment();
-                        return true;
-                    case R.id.tab_account:
-                        showAccountFragment();
-                        return true;
+                        break;
                     case R.id.tab_camera:
                         showCameraFragment();
-                        return true;
+                        break;
+                    case R.id.tab_account:
+                        showAccountFragment();
+                        break;
                 }
-                return false;
             }
         });
-        showHomeFragment();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showFragment(currentTab);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(KEY_CURRENT_TAB, currentTab);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        currentTab = savedInstanceState.getInt(KEY_CURRENT_TAB, 0);
+        Log.d(TAG, "onRestoreInstanceState: currentTab = " + currentTab);
     }
 
     private void showHomeFragment() {
+        currentTab = 0;
         showFragment(HomeFragment.newInstance(this), false);
     }
 
-    private void showAccountFragment() {
-        showFragment(ProfileFragment.newInstance(this), false);
+    private void showCameraFragment() {
+        currentTab = 1;
+        showFragment(PicturesFragment.newInstance(this), false);
     }
 
-    private void showCameraFragment() {
-        showFragment(PicturesFragment.newInstance(this), false);
+    private void showAccountFragment() {
+        currentTab = 2;
+        showFragment(ProfileFragment.newInstance(this), false);
     }
 
     private void showPostFragment(Post post) {
         showFragment(PostFragment.newInstance(this, post), true);
+    }
+
+    private void showFragment(int currentTab) {
+        switch (currentTab) {
+            case 0:
+                showHomeFragment();
+                break;
+            case 1:
+                showCameraFragment();
+                break;
+            case 2:
+                showAccountFragment();
+                break;
+        }
     }
 
     private void showFragment(Fragment fragment, boolean addToStack) {
