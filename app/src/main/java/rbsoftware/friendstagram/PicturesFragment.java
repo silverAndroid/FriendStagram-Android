@@ -74,7 +74,9 @@ public class PicturesFragment extends Fragment implements LoaderManager.LoaderCa
         ImageView leftIcon = (ImageView) toolbar.findViewById(R.id.left_icon);
         ImageView rightIcon = (ImageView) toolbar.findViewById(R.id.right_icon);
         leftIcon.setImageResource(R.drawable.ic_close);
+        leftIcon.setContentDescription("Back");
         rightIcon.setImageResource(R.drawable.ic_camera);
+        rightIcon.setContentDescription("Open Camera");
         toolbarManipulator.setToolbar(toolbar);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv);
