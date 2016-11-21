@@ -19,6 +19,7 @@
     </string>
     <string name="tab_home">Home</string>
     <string name="tab_account">Profile</string>
+    <string name="tab_camera">Camera</string>
     <string name="like">Like</string>
     <string name="comment">Comment</string>
     <string name="send">Send</string>
