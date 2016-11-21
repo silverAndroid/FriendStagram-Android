@@ -20,6 +20,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -63,6 +65,16 @@ public class PicturesFragment extends Fragment implements LoaderManager.LoaderCa
         super.onViewCreated(view, savedInstanceState);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorToolbarBlack, null));
+        } else {
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorToolbarBlack));
+        }
+
+        ImageView leftIcon = (ImageView) toolbar.findViewById(R.id.left_icon);
+        ImageView rightIcon = (ImageView) toolbar.findViewById(R.id.right_icon);
+        leftIcon.setImageResource(R.drawable.ic_close);
+        rightIcon.setImageResource(R.drawable.ic_camera);
         toolbarManipulator.setToolbar(toolbar);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv);
