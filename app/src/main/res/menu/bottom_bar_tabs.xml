@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tabs>
-    <tab
-        icon="@drawable/home"
-        id="@+id/tab_home"
-        title="@string/tab_home" />
-    <tab
-        icon="@drawable/ic_camera"
-        id="@+id/tab_camera"
-        title="Camera"/>
-    <tab
-        icon="@drawable/account"
-        id="@+id/tab_account"
-        title="@string/tab_account" />
-</tabs>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tab_home"
+        android:icon="@drawable/home"
+        android:title="@string/tab_home" />
+    <item
+        android:id="@+id/tab_camera"
+        android:icon="@drawable/ic_camera"
+        android:title="@string/tab_camera" />
+    <item
+        android:id="@+id/tab_account"
+        android:icon="@drawable/account"
+        android:title="@string/tab_account" />
+</menu>
