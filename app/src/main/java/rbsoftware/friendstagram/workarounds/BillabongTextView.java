@@ -9,18 +9,18 @@ import android.widget.TextView;
  * Created by silver_android on 25/10/16.
  */
 
-public class AppNameTextView extends TextView {
-    public AppNameTextView(Context context) {
+public class BillabongTextView extends TextView {
+    public BillabongTextView(Context context) {
         super(context);
         init();
     }
 
-    public AppNameTextView(Context context, AttributeSet attrs) {
+    public BillabongTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public AppNameTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BillabongTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
