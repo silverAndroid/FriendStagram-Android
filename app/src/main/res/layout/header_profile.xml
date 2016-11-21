@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:src="@drawable/settings"/>
+            android:src="@drawable/ic_settings"/>
 
         <ImageView
             android:id="@+id/edit_profile"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="32dp"
             android:layout_toLeftOf="@+id/settings"
-            android:src="@drawable/pencil"/>
+            android:src="@drawable/ic_pencil"/>
 
         <TextView
             android:id="@+id/name"

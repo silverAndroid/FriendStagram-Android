@@ -52,7 +52,7 @@
                 android:id="@+id/num_likes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/heart"
+                android:drawableLeft="@drawable/ic_heart"
                 android:drawablePadding="4dp"
                 android:text="3 likes"
                 android:textColor="@color/colorLike"
@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/heart_outline"
+                android:drawableLeft="@drawable/ic_heart_outline"
                 android:drawablePadding="-15dp"
                 android:text="@string/like"
                 android:textColor="@android:color/darker_gray"/>
@@ -93,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/message_reply_text"
+                android:drawableLeft="@drawable/ic_message_reply_text"
                 android:drawablePadding="-5dp"
                 android:text="@string/comment"
                 android:textColor="@android:color/darker_gray"/>
@@ -103,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/share"
+                android:drawableLeft="@drawable/ic_share"
                 android:drawablePadding="-10dp"
                 android:text="@string/send"
                 android:textColor="@android:color/darker_gray"/>

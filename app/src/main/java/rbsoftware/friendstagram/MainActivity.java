@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
                         showAccountFragment();
                         return true;
                     case R.id.tab_camera:
-                        showPicturesFragment();
+                        showCameraFragment();
                         return true;
                 }
                 return false;
@@ -49,12 +49,12 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
         showFragment(ProfileFragment.newInstance(this), false);
     }
 
-    private void showPostFragment(Post post) {
-        showFragment(PostFragment.newInstance(post), true);
+    private void showCameraFragment() {
+        showFragment(PicturesFragment.newInstance(this), false);
     }
 
-    private void showPicturesFragment() {
-        showFragment(PicturesFragment.newInstance(), false);
+    private void showPostFragment(Post post) {
+        showFragment(PostFragment.newInstance(this, post), true);
     }
 
     private void showFragment(Fragment fragment, boolean addToStack) {

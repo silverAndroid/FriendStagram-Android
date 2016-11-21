@@ -15,6 +15,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,7 @@ public class PicturesFragment extends Fragment implements LoaderManager.LoaderCa
     private static final int EXTERNAL_STORAGE_ID = 0;
     private static final int INTERNAL_STORAGE_ID = 1;
     private static final String TAG = "PicturesFragment";
+    private static ToolbarManipulator toolbarManipulator;
 
     private RecyclerView recyclerView;
     private PicturesAdapter adapter;
@@ -44,7 +46,8 @@ public class PicturesFragment extends Fragment implements LoaderManager.LoaderCa
         // Required empty public constructor
     }
 
-    public static PicturesFragment newInstance() {
+    public static PicturesFragment newInstance(ToolbarManipulator manipulator) {
+        PicturesFragment.toolbarManipulator = manipulator;
         return new PicturesFragment();
     }
 
@@ -58,6 +61,9 @@ public class PicturesFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        toolbarManipulator.setToolbar(toolbar);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.rv);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
