@@ -21,6 +21,8 @@ import rbsoftware.friendstagram.temp.RandomString;
  */
 public class HomeFragment extends Fragment {
 
+    private static final String KEY_POSTS_LIST = "posts_list";
+
     private static ToolbarManipulator toolbarManipulator;
     private String[] images = {
             "http://4.bp.blogspot.com/-F_6SfcFHKRE/UIjJKWfbt8I/AAAAAAAAA6w/AK5H_oGl9io/s1600/nature182.jpg",
@@ -59,6 +61,10 @@ public class HomeFragment extends Fragment {
             "http://ablissfulhaven.com/dev/wp-content/uploads/2015/06/round-chokolatta-profile-pic.png",
             "http://helpgrowchange.com/wp-content/uploads/2014/03/tb_profile_201303_round.png"
     };
+    private ArrayList<Post> posts;
+
+    static {
+    }
 
     public HomeFragment() {
         // Required empty public constructor
@@ -84,7 +90,7 @@ public class HomeFragment extends Fragment {
         toolbarManipulator.setToolbar(toolbar);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rv);
 
-        ArrayList<Post> posts = new ArrayList<>();
+        posts = new ArrayList<>();
         for (int i = 0; i < images.length; i++) {
             Post post = new Post(images[i], new RandomString(250).nextString(),  new User(new RandomString(25)
                     .nextString(), profilePictures[i]));
@@ -94,5 +100,11 @@ public class HomeFragment extends Fragment {
         HomeAdapter adapter = new HomeAdapter(posts);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(KEY_POSTS_LIST, posts);
+        super.onSaveInstanceState(outState);
     }
 }
