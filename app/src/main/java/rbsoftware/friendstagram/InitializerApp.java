@@ -7,7 +7,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.listener.RequestListener;
 import com.facebook.imagepipeline.listener.RequestLoggingListener;
-import com.karumi.dexter.Dexter;
+//import com.karumi.dexter.Dexter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,8 +21,6 @@ public class InitializerApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Dexter.initialize(getBaseContext());
-
         Set<RequestListener> requestListeners = new HashSet<>();
         requestListeners.add(new RequestLoggingListener());
         ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
