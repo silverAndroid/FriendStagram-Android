@@ -12,4 +12,5 @@
     <color name="colorTranslucentOverlay2">#44000000</color>
     <color name="colorLighterGray">#DDD</color>
     <color name="colorToolbarBlack">#191919</color>
+    <color name="colorToolbarBlackDark">#131313</color>
 </resources>
