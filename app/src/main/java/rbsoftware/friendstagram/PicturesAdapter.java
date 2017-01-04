@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import rbsoftware.friendstagram.model.Picture;
+
 /**
  * Created by silver_android on 09/11/16.
  */
@@ -18,9 +20,10 @@ import java.util.ArrayList;
 public class PicturesAdapter extends RecyclerView.Adapter<PictureViewHolder> {
 
     private static final String TAG = "PicturesAdapter";
-    private ArrayList<String> imageURLs;
+    private ArrayList<Picture> images;
 
     public PicturesAdapter(Cursor cursor) {
+        images = new ArrayList<>();
         changeCursor(cursor);
     }
 
@@ -32,21 +35,27 @@ public class PicturesAdapter extends RecyclerView.Adapter<PictureViewHolder> {
 
     @Override
     public void onBindViewHolder(PictureViewHolder holder, int position) {
-        holder.image.setImageURI(Uri.parse(imageURLs.get(position)));
+        holder.image.setImageURI(Uri.parse(images.get(position).getURL()));
     }
 
     @Override
     public int getItemCount() {
-        return imageURLs.size();
+        return images.size();
     }
 
     public void changeCursor(Cursor cursor) {
-        if (cursor == null || imageURLs == null)
-            imageURLs = new ArrayList<>();
+        images = new ArrayList<>();
+        Log.i(TAG, "changeCursor: Resetting adapter");
         if (cursor != null && cursor.moveToFirst()) {
+            Log.i(TAG, "changeCursor: Adding images");
+            int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            int idColumnIndex = cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID);
+
             do {
-                imageURLs.add("file://" + cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)));
+                images.add(new Picture(cursor.getInt(idColumnIndex), "file://" + cursor.getString(dataColumnIndex)));
             } while (cursor.moveToNext());
         }
+
+        notifyDataSetChanged();
     }
 }
