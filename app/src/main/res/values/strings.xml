@@ -22,8 +22,11 @@
     <string name="send">Send</string>
     <string name="description_search">Search</string>
     <string name="description_notifications">Notifications</string>
-    <string name="permission_storage_rationale">This app needs access to your storage so it can access your pictures and show them to you.</string>
+    <string name="permission_read_storage_rationale">This app needs access to your storage so it can show your pictures.</string>
+    <string name="permission_read_storage_denied">Denied permission to display images</string>
+    <string name="permission_write_storage_rationale">This app needs to be able to write to your storage so it can save your pictures to it.</string>
+    <string name="permission_write_storage_denied">Denied permission to save images</string>
     <string name="btn_allow">Allow</string>
     <string name="btn_deny">Deny</string>
-    <string name="permission_storage_denied">Denied permission to display images</string>
+    <string name="error_occurred">An error occurred</string>
 </resources>
