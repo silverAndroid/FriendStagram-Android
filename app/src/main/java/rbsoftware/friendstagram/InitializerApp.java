@@ -11,6 +11,8 @@ import com.facebook.imagepipeline.listener.RequestLoggingListener;
 import java.util.HashSet;
 import java.util.Set;
 
+import rbsoftware.friendstagram.service.AuthenticationService;
+
 /**
  * Created by silver_android on 10/11/16.
  */
@@ -28,5 +30,6 @@ public class InitializerApp extends Application {
                 .build();
         Fresco.initialize(this, config);
         FLog.setMinimumLoggingLevel(FLog.VERBOSE);
+        AuthenticationService.newInstance(getApplicationContext());
     }
 }

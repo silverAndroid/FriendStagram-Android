@@ -5,37 +5,45 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import rbsoftware.friendstagram.model.Error;
+import rbsoftware.friendstagram.model.Response;
+import rbsoftware.friendstagram.model.User;
+import rbsoftware.friendstagram.service.AuthenticationService;
+import rbsoftware.friendstagram.service.NetworkService;
+import rbsoftware.friendstagram.service.UsersService;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 /**
  * A login screen that offers login via username/password.
  */
-public class LoginRegisterActivity extends AppCompatActivity implements LoginFragment.LoginListener, RegisterFragment
-        .RegisterListener, FragmentManager.OnBackStackChangedListener {
+public class LoginRegisterActivity extends AppCompatActivity implements LoginFragment.LoginListener, RegisterFragment.RegisterListener, FragmentManager.OnBackStackChangedListener {
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+    private static final String TAG = "LoginRegisterActivity";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private Call<Response<String>> mAuthTask = null;
+    private Call<Response<User>> mRegisterTask = null;
     private View mProgressView;
     private View mFormView;
     private RegisterFragment registerFragment = null;
+    private UsersService usersService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +64,7 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
         mProgressView = findViewById(R.id.login_progress);
 
         loadLoginPage();
+        usersService = new UsersService();
     }
 
     @Override
@@ -69,13 +78,65 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
     @Override
     public void login(String username, String password) {
         showProgress(true);
-        mAuthTask = new LoginRegisterActivity.UserLoginTask(username, password);
-        mAuthTask.execute((Void) null);
+
+        Map<String, String> loginDetails = new HashMap<>(2, 2);
+        loginDetails.put("username", username);
+        loginDetails.put("password", password);
+
+        mAuthTask = usersService.getAPI().login(loginDetails);
+        mAuthTask.enqueue(new Callback<Response<String>>() {
+            @Override
+            public void onResponse(Call<Response<String>> call, retrofit2.Response<Response<String>> response) {
+                if (response.isSuccessful()) {
+                    String token = response.body().getData();
+                    AuthenticationService.getInstance().saveToken(token);
+                    onLoginSuccess();
+                    Toast.makeText(getApplicationContext(), getString(R.string.success_login), Toast.LENGTH_SHORT).show();
+                } else {
+                    Error error = NetworkService.parseError(response);
+                    handleError(error);
+                }
+                showProgress(false);
+            }
+
+            @Override
+            public void onFailure(Call<Response<String>> call, Throwable t) {
+                Log.e(TAG, "onFailure: Failed to login", t);
+                showProgress(false);
+                Toast.makeText(getBaseContext(), getString(R.string.error_occurred), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public void register(String name, String email, String username, String password) {
-        showProgress(true);
+        Map<String, String> registerDetails = new HashMap<>(4, 4);
+        registerDetails.put("username", username);
+        registerDetails.put("password", password);
+        registerDetails.put("name", name);
+        registerDetails.put("email", email);
+
+        mRegisterTask = usersService.getAPI().register(registerDetails);
+        mRegisterTask.enqueue(new Callback<Response<User>>() {
+            @Override
+            public void onResponse(Call<Response<User>> call, retrofit2.Response<Response<User>> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.success_register), Toast.LENGTH_SHORT).show();
+                    loadLoginPage();
+                } else {
+                    Error error = NetworkService.parseError(response);
+                    handleError(error);
+                }
+                showProgress(false);
+            }
+
+            @Override
+            public void onFailure(Call<Response<User>> call, Throwable t) {
+                Log.e(TAG, "onFailure: Failed to register", t);
+                showProgress(false);
+                Toast.makeText(getBaseContext(), getString(R.string.error_occurred), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -101,6 +162,22 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
         }
 
         loadLoginBackground();
+    }
+
+    private void handleError(Error error) {
+        showProgress(false);
+        if (error.getMessage().equals("Username is Null") || error.getMessage().equals("Password is Null")) {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            if (fragment instanceof LoginFragment) {
+                LoginFragment loginFragment = (LoginFragment) fragment;
+                loginFragment.onResponseError(error);
+            } else if (fragment instanceof RegisterFragment) {
+                RegisterFragment registerFragment = (RegisterFragment) fragment;
+                registerFragment.onResponseError(error);
+            }
+        } else {
+            Toast.makeText(getBaseContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadLoginBackground() {
@@ -159,11 +236,17 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
         });
     }
 
+    private void onLoginSuccess() {
+        Intent intent = new Intent(LoginRegisterActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    /*public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
@@ -199,8 +282,6 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            LoginFragment fragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id
-                    .fragment_container);
             showProgress(false);
 
             if (success) {
@@ -208,6 +289,7 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
                 startActivity(intent);
                 finish();
             } else {
+                LoginFragment fragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                 fragment.onWrongPassword();
             }
         }
@@ -216,6 +298,6 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
         protected void onCancelled() {
             showProgress(false);
         }
-    }
+    }*/
 }
 
