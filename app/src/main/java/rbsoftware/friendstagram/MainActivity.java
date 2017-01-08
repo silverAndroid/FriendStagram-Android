@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
-
                 switch (tabId) {
                     case R.id.tab_home:
                         showHomeFragment();

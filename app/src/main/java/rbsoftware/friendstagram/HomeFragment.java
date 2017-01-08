@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(KEY_POSTS_LIST, posts);
+//        outState.putParcelableArrayList(KEY_POSTS_LIST, posts);
         super.onSaveInstanceState(outState);
     }
 }
