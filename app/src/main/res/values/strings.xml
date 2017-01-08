@@ -29,4 +29,6 @@
     <string name="btn_allow">Allow</string>
     <string name="btn_deny">Deny</string>
     <string name="error_occurred">An error occurred</string>
+    <string name="success_register">Successfully registered user</string>
+    <string name="success_login">Successfully logged in</string>
 </resources>
