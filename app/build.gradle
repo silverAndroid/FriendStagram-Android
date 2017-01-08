@@ -36,6 +36,7 @@ dependencies {
     compile 'com.github.hotchemi:permissionsdispatcher:2.3.0'
     compile 'com.roughike:bottom-bar:2.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.0'
 
