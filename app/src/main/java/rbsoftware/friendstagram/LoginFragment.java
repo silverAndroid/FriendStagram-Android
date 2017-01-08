@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import rbsoftware.friendstagram.model.Error;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -116,7 +118,7 @@ public class LoginFragment extends Fragment {
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(password) && !Util.isPasswordValid(password)) {
+        if (!Util.isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -128,7 +130,7 @@ public class LoginFragment extends Fragment {
             focusView = mUsernameView;
             cancel = true;
         } else if (!Util.isUsernameValid(username)) {
-            mUsernameView.setError(getString(R.string.error_invalid_email));
+            mUsernameView.setError(getString(R.string.error_invalid_username));
             focusView = mUsernameView;
             cancel = true;
         }
@@ -146,9 +148,14 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    public void onWrongPassword() {
-        mPasswordView.setError(getString(R.string.error_incorrect_password));
-        mPasswordView.requestFocus();
+    public void onResponseError(Error error) {
+        if (error.getMessage().equals("Username is Null")) {
+            mUsernameView.setError(getString(R.string.error_field_required));
+            mUsernameView.requestFocus();
+        } else if (error.getMessage().equals("Password is Null")) {
+            mPasswordView.setError(getString(R.string.error_field_required));
+            mPasswordView.requestFocus();
+        }
     }
 
     public interface LoginListener {

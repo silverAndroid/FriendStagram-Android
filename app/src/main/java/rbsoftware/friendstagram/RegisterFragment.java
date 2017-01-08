@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import rbsoftware.friendstagram.model.Error;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -168,6 +170,16 @@ public class RegisterFragment extends Fragment {
             if (mListener != null) {
                 mListener.register(name, email, username, password);
             }
+        }
+    }
+
+    public void onResponseError(Error error) {
+        if (error.getMessage().equals("Username is Null")) {
+            mUsernameView.setError(getString(R.string.error_field_required));
+            mUsernameView.requestFocus();
+        } else if (error.getMessage().equals("Password is Null")) {
+            mPasswordView.setError(getString(R.string.error_field_required));
+            mPasswordView.requestFocus();
         }
     }
 
