@@ -8,13 +8,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,11 +26,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
@@ -40,12 +35,13 @@ import permissions.dispatcher.RuntimePermissions;
 
 // TODO: Check if using the LoaderManager that is not in the support library will causes backwards-compatibility issues
 @RuntimePermissions
-public class PicturesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class CreatePostActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int EXTERNAL_STORAGE_ID = 0;
     private static final int INTERNAL_STORAGE_ID = 1;
-    private static final String TAG = "PicturesActivity";
     private static final int REQUEST_IMAGE_CAPTURE = 2;
+
+    private static final String TAG = "CreatePostActivity";
 
     private RecyclerView recyclerView;
     private PicturesAdapter adapter;
@@ -61,7 +57,7 @@ public class PicturesActivity extends AppCompatActivity implements LoaderManager
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PicturesActivityPermissionsDispatcher.takePictureWithCheck(PicturesActivity.this);
+                PicturesActivityPermissionsDispatcher.takePictureWithCheck(CreatePostActivity.this);
             }
         });
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -82,7 +78,8 @@ public class PicturesActivity extends AppCompatActivity implements LoaderManager
     @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     void loadImages() {
         getLoaderManager().initLoader(EXTERNAL_STORAGE_ID, null, this);
-//        getLoaderManager().restartLoader(INTERNAL_STORAGE_ID, null, PicturesActivity.this); // TODO: See if any phones use the internal storage ID for photos
+        // TODO: See if any phones use the internal storage ID for photos
+//        getLoaderManager().restartLoader(INTERNAL_STORAGE_ID, null, CreatePostActivity.this);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -163,7 +160,7 @@ public class PicturesActivity extends AppCompatActivity implements LoaderManager
                 id == EXTERNAL_STORAGE_ID ?
                         MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI :
                         MediaStore.Images.Thumbnails.INTERNAL_CONTENT_URI,
-                new String[] {
+                new String[]{
                         MediaStore.Images.ImageColumns._ID,
                         MediaStore.Images.ImageColumns.DATA
                 },
@@ -190,6 +187,12 @@ public class PicturesActivity extends AppCompatActivity implements LoaderManager
             Log.i(TAG, "onLoaderReset: Resetting loader");
             adapter.changeCursor(null);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Workaround to fix issue 5
+        NavUtils.navigateUpFromSameTask(this);
     }
 
     @Override

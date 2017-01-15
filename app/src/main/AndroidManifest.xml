@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PicturesActivity"
+            android:name=".CreatePostActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/PicturesTheme">
             <meta-data
