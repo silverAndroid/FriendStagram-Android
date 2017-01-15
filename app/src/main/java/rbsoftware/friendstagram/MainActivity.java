@@ -2,16 +2,15 @@ package rbsoftware.friendstagram;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-
-import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabSelectListener;
+import android.view.MenuItem;
 
 import rbsoftware.friendstagram.model.Post;
 
@@ -28,21 +27,23 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
 
         setContentView(R.layout.activity_main);
 
-        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottom_bar);
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+        BottomNavigationView bottomBar = (BottomNavigationView) findViewById(R.id.bottom_bar);
+        bottomBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onTabSelected(@IdRes int tabId) {
-                switch (tabId) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
                     case R.id.tab_home:
                         showHomeFragment();
-                        break;
+                        return true;
                     case R.id.tab_camera:
                         showCameraActivity();
-                        break;
+                        return true;
                     case R.id.tab_account:
                         showAccountFragment();
-                        break;
+                        return true;
                 }
+                return false;
             }
         });
     }
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
 
     private void showCameraActivity() {
         currentTab = 1;
-        Intent intent = new Intent(MainActivity.this, PicturesActivity.class);
+        Intent intent = new Intent(MainActivity.this, CreatePostActivity.class);
         startActivity(intent);
     }
 
