@@ -25,7 +25,6 @@ import rbsoftware.friendstagram.model.Response;
 import rbsoftware.friendstagram.model.User;
 import rbsoftware.friendstagram.service.AuthenticationService;
 import rbsoftware.friendstagram.service.NetworkService;
-import rbsoftware.friendstagram.service.UsersService;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -38,12 +37,10 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private Call<Response<String>> mAuthTask = null;
-    private Call<Response<User>> mRegisterTask = null;
     private View mProgressView;
     private View mFormView;
     private RegisterFragment registerFragment = null;
-    private UsersService usersService;
+    private LoginRegisterController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +59,12 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
 
         mFormView = findViewById(R.id.fragment_container);
         mProgressView = findViewById(R.id.login_progress);
+        controller = new LoginRegisterController();
 
         if (AuthenticationService.getInstance().isLoggedIn()) {
             onLoginSuccess();
         } else {
             loadLoginPage();
-            usersService = new UsersService();
         }
     }
 
@@ -83,12 +80,7 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
     public void login(String username, String password) {
         showProgress(true);
 
-        Map<String, String> loginDetails = new HashMap<>(2, 2);
-        loginDetails.put("username", username);
-        loginDetails.put("password", password);
-
-        mAuthTask = usersService.getAPI().login(loginDetails);
-        mAuthTask.enqueue(new Callback<Response<String>>() {
+        controller.login(username, password, new Callback<Response<String>>() {
             @Override
             public void onResponse(Call<Response<String>> call, retrofit2.Response<Response<String>> response) {
                 if (response.isSuccessful()) {
@@ -116,14 +108,7 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
     public void register(String name, String email, String username, String password) {
         showProgress(true);
 
-        Map<String, String> registerDetails = new HashMap<>(4, 4);
-        registerDetails.put("username", username);
-        registerDetails.put("password", password);
-        registerDetails.put("name", name);
-        registerDetails.put("email", email);
-
-        mRegisterTask = usersService.getAPI().register(registerDetails);
-        mRegisterTask.enqueue(new Callback<Response<User>>() {
+        controller.register(username, password, name, email, new Callback<Response<User>>() {
             @Override
             public void onResponse(Call<Response<User>> call, retrofit2.Response<Response<User>> response) {
                 if (response.isSuccessful()) {
@@ -247,63 +232,5 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
         startActivity(intent);
         finish();
     }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    /*public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                Intent intent = new Intent(LoginRegisterActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            } else {
-                LoginFragment fragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-                fragment.onWrongPassword();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            showProgress(false);
-        }
-    }*/
 }
 
