@@ -17,10 +17,6 @@ public class UsersService {
     private final UserAPI api;
 
     public UsersService() {
-        this(NetworkService.getBaseURL());
-    }
-
-    public UsersService(String apiURL) {
         api = NetworkService.getRetrofit().create(UserAPI.class);
     }
 
@@ -30,10 +26,10 @@ public class UsersService {
 
     public interface UserAPI {
         @POST("/users")
-        Call<Response<User>> register(@Body Map<String, String> registerDetails);
+        Call<Response<User>> register(@Body Map<String, String> registerJSON);
 
         @POST("/login")
-        Call<Response<String>> login(@Body Map<String, String> loginDetails);
+        Call<Response<String>> login(@Body Map<String, String> loginJSON);
 
         @POST("/logOff")
         Call<User> logout();
