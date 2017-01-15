@@ -63,8 +63,12 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
         mFormView = findViewById(R.id.fragment_container);
         mProgressView = findViewById(R.id.login_progress);
 
-        loadLoginPage();
-        usersService = new UsersService();
+        if (AuthenticationService.getInstance().isLoggedIn()) {
+            onLoginSuccess();
+        } else {
+            loadLoginPage();
+            usersService = new UsersService();
+        }
     }
 
     @Override
@@ -110,6 +114,8 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
 
     @Override
     public void register(String name, String email, String username, String password) {
+        showProgress(true);
+
         Map<String, String> registerDetails = new HashMap<>(4, 4);
         registerDetails.put("username", username);
         registerDetails.put("password", password);

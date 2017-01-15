@@ -34,7 +34,15 @@ public class AuthenticationService {
         return preferences.getString(tokenKey, null);
     }
 
+    public boolean hasToken() {
+        return preferences.contains(tokenKey);
+    }
+
     public void deleteToken() {
         preferences.edit().remove(tokenKey).apply();
+    }
+
+    public boolean isLoggedIn() {
+        return hasToken();
     }
 }
