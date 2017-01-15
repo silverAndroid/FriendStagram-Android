@@ -49,7 +49,7 @@ public class CreatePostActivity extends AppCompatActivity implements LoaderManag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pictures);
+        setContentView(R.layout.activity_create_post);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -57,7 +57,7 @@ public class CreatePostActivity extends AppCompatActivity implements LoaderManag
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PicturesActivityPermissionsDispatcher.takePictureWithCheck(CreatePostActivity.this);
+                CreatePostActivityPermissionsDispatcher.takePictureWithCheck(CreatePostActivity.this);
             }
         });
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -71,7 +71,7 @@ public class CreatePostActivity extends AppCompatActivity implements LoaderManag
             recyclerView.setAdapter(adapter);
         }
 
-        PicturesActivityPermissionsDispatcher.loadImagesWithCheck(this);
+        CreatePostActivityPermissionsDispatcher.loadImagesWithCheck(this);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -199,7 +199,7 @@ public class CreatePostActivity extends AppCompatActivity implements LoaderManag
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // NOTE: delegate the permission handling to generated method
-        PicturesActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+        CreatePostActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     private void updateMediaScanner(Uri photoURI) {
