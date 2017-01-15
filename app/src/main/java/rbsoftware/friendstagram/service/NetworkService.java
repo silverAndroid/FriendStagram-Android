@@ -15,15 +15,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class NetworkService {
-    private static final String baseURL = "https://58e5a2a1.ngrok.io";
+    private static final String baseURL = "https://8deb3cb7.ngrok.io";
     private static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(baseURL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
-
-    static String getBaseURL() {
-        return baseURL;
-    }
 
     static Retrofit getRetrofit() {
         return retrofit;
