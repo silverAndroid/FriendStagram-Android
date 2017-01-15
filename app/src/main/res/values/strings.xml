@@ -14,20 +14,30 @@
     <string name="error_invalid_username">This username is invalid</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+
+    <!-- Strings related to bottom bar -->
     <string name="tab_home">Home</string>
     <string name="tab_account">Profile</string>
     <string name="tab_camera">Camera</string>
+
+    <!-- Strings related to post actions -->
     <string name="like">Like</string>
     <string name="comment">Comment</string>
     <string name="send">Send</string>
+
+    <!-- Strings related to content descriptions -->
     <string name="description_search">Search</string>
     <string name="description_notifications">Notifications</string>
+
+    <!-- Strings related to permission dialogs -->
     <string name="permission_read_storage_rationale">This app needs access to your storage so it can show your pictures.</string>
     <string name="permission_read_storage_denied">Denied permission to display images</string>
     <string name="permission_write_storage_rationale">This app needs to be able to write to your storage so it can save your pictures to it.</string>
     <string name="permission_write_storage_denied">Denied permission to save images</string>
     <string name="btn_allow">Allow</string>
     <string name="btn_deny">Deny</string>
+
+    <!-- Strings related to login/register messages -->
     <string name="error_occurred">An error occurred</string>
     <string name="success_register">Successfully registered user</string>
     <string name="success_login">Successfully logged in</string>
