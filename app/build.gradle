@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+Properties properties = new Properties()
+File propertiesFile = rootProject.file("secret.properties")
+properties.load(new FileInputStream(propertiesFile))
+
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
@@ -10,6 +14,11 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes.each {
+        it.buildConfigField "String", "CLOUDINARY_API_KEY", properties['CLOUDINARY_API_KEY']
+        it.buildConfigField "String", "CLOUDINARY_API_SECRET", properties['CLOUDINARY_API_SECRET']
+        it.buildConfigField "String", "CLOUDINARY_CLOUD_NAME", properties['CLOUDINARY_CLOUD']
     }
     buildTypes {
         release {
@@ -27,18 +36,17 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:cardview-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
     compile 'com.android.support:recyclerview-v7:25.1.0'
     compile 'com.android.support:support-v4:25.1.0'
+    compile 'com.cloudinary:cloudinary-android:1.2.2'
     compile 'com.facebook.fresco:fresco:0.14.1'
     compile 'com.github.hotchemi:permissionsdispatcher:2.3.0'
-    compile 'com.roughike:bottom-bar:2.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-
-    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.0'
-
     testCompile 'junit:junit:4.12'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.0'
 }
