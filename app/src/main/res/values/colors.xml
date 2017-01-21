@@ -10,6 +10,7 @@
     <color name="colorLike">#D50000</color>
     <color name="colorTranslucentOverlay">#66000000</color>
     <color name="colorTranslucentOverlay2">#44000000</color>
+    <color name="colorTranslucentOverlay3">#88FFFFFF</color>
     <color name="colorLighterGray">#DDD</color>
     <color name="colorToolbarBlack">#191919</color>
     <color name="colorToolbarBlackDark">#131313</color>
