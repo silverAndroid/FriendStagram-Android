@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">FriendStagram</string>
-    <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -21,9 +20,9 @@
     <string name="tab_camera">Camera</string>
 
     <!-- Strings related to post actions -->
-    <string name="like">Like</string>
-    <string name="comment">Comment</string>
-    <string name="send">Send</string>
+    <string name="action_post_like">Like</string>
+    <string name="action_post_comment">Comment</string>
+    <string name="action_post_send">Send</string>
 
     <!-- Strings related to content descriptions -->
     <string name="description_search">Search</string>
@@ -41,4 +40,8 @@
     <string name="error_occurred">An error occurred</string>
     <string name="success_register">Successfully registered user</string>
     <string name="success_login">Successfully logged in</string>
+
+    <!-- Strings related to creating posts -->
+    <string name="action_next">Next</string>
+    <string name="message_filters_coming_soon">Filters Coming Soon</string>
 </resources>
