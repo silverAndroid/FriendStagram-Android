@@ -1,8 +1,10 @@
 package rbsoftware.friendstagram;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,10 +23,16 @@ public class PicturesAdapter extends RecyclerView.Adapter<PictureViewHolder> {
 
     private static final String TAG = "PicturesAdapter";
     private ArrayList<Picture> images;
+    private int selectedPosition;
+    private Context context;
+    private ImageSelectListener imageSelectListener;
 
-    public PicturesAdapter(Cursor cursor) {
+    public PicturesAdapter(Cursor cursor, Context context, ImageSelectListener imageSelectListener) {
+        this.context = context;
+        this.imageSelectListener = imageSelectListener;
         images = new ArrayList<>();
         changeCursor(cursor);
+        selectedPosition = -1;
     }
 
     @Override
@@ -34,8 +42,24 @@ public class PicturesAdapter extends RecyclerView.Adapter<PictureViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(PictureViewHolder holder, int position) {
-        holder.image.setImageURI(Uri.parse(images.get(position).getURL()));
+    public void onBindViewHolder(final PictureViewHolder holder, int position) {
+        holder.image.setImageURI(images.get(position).getURI());
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int oldSelectedPosition = selectedPosition;
+                selectedPosition = holder.getAdapterPosition();
+                notifyItemChanged(selectedPosition);
+                notifyItemChanged(oldSelectedPosition);
+                imageSelectListener.onImageSelected(images.get(selectedPosition).getURI());
+            }
+        });
+
+        if (selectedPosition == position) {
+            holder.image.setColorFilter(ContextCompat.getColor(context, R.color.colorTranslucentOverlay3));
+        } else {
+            holder.image.setColorFilter(null);
+        }
     }
 
     @Override
@@ -52,7 +76,7 @@ public class PicturesAdapter extends RecyclerView.Adapter<PictureViewHolder> {
             int idColumnIndex = cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID);
 
             do {
-                images.add(new Picture(cursor.getInt(idColumnIndex), "file://" + cursor.getString(dataColumnIndex)));
+                images.add(new Picture(cursor.getInt(idColumnIndex), Uri.parse("file://" + cursor.getString(dataColumnIndex))));
             } while (cursor.moveToNext());
         }
 
