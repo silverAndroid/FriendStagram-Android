@@ -99,7 +99,7 @@ public class SelectImageFragment extends Fragment implements LoaderManager.Loade
     void loadImages() {
         getLoaderManager().initLoader(EXTERNAL_STORAGE_ID, null, this);
         // TODO: See if any phones use the internal storage ID for photos
-//        getLoaderManager().restartLoader(INTERNAL_STORAGE_ID, null, CreatePostActivity.this);
+//        getLoaderManager().restartLoader(INTERNAL_STORAGE_ID, null, this);
     }
 
     @TargetApi(Build.VERSION_CODES.M)

@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 public class AuthenticationService {
 
     private static final String tokenKey = "auth";
+    private static final String usernameKey = "username";
     private SharedPreferences preferences;
     private static AuthenticationService instance;
 
@@ -40,6 +41,22 @@ public class AuthenticationService {
 
     public void deleteToken() {
         preferences.edit().remove(tokenKey).apply();
+    }
+
+    public void saveUsername(String username) {
+        preferences.edit().putString(usernameKey, username).apply();
+    }
+
+    public String getUsername() {
+        return preferences.getString(usernameKey, null);
+    }
+
+    public boolean hasSavedUsername() {
+        return preferences.contains(usernameKey);
+    }
+
+    public void deleteSavedUsername() {
+        preferences.edit().remove(usernameKey).apply();
     }
 
     public boolean isLoggedIn() {

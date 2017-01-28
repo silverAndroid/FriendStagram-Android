@@ -1,18 +1,26 @@
 package rbsoftware.friendstagram.service;
 
+import android.util.Log;
+
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.google.common.base.Function;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import rbsoftware.friendstagram.Constants;
+import retrofit2.Call;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
 
 /**
  * Created by rushil.perera on 2017-01-15.
  */
 public class ImageService {
+    private static final String TAG = "ImageService";
     private static ImageService ourInstance;
     private Cloudinary cloudinary;
 
@@ -30,7 +38,29 @@ public class ImageService {
         cloudinary = new Cloudinary(config);
     }
 
-    public Map<String, String> uploadImage(String uploadFilePath, String username) throws IOException {
-        return cloudinary.uploader().upload(uploadFilePath, ObjectUtils.asMap("folder", username, "resource_type", "image", "type", "authenticated"));
+    public void uploadImage(final InputStream uploadFileStream, final String username, final ImageResponseHandler callback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    callback.onComplete(cloudinary.uploader().upload(uploadFileStream, ObjectUtils.asMap("folder", username, "resource_type", "image", "type", "authenticated")));
+                } catch (IOException e) {
+                    Map<String, IOException> exceptionMap = new HashMap<>();
+                    exceptionMap.put("exception", e);
+                    callback.onComplete(exceptionMap);
+                    Log.e(TAG, "run: Failed to upload image", e);
+                }
+            }
+        }).start();
+    }
+
+    public interface ImageResponseHandler {
+        void onComplete(Map response);
+    }
+
+    public interface ImageAPI {
+        @Multipart
+        @POST("/image/upload")
+        Call<Map<String, String>> upload();
     }
 }

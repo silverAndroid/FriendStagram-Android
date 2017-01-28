@@ -25,14 +25,14 @@ public class PicturesAdapter extends RecyclerView.Adapter<PictureViewHolder> {
     private ArrayList<Picture> images;
     private int selectedPosition;
     private Context context;
-    private ImageSelectListener imageSelectListener;
+    private final ImageSelectListener imageSelectListener;
 
     public PicturesAdapter(Cursor cursor, Context context, ImageSelectListener imageSelectListener) {
         this.context = context;
         this.imageSelectListener = imageSelectListener;
         images = new ArrayList<>();
         changeCursor(cursor);
-        selectedPosition = -1;
+        selectedPosition = 0;
     }
 
     @Override
@@ -81,5 +81,11 @@ public class PicturesAdapter extends RecyclerView.Adapter<PictureViewHolder> {
         }
 
         notifyDataSetChanged();
+
+        if (images.size() > selectedPosition) {
+            imageSelectListener.onImageSelected(images.get(selectedPosition).getURI());
+        } else {
+            imageSelectListener.onImageSelected(null);
+        }
     }
 }
