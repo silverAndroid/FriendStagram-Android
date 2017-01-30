@@ -141,7 +141,7 @@ public class SelectImageFragment extends Fragment implements LoaderManager.Loade
                 Log.d(TAG, "takePicture: " + photoURI);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                updateMediaScanner(photoURI);
+                ImageHandler.addToMediaScanner(photoURI, getContext());
             }
         }
     }
@@ -202,8 +202,8 @@ public class SelectImageFragment extends Fragment implements LoaderManager.Loade
         return new CursorLoader(
                 getContext(),
                 id == EXTERNAL_STORAGE_ID ?
-                        MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI :
-                        MediaStore.Images.Thumbnails.INTERNAL_CONTENT_URI,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI :
+                        MediaStore.Images.Media.INTERNAL_CONTENT_URI,
                 new String[]{
                         MediaStore.Images.ImageColumns._ID,
                         MediaStore.Images.ImageColumns.DATA

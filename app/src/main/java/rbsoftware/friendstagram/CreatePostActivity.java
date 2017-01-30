@@ -1,6 +1,7 @@
 package rbsoftware.friendstagram;
 
 import android.app.ProgressDialog;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Map;
 
 import rbsoftware.friendstagram.service.AuthenticationService;
@@ -86,7 +88,7 @@ public class CreatePostActivity extends AppCompatActivity implements ImageSelect
     }
 
     private void uploadImage() {
-        ProgressDialog dialog = ProgressDialog.show(this, "", "Uploading image...");
+        final ProgressDialog dialog = ProgressDialog.show(this, "", "Uploading image...");
         try {
             FileInputStream inputStream = new FileInputStream(new File(new URI(imageURI.toString())));
             ImageService.getInstance().uploadImage(inputStream, AuthenticationService.getInstance().getUsername(), new ImageService.ImageResponseHandler() {
@@ -99,6 +101,7 @@ public class CreatePostActivity extends AppCompatActivity implements ImageSelect
                         Log.d(TAG, "onComplete: Image upload successful!");
                         String publicID = (String) response.get("public_id"); // ID to reference image in Cloudinary
                     }
+                    dialog.dismiss();
                 }
             });
         } catch (IOException e) {
@@ -108,7 +111,6 @@ public class CreatePostActivity extends AppCompatActivity implements ImageSelect
             Toast.makeText(getApplicationContext(), "An error occurred!", Toast.LENGTH_SHORT).show();
             Log.e(TAG, "uploadImage: Invalid URI", e);
         }
-        dialog.dismiss();
     }
 
     private void showImageSelectFragment() {
