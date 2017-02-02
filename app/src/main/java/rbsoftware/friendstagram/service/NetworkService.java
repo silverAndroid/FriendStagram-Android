@@ -15,19 +15,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class NetworkService {
-    private static final String baseURL = "https://90551618.ngrok.io";
-    private static final Retrofit retrofit = new Retrofit.Builder()
+    private static final String baseURL = "https://a3c41e00.ngrok.io";
+    final Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
             .baseUrl(baseURL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
+            .addConverterFactory(GsonConverterFactory.create());
 
-    static Retrofit getRetrofit() {
-        return retrofit;
+    Retrofit getRetrofit() {
+        return retrofitBuilder.build();
     }
 
     public static Error parseError(Response<?> response) {
-        Converter<ResponseBody, Error> converter = getRetrofit()
-                .responseBodyConverter(Error.class, new Annotation[0]);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseURL)
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        Converter<ResponseBody, Error> converter = retrofit.responseBodyConverter(Error.class, new Annotation[0]);
 
         Error error;
 

@@ -12,12 +12,12 @@ import retrofit2.http.POST;
  * Created by silver_android on 1/5/2017.
  */
 
-public class UsersService {
+public class UsersService extends NetworkService {
 
     private final UserAPI api;
 
     public UsersService() {
-        api = NetworkService.getRetrofit().create(UserAPI.class);
+        api = getRetrofit().create(UserAPI.class);
     }
 
     public UserAPI getAPI() {
