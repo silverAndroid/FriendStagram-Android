@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FriendStagram</string>
+    <string name="app_name">Friendstagram</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -44,4 +44,5 @@
     <!-- Strings related to creating posts -->
     <string name="action_next">Next</string>
     <string name="message_filters_coming_soon">Filters Coming Soon</string>
+    <string name="prompt_caption">Write a caption…</string>
 </resources>
