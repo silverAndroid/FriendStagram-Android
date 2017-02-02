@@ -63,9 +63,6 @@ public class HomeFragment extends Fragment {
     };
     private ArrayList<Post> posts;
 
-    static {
-    }
-
     public HomeFragment() {
         // Required empty public constructor
     }
