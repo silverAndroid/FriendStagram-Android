@@ -1,21 +1,28 @@
 package rbsoftware.friendstagram.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+
 /**
  * Created by silver_android on 06/10/16.
  */
 
 public class Post {
     private int id;
+    @SerializedName("url")
     private String imageID;
+    @SerializedName("description")
     private String description;
-    private final User user;
+    @SerializedName("tags")
+    private ArrayList<String> hashTags;
+    private User user;
     private String imageURL; // Temporary until server is up
 
-    public Post(int id, String imageID, String description, User user) {
-        this.id = id;
+    public Post(String imageID, String description, ArrayList<String> tags) {
         this.imageID = imageID;
         this.description = description;
-        this.user = user;
+        hashTags = new ArrayList<>(tags);
     }
 
     /**
