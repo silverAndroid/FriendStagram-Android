@@ -146,8 +146,8 @@ public class CreatePostActivity extends AppCompatActivity implements ImageSelect
 
     private void createPost(String imageID, String caption) {
         final ProgressDialog dialog = ProgressDialog.show(this, "", "Sharing post...");
-        Call<Response<Post>> response = PostsService.getInstance().getAPI().createPost(new Post(imageID, caption, new ArrayList<String>()));
-        response.enqueue(new Callback<Response<Post>>() {
+        Call<Response<Post>> createPostTask = PostsService.getInstance().getAPI().createPost(new Post(imageID, caption, new ArrayList<String>()));
+        createPostTask.enqueue(new Callback<Response<Post>>() {
             @Override
             public void onResponse(Call<Response<Post>> call, retrofit2.Response<Response<Post>> response) {
                 if (response.isSuccessful()) {
