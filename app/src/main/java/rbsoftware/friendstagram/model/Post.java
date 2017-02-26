@@ -36,7 +36,7 @@ public class Post {
         this.user = user;
     }
 
-    public int getId() {
+    public int getID() {
         return id;
     }
 

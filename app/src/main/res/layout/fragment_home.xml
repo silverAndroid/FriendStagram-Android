@@ -11,6 +11,15 @@
         android:layout_height="match_parent"
         tools:context="rbsoftware.friendstagram.HomeFragment">
 
+        <ProgressBar
+            android:id="@+id/post_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            android:layout_gravity="center"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv"
             android:layout_width="match_parent"
