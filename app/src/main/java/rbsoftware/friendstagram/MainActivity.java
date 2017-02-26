@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import rbsoftware.friendstagram.model.Post;
+import rbsoftware.friendstagram.service.AuthenticationService;
 
 public class MainActivity extends AppCompatActivity implements ProfileFragment.UpdateListener, ToolbarManipulator {
 
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
 
     private void showAccountFragment() {
         currentTab = 2;
-        showFragment(ProfileFragment.newInstance(this), false);
+        showFragment(ProfileFragment.newInstance(this, AuthenticationService.getInstance().getUsername()), false);
     }
 
     private void showPostFragment(Post post) {

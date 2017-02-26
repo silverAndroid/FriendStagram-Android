@@ -28,7 +28,7 @@ import rbsoftware.friendstagram.model.User;
 
 public class ProfileFragment extends Fragment implements ProfileAdapter.ImageClickListener {
 
-    private static ToolbarManipulator toolbarManipulator;
+    private static final String ARG_USERNAME = "username";
     private String[] images = {
             "http://4.bp.blogspot.com/-F_6SfcFHKRE/UIjJKWfbt8I/AAAAAAAAA6w/AK5H_oGl9io/s1600/nature182.jpg",
             "http://rising.blackstar.com/wp-content/uploads/2012/08/95432c1c89bd11e1a9f71231382044a1_7-450x450.jpg",
@@ -49,14 +49,30 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
     };
 
     private UpdateListener mListener;
+    private ToolbarManipulator toolbarManipulator;
+    private String username;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
 
-    public static ProfileFragment newInstance(ToolbarManipulator manipulator) {
-        ProfileFragment.toolbarManipulator = manipulator;
-        return new ProfileFragment();
+    public static ProfileFragment newInstance(ToolbarManipulator manipulator, String username) {
+        ProfileFragment fragment = new ProfileFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(Constants.ARG_TOOLBAR_MANIPULATOR, manipulator);
+        args.putString(ARG_USERNAME, username);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null) {
+            toolbarManipulator = (ToolbarManipulator) args.getSerializable(Constants.ARG_TOOLBAR_MANIPULATOR);
+            username = args.getString(ARG_USERNAME);
+        }
     }
 
     @Override
@@ -74,17 +90,17 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
         toolbar.setBackgroundColor(0);
         toolbarManipulator.setToolbar(toolbar);
 
+        RecyclerView rv = (RecyclerView) view.findViewById(R.id.rv);
+        User user = new User(username, "http://tracara.com/wp-content/uploads/2016/04/aleksandar-radojicic-i-aja-e1461054273916.jpg?fa0c3d");
+        user.setName("Aleksandar");
+        user.setDescription("Time present & time past are both perhaps present in time future");
+        final ProfileAdapter adapter = new ProfileAdapter(user, new ArrayList<>(Arrays.asList(images)), this);
+
         SimpleDraweeView backDrop = (SimpleDraweeView) view.findViewById(R.id.backdrop);
         backDrop.setImageURI(Uri.parse("http://cdn.pcwallart.com/images/cool-backgrounds-hd-space-wallpaper-2.jpg"));
 
         SimpleDraweeView profilePicture = (SimpleDraweeView) view.findViewById(R.id.profile);
-        profilePicture.setImageURI(Uri.parse("https://premium.wpmudev.org/forums/?bb_attachments=712464&bbat=47619&inline"));
-
-        RecyclerView rv = (RecyclerView) view.findViewById(R.id.rv);
-        User user = new User("vemea", "http://tracara.com/wp-content/uploads/2016/04/aleksandar-radojicic-i-aja-e1461054273916.jpg?fa0c3d");
-        user.setName("Aleksandar");
-        user.setDescription("Time present & time past are both perhaps present in time future");
-        final ProfileAdapter adapter = new ProfileAdapter(user, new ArrayList<>(Arrays.asList(images)), this);
+        profilePicture.setImageURI(Uri.parse(user.getProfilePictureURL()));
 
         rv.setAdapter(adapter);
         final GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);

@@ -25,12 +25,17 @@ public class ProfileAdapter extends RecyclerView.Adapter {
     private static final int ITEM_VIEW_TYPE_HEADER = 0;
     private static final int ITEM_VIEW_TYPE_ITEM = 1;
     private User user;
-    private List<String> imageURLs;
+    private ArrayList<String> imageURLs;
     private ImageClickListener listener;
+
+    public ProfileAdapter(ImageClickListener imageClickListener) {
+        listener = imageClickListener;
+        imageURLs = new ArrayList<>();
+    }
 
     public ProfileAdapter(User user, ArrayList<String> imageURLs, ImageClickListener imageClickListener) {
         this.user = user;
-        this.imageURLs = imageURLs;
+        this.imageURLs = new ArrayList<>(imageURLs);
         listener = imageClickListener;
     }
 
@@ -75,7 +80,17 @@ public class ProfileAdapter extends RecyclerView.Adapter {
         return isHeader(position) ? ITEM_VIEW_TYPE_HEADER : ITEM_VIEW_TYPE_ITEM;
     }
 
-    boolean isHeader(int position) {
+    public void setUser(User user) {
+        boolean hadNoUser = this.user == null;
+        this.user = user;
+
+        if (hadNoUser)
+            notifyItemInserted(0);
+        else
+            notifyItemChanged(0);
+    }
+
+    private boolean isHeader(int position) {
         return user != null && position == 0;
     }
 
