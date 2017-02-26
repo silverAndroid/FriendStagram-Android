@@ -104,16 +104,16 @@ public class HomeFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.post_progress);
 
         posts = new ArrayList<>();
-        for (int i = 0; i < images.length; i++) {
+        /*for (int i = 0; i < images.length; i++) {
             Post post = new Post(images[i], new RandomString(250).nextString(),  new User(new RandomString(25)
                     .nextString(), profilePictures[i]));
             posts.add(post);
-        }
+        }*/
 
         adapter = new HomeAdapter(posts);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
-        getPosts();
+//        getPosts();
     }
 
     @Override
