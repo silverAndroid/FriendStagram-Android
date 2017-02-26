@@ -45,4 +45,9 @@
     <string name="action_next">Next</string>
     <string name="message_filters_coming_soon">Filters Coming Soon</string>
     <string name="prompt_caption">Write a caption…</string>
+    <string name="success_image_upload">Uploaded image successfully</string>
+
+    <!-- Strings related to retrieving information -->
+    <string name="error_occurred_user_info">Failed to retrieve user info</string>
+    <string name="error_occurred_posts">Unable to retrieve posts</string>
 </resources>
