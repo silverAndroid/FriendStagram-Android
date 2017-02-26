@@ -11,21 +11,31 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 
+import rbsoftware.friendstagram.model.Error;
 import rbsoftware.friendstagram.model.Post;
+import rbsoftware.friendstagram.model.Response;
 import rbsoftware.friendstagram.model.User;
+import rbsoftware.friendstagram.service.NetworkService;
+import rbsoftware.friendstagram.service.PostsService;
+import rbsoftware.friendstagram.service.UsersService;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class ProfileFragment extends Fragment implements ProfileAdapter.ImageClickListener {
 
     private static final String ARG_USERNAME = "username";
+    private static final String TAG = "ProfileFragment";
     private String[] images = {
             "http://4.bp.blogspot.com/-F_6SfcFHKRE/UIjJKWfbt8I/AAAAAAAAA6w/AK5H_oGl9io/s1600/nature182.jpg",
             "http://rising.blackstar.com/wp-content/uploads/2012/08/95432c1c89bd11e1a9f71231382044a1_7-450x450.jpg",
@@ -80,18 +90,60 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(0);
         toolbarManipulator.setToolbar(toolbar);
+        final ProfileAdapter adapter = new ProfileAdapter(this);
+
+        Call<Response<User>> getUserTask = UsersService.getInstance().getAPI().getUser(username);
+        getUserTask.enqueue(new Callback<Response<User>>() {
+            @Override
+            public void onResponse(Call<Response<User>> call, retrofit2.Response<Response<User>> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "onResponse: Get user info successful");
+                    User user = response.body().getData();
+                    user.setName("Aleksandar");
+                    user.setDescription("Time present & time past are both perhaps present in time future");
+                    adapter.setUser(user);
+                    update(user.getPostIDs().size(), user.getFollowersUserIDs().size(), user.getFollowingUserIDs().size(), "http://tracara.com/wp-content/uploads/2016/04/aleksandar-radojicic-i-aja-e1461054273916.jpg?fa0c3d", view);
+                } else {
+                    Error error = NetworkService.parseError(response);
+                    //TODO: Handle error
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Response<User>> call, Throwable t) {
+                Log.e(TAG, "onFailure: Failed to retrieve user info", t);
+                Toast.makeText(getContext(), getString(R.string.error_occurred_user_info), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Call<Response<ArrayList<Post>>> getPostsTask = PostsService.getInstance().getAPI().getPosts(username);
+        getPostsTask.enqueue(new Callback<Response<ArrayList<Post>>>() {
+            @Override
+            public void onResponse(Call<Response<ArrayList<Post>>> call, retrofit2.Response<Response<ArrayList<Post>>> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "onResponse: Retrieved posts successfully");
+                    adapter.setPosts(response.body().getData());
+                } else {
+                    Error error = NetworkService.parseError(response);
+                    // TODO: Handle error
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Response<ArrayList<Post>>> call, Throwable t) {
+                Log.e(TAG, "onFailure: Failed to retrieve posts", t);
+                Toast.makeText(getContext(), getString(R.string.error_occurred_posts), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.rv);
         User user = new User(username, "http://tracara.com/wp-content/uploads/2016/04/aleksandar-radojicic-i-aja-e1461054273916.jpg?fa0c3d");
-        user.setName("Aleksandar");
-        user.setDescription("Time present & time past are both perhaps present in time future");
-        final ProfileAdapter adapter = new ProfileAdapter(user, new ArrayList<String>(), this);
 
         SimpleDraweeView backDrop = (SimpleDraweeView) view.findViewById(R.id.backdrop);
         backDrop.setImageURI(Uri.parse("http://cdn.pcwallart.com/images/cool-backgrounds-hd-space-wallpaper-2.jpg"));
@@ -108,8 +160,6 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
             }
         });
         rv.setLayoutManager(layoutManager);
-
-        update(25, 34, 10, user.getProfilePictureURL(), view);
     }
 
     @Override
