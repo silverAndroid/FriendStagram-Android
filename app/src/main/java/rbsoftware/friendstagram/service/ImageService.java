@@ -38,12 +38,12 @@ public class ImageService {
         cloudinary = new Cloudinary(config);
     }
 
-    public void uploadImage(final InputStream uploadFileStream, final String username, final ImageResponseHandler callback) {
+    public void uploadImage(final InputStream uploadFileStream, final String username, final ImageResponseHandler<Map> callback) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    callback.onComplete(cloudinary.uploader().upload(uploadFileStream, ObjectUtils.asMap("folder", username, "resource_type", "image", "type", "authenticated")));
+                    callback.onComplete(cloudinary.uploader().upload(uploadFileStream, ObjectUtils.asMap("folder", username, "resource_type", "image")));
                 } catch (IOException e) {
                     Map<String, IOException> exceptionMap = new HashMap<>();
                     exceptionMap.put("exception", e);
@@ -54,8 +54,17 @@ public class ImageService {
         }).start();
     }
 
-    public interface ImageResponseHandler {
-        void onComplete(Map response);
+    public void getImageURI(final String publicID, final ImageResponseHandler<String> callback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                callback.onComplete(cloudinary.url().format(".jpg").generate(publicID));
+            }
+        }).start();
+    }
+
+    public interface ImageResponseHandler<T> {
+        void onComplete(T response);
     }
 
     public interface ImageAPI {

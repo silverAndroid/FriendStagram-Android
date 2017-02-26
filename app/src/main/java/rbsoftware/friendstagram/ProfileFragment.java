@@ -1,7 +1,6 @@
 package rbsoftware.friendstagram;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +19,6 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import rbsoftware.friendstagram.model.Post;
 import rbsoftware.friendstagram.model.User;
@@ -94,7 +91,7 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
         User user = new User(username, "http://tracara.com/wp-content/uploads/2016/04/aleksandar-radojicic-i-aja-e1461054273916.jpg?fa0c3d");
         user.setName("Aleksandar");
         user.setDescription("Time present & time past are both perhaps present in time future");
-        final ProfileAdapter adapter = new ProfileAdapter(user, new ArrayList<>(Arrays.asList(images)), this);
+        final ProfileAdapter adapter = new ProfileAdapter(user, new ArrayList<String>(), this);
 
         SimpleDraweeView backDrop = (SimpleDraweeView) view.findViewById(R.id.backdrop);
         backDrop.setImageURI(Uri.parse("http://cdn.pcwallart.com/images/cool-backgrounds-hd-space-wallpaper-2.jpg"));
@@ -132,11 +129,11 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
         mListener = null;
     }
 
-    public void update(int posts, int followers, int following, String profilePictureURL, View view) {
-        TextView numPosts = (TextView) view.findViewById(R.id.num_posts);
-        TextView numFollowers = (TextView) view.findViewById(R.id.num_followers);
-        TextView numFollowing = (TextView) view.findViewById(R.id.num_following);
-        SimpleDraweeView profilePicture = (SimpleDraweeView) view.findViewById(R.id.profile);
+    public void update(int posts, int followers, int following, String profilePictureURL, View mainView) {
+        TextView numPosts = (TextView) mainView.findViewById(R.id.num_posts);
+        TextView numFollowers = (TextView) mainView.findViewById(R.id.num_followers);
+        TextView numFollowing = (TextView) mainView.findViewById(R.id.num_following);
+        SimpleDraweeView profilePicture = (SimpleDraweeView) mainView.findViewById(R.id.profile);
 
         SpannableString postsString = new SpannableString(posts + "\nPOSTS");
         SpannableString followersString = new SpannableString(followers + "\nFOLLOWERS");

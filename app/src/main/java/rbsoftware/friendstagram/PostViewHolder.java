@@ -13,6 +13,7 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import rbsoftware.friendstagram.model.Post;
+import rbsoftware.friendstagram.service.ImageService;
 
 /**
  * Created by silver_android on 17/10/16.
@@ -31,9 +32,24 @@ class PostViewHolder extends RecyclerView.ViewHolder {
         username = (TextView) itemView.findViewById(R.id.username);
     }
 
-    public void init(Post post) {
+    public void init(final Post post) {
+       /* ImageService.getInstance().getImageURI(post.getImageID(), new ImageService.ImageResponseHandler<String>() {
+            @Override
+            public void onComplete(String response) {
+                Uri imageURI = Uri.parse(response);
+
+                ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(imageURI)
+                        .setResizeOptions(new ResizeOptions(500, 500))
+                        .build();
+                PipelineDraweeController imageController = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                        .setOldController(image.getController())
+                        .setImageRequest(imageRequest)
+                        .build();
+                image.setController(imageController);
+                image.setImageURI(imageURI);
+            }
+        });*/
         Uri imageURI = Uri.parse(post.getImageURL());
-        Uri profilePicURI = Uri.parse(post.getUser().getProfilePictureURL());
 
         ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(imageURI)
                 .setResizeOptions(new ResizeOptions(500, 500))
@@ -43,8 +59,10 @@ class PostViewHolder extends RecyclerView.ViewHolder {
                 .setImageRequest(imageRequest)
                 .build();
         image.setController(imageController);
+        image.setImageURI(imageURI);
+        Uri profilePicURI = Uri.parse(post.getUser().getProfilePictureURL());
 
-        ImageRequest profilePicRequest = ImageRequestBuilder.newBuilderWithSource(imageURI)
+        ImageRequest profilePicRequest = ImageRequestBuilder.newBuilderWithSource(profilePicURI)
                 .setResizeOptions(new ResizeOptions(300, 300))
                 .build();
         PipelineDraweeController profilePicController = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
@@ -54,7 +72,6 @@ class PostViewHolder extends RecyclerView.ViewHolder {
         profilePicture.setController(profilePicController);
 
         username.setText(post.getUser().getUsername());
-        image.setImageURI(imageURI);
         profilePicture.setImageURI(profilePicURI);
     }
 }

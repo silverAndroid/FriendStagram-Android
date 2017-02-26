@@ -77,7 +77,7 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
     }
 
     @Override
-    public void login(String username, String password) {
+    public void login(final String username, final String password) {
         showProgress(true);
 
         controller.login(username, password, new Callback<Response<String>>() {
@@ -86,6 +86,7 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
                 if (response.isSuccessful()) {
                     String token = response.body().getData();
                     AuthenticationService.getInstance().saveToken(token);
+                    AuthenticationService.getInstance().saveUsername(username);
                     onLoginSuccess();
                     Toast.makeText(getApplicationContext(), getString(R.string.success_login), Toast.LENGTH_SHORT).show();
                 } else {

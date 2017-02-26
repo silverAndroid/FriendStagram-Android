@@ -2,7 +2,6 @@ package rbsoftware.friendstagram.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -21,9 +20,10 @@ import retrofit2.http.Path;
 
 public class PostsService extends NetworkService {
 
+    private static PostsService instance;
     private final PostAPI api;
 
-    public PostsService() {
+    private PostsService() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(new Interceptor() {
             @Override
@@ -43,6 +43,12 @@ public class PostsService extends NetworkService {
         retrofitBuilder.client(client);
 
         api = retrofitBuilder.build().create(PostAPI.class);
+    }
+
+    public static PostsService getInstance() {
+        if (instance == null)
+            instance = new PostsService();
+        return instance;
     }
 
     public PostAPI getAPI() {

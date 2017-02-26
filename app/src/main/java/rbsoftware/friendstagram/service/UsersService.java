@@ -17,9 +17,16 @@ import retrofit2.http.Path;
 public class UsersService extends NetworkService {
 
     private final UserAPI api;
+    private static UsersService instance;
 
-    public UsersService() {
+    private UsersService() {
         api = getRetrofit().create(UserAPI.class);
+    }
+
+    public static UsersService getInstance() {
+        if (instance == null)
+            instance = new UsersService();
+        return instance;
     }
 
     public UserAPI getAPI() {
