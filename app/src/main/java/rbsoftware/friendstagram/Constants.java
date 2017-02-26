@@ -5,6 +5,7 @@ package rbsoftware.friendstagram;
  */
 
 public class Constants {
+    public static final String ARG_TOOLBAR_MANIPULATOR = "toolbar_manipulator";
     public class Cloudinary {
         public static final String API_KEY = BuildConfig.CLOUDINARY_API_KEY;
         public static final String API_SECRET = BuildConfig.CLOUDINARY_API_SECRET;
