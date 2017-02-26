@@ -115,7 +115,7 @@ public class CreatePostActivity extends AppCompatActivity implements ImageSelect
     private void uploadImage() {
         final ProgressDialog dialog = ProgressDialog.show(this, "", "Uploading image...");
         try {
-            FileInputStream inputStream = new FileInputStream(new File(new URI(imageURI.toString())));
+            FileInputStream inputStream = new FileInputStream(new File(new URI(imageURI.toString().replace(" ", "%20"))));
             ImageService.getInstance().uploadImage(inputStream, AuthenticationService.getInstance().getUsername(), new ImageService.ImageResponseHandler() {
                 @Override
                 public void onComplete(Map response) {
@@ -154,8 +154,11 @@ public class CreatePostActivity extends AppCompatActivity implements ImageSelect
             public void onResponse(Call<Response<Post>> call, retrofit2.Response<Response<Post>> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG, "onResponse: Image upload successful");
+                    Toast.makeText(getApplicationContext(), getString(R.string.success_image_upload), Toast.LENGTH_SHORT).show();
+                    NavUtils.navigateUpFromSameTask(CreatePostActivity.this);
                 } else {
                     Error error = NetworkService.parseError(response);
+                    //TODO: Handle error
                 }
                 dialog.dismiss();
             }
