@@ -33,7 +33,7 @@ class PostViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void init(final Post post) {
-       /* ImageService.getInstance().getImageURI(post.getImageID(), new ImageService.ImageResponseHandler<String>() {
+        ImageService.getInstance().getImageURI(post.getImageID(), new ImageService.ImageResponseHandler<String>() {
             @Override
             public void onComplete(String response) {
                 Uri imageURI = Uri.parse(response);
@@ -48,18 +48,7 @@ class PostViewHolder extends RecyclerView.ViewHolder {
                 image.setController(imageController);
                 image.setImageURI(imageURI);
             }
-        });*/
-        Uri imageURI = Uri.parse(post.getImageURL());
-
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(imageURI)
-                .setResizeOptions(new ResizeOptions(500, 500))
-                .build();
-        PipelineDraweeController imageController = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
-                .setOldController(image.getController())
-                .setImageRequest(imageRequest)
-                .build();
-        image.setController(imageController);
-        image.setImageURI(imageURI);
+        });
         Uri profilePicURI = Uri.parse(post.getUser().getProfilePictureURL());
 
         ImageRequest profilePicRequest = ImageRequestBuilder.newBuilderWithSource(profilePicURI)
