@@ -15,10 +15,7 @@ import retrofit2.Callback;
 
 public class LoginRegisterController {
 
-    private UsersService usersService;
-
     public LoginRegisterController() {
-        usersService = new UsersService();
     }
 
     public void login(String username, String password, Callback<Response<String>> callback) {
@@ -26,8 +23,8 @@ public class LoginRegisterController {
         loginDetails.put("username", username);
         loginDetails.put("password", password);
 
-        Call<Response<String>> mAuthTask = usersService.getAPI().login(loginDetails);
-        mAuthTask.enqueue(callback);
+        Call<Response<String>> loginTask = UsersService.getInstance().getAPI().login(loginDetails);
+        loginTask.enqueue(callback);
     }
 
     public void register(String username, String password, String name, String email, Callback<Response<User>> callback) {
@@ -37,7 +34,7 @@ public class LoginRegisterController {
         registerDetails.put("name", name);
         registerDetails.put("email", email);
 
-        Call<Response<User>> mRegisterTask = usersService.getAPI().register(registerDetails);
-        mRegisterTask.enqueue(callback);
+        Call<Response<User>> registerTask = UsersService.getInstance().getAPI().register(registerDetails);
+        registerTask.enqueue(callback);
     }
 }
