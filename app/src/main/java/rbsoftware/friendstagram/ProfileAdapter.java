@@ -2,13 +2,13 @@ package rbsoftware.friendstagram;
 
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ import java.util.List;
 import rbsoftware.friendstagram.databinding.HeaderProfileBinding;
 import rbsoftware.friendstagram.model.Post;
 import rbsoftware.friendstagram.model.User;
+import rbsoftware.friendstagram.service.ImageService;
 
 /**
  * Created by silver_android on 13/10/16.
@@ -26,17 +27,17 @@ public class ProfileAdapter extends RecyclerView.Adapter {
     private static final int ITEM_VIEW_TYPE_HEADER = 0;
     private static final int ITEM_VIEW_TYPE_ITEM = 1;
     private User user;
-    private ArrayList<String> imageURLs;
+    private ArrayList<Post> posts;
     private ImageClickListener listener;
 
     public ProfileAdapter(ImageClickListener imageClickListener) {
         listener = imageClickListener;
-        imageURLs = new ArrayList<>();
+        posts = new ArrayList<>();
     }
 
-    public ProfileAdapter(User user, ArrayList<String> imageURLs, ImageClickListener imageClickListener) {
+    public ProfileAdapter(User user, ArrayList<Post> posts, ImageClickListener imageClickListener) {
         this.user = user;
-        this.imageURLs = new ArrayList<>(imageURLs);
+        this.posts = new ArrayList<>(posts);
         listener = imageClickListener;
     }
 
@@ -58,29 +59,45 @@ public class ProfileAdapter extends RecyclerView.Adapter {
             HeaderViewHolder holder = (HeaderViewHolder) parent;
             holder.itemView.setUser(user);
         } else {
-            PictureViewHolder holder = (PictureViewHolder) parent;
-            final String imageURL = imageURLs.get(position - 1);
-            holder.image.setImageURI(Uri.parse(imageURL));
+            final PictureViewHolder holder = (PictureViewHolder) parent;
+            int index = position - (user == null ? 0 : 1);
+            final Post post = posts.get(index);
+            final boolean[] imageLoaded = {false};
+            ImageService.getInstance().getImageURI(post.getImageID(), new ImageService.ImageResponseHandler<String>() {
+                @Override
+                public void onComplete(final String imageURL) {
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.image.setImageURI(Uri.parse(imageURL));
+                            imageLoaded[0] = true;
+                        }
+                    };
+                    handler.post(runnable);
+                }
+            });
             holder.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Post post = new Post(imageURL, "", user);
-                    listener.onImageClick(post);
+                    if (imageLoaded[0]) {
+                        listener.onImageClick(post);
+                    }
                 }
             });
         }
     }
 
-    public void setImages(List<String> urls) {
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ImagesDiffCallback(this.imageURLs, urls));
-        this.imageURLs.clear();
-        this.imageURLs.addAll(urls);
+    public void setPosts(ArrayList<Post> posts) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new PostsDiffCallback(this.posts, posts));
+        this.posts.clear();
+        this.posts.addAll(posts);
         diffResult.dispatchUpdatesTo(this);
     }
 
     @Override
     public int getItemCount() {
-        return imageURLs.size() + (user != null ? 1 : 0);
+        return posts.size() + (user != null ? 1 : 0);
     }
 
     @Override
@@ -117,34 +134,34 @@ public class ProfileAdapter extends RecyclerView.Adapter {
         void onImageClick(Post post);
     }
 
-    private class ImagesDiffCallback extends DiffUtil.Callback {
+    private class PostsDiffCallback extends DiffUtil.Callback {
 
-        private final List<String> oldImageURLs;
-        private final List<String> newImageURLs;
+        private final List<Post> oldPosts;
+        private final List<Post> newPosts;
 
-        ImagesDiffCallback(List<String> oldImageURLs, List<String> newImageURLs) {
-            this.oldImageURLs = oldImageURLs;
-            this.newImageURLs = newImageURLs;
+        PostsDiffCallback(List<Post> oldPosts, List<Post> newPosts) {
+            this.oldPosts = oldPosts;
+            this.newPosts = newPosts;
         }
 
         @Override
         public int getOldListSize() {
-            return oldImageURLs.size();
+            return oldPosts.size();
         }
 
         @Override
         public int getNewListSize() {
-            return newImageURLs.size();
+            return newPosts.size();
         }
 
         @Override
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldImageURLs.get(oldItemPosition).equals(newImageURLs.get(newItemPosition));
+            return oldPosts.get(oldItemPosition).equals(newPosts.get(newItemPosition));
         }
 
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldImageURLs.get(oldItemPosition).equals(newImageURLs.get(newItemPosition));
+            return oldPosts.get(oldItemPosition).equals(newPosts.get(newItemPosition));
         }
     }
 }
