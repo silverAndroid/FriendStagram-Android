@@ -38,7 +38,6 @@ public class CreatePostActivity extends AppCompatActivity implements ImageSelect
     private static final String TAG = "CreatePostActivity";
     private Uri imageURI;
     private String caption;
-    private PostsService postsService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +51,6 @@ public class CreatePostActivity extends AppCompatActivity implements ImageSelect
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
         showImageSelectFragment();
-        postsService = new PostsService();
     }
 
     @Override
@@ -116,7 +114,7 @@ public class CreatePostActivity extends AppCompatActivity implements ImageSelect
         final ProgressDialog dialog = ProgressDialog.show(this, "", "Uploading image...");
         try {
             FileInputStream inputStream = new FileInputStream(new File(new URI(imageURI.toString())));
-            ImageService.getInstance().uploadImage(inputStream, AuthenticationService.getInstance().getUsername(), new ImageService.ImageResponseHandler() {
+            ImageService.getInstance().uploadImage(inputStream, AuthenticationService.getInstance().getUsername(), new ImageService.ImageResponseHandler<Map>() {
                 @Override
                 public void onComplete(Map response) {
                     if (response.containsKey("exception")) {
@@ -148,7 +146,7 @@ public class CreatePostActivity extends AppCompatActivity implements ImageSelect
 
     private void createPost(String imageID, String caption) {
         final ProgressDialog dialog = ProgressDialog.show(this, "", "Sharing post...");
-        Call<Response<Post>> response = postsService.getAPI().createPost(new Post(imageID, caption, new ArrayList<String>()));
+        Call<Response<Post>> response = PostsService.getInstance().getAPI().createPost(new Post(imageID, caption, new ArrayList<String>()));
         response.enqueue(new Callback<Response<Post>>() {
             @Override
             public void onResponse(Call<Response<Post>> call, retrofit2.Response<Response<Post>> response) {
