@@ -6,15 +6,26 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import rbsoftware.friendstagram.model.Error;
 import rbsoftware.friendstagram.model.Post;
+import rbsoftware.friendstagram.model.Response;
 import rbsoftware.friendstagram.model.User;
+import rbsoftware.friendstagram.service.AuthenticationService;
+import rbsoftware.friendstagram.service.NetworkService;
+import rbsoftware.friendstagram.service.PostsService;
 import rbsoftware.friendstagram.temp.RandomString;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,6 +33,7 @@ import rbsoftware.friendstagram.temp.RandomString;
 public class HomeFragment extends Fragment {
 
     private static final String KEY_POSTS_LIST = "posts_list";
+    private static final String TAG = "HomeFragment";
 
     private static ToolbarManipulator toolbarManipulator;
     private String[] images = {
@@ -62,6 +74,9 @@ public class HomeFragment extends Fragment {
             "http://helpgrowchange.com/wp-content/uploads/2014/03/tb_profile_201303_round.png"
     };
     private ArrayList<Post> posts;
+    private RecyclerView recyclerView;
+    private HomeAdapter adapter;
+    private ProgressBar progressBar;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -85,7 +100,8 @@ public class HomeFragment extends Fragment {
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbarManipulator.setToolbar(toolbar);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+        recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+        progressBar = (ProgressBar) view.findViewById(R.id.post_progress);
 
         posts = new ArrayList<>();
         for (int i = 0; i < images.length; i++) {
@@ -94,14 +110,46 @@ public class HomeFragment extends Fragment {
             posts.add(post);
         }
 
-        HomeAdapter adapter = new HomeAdapter(posts);
+        adapter = new HomeAdapter(posts);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+        getPosts();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
 //        outState.putParcelableArrayList(KEY_POSTS_LIST, posts);
         super.onSaveInstanceState(outState);
+    }
+
+    private void getPosts() {
+        showProgress(true);
+        Call<Response<ArrayList<Post>>> postTask = PostsService.getInstance().getAPI().getPosts(AuthenticationService.getInstance().getUsername());
+        postTask.enqueue(new Callback<Response<ArrayList<Post>>>() {
+            @Override
+            public void onResponse(Call<Response<ArrayList<Post>>> call, retrofit2.Response<Response<ArrayList<Post>>> response) {
+                if (response.isSuccessful()) {
+                    updatePosts(response.body().getData());
+                } else {
+                    Error error = NetworkService.parseError(response);
+                }
+                showProgress(false);
+            }
+
+            @Override
+            public void onFailure(Call<Response<ArrayList<Post>>> call, Throwable t) {
+                Log.e(TAG, "onFailure: Failed to retrieve posts", t);
+                showProgress(false);
+                Toast.makeText(getContext(), getString(R.string.error_occurred), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showProgress(boolean show) {
+        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    private void updatePosts(List<Post> posts) {
+        adapter.setPosts(posts);
     }
 }
