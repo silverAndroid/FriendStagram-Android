@@ -79,4 +79,13 @@ public class Post {
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Post) {
+            Post post = (Post) obj;
+            return post.id == id && post.imageID.equals(imageID) && post.description.equals(description) && post.user.equals(user) && post.hashTags.equals(hashTags);
+        }
+        return false;
+    }
 }
