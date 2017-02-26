@@ -25,6 +25,7 @@ import java.util.Arrays;
 
 import rbsoftware.friendstagram.model.Post;
 import rbsoftware.friendstagram.model.User;
+import rbsoftware.friendstagram.service.AuthenticationService;
 
 public class ProfileFragment extends Fragment implements ProfileAdapter.ImageClickListener {
 
@@ -81,10 +82,10 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
         profilePicture.setImageURI(Uri.parse("https://premium.wpmudev.org/forums/?bb_attachments=712464&bbat=47619&inline"));
 
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.rv);
-        User user = new User("vemea", "http://tracara.com/wp-content/uploads/2016/04/aleksandar-radojicic-i-aja-e1461054273916.jpg?fa0c3d");
+        User user = new User(AuthenticationService.getInstance().getUsername(), "http://tracara.com/wp-content/uploads/2016/04/aleksandar-radojicic-i-aja-e1461054273916.jpg?fa0c3d");
         user.setName("Aleksandar");
         user.setDescription("Time present & time past are both perhaps present in time future");
-        final ProfileAdapter adapter = new ProfileAdapter(user, new ArrayList<>(Arrays.asList(images)), this);
+        final ProfileAdapter adapter = new ProfileAdapter(user, new ArrayList<String>(), this);
 
         rv.setAdapter(adapter);
         final GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
@@ -116,11 +117,11 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
         mListener = null;
     }
 
-    public void update(int posts, int followers, int following, String profilePictureURL, View view) {
-        TextView numPosts = (TextView) view.findViewById(R.id.num_posts);
-        TextView numFollowers = (TextView) view.findViewById(R.id.num_followers);
-        TextView numFollowing = (TextView) view.findViewById(R.id.num_following);
-        SimpleDraweeView profilePicture = (SimpleDraweeView) view.findViewById(R.id.profile);
+    public void update(int posts, int followers, int following, String profilePictureURL, View mainView) {
+        TextView numPosts = (TextView) mainView.findViewById(R.id.num_posts);
+        TextView numFollowers = (TextView) mainView.findViewById(R.id.num_followers);
+        TextView numFollowing = (TextView) mainView.findViewById(R.id.num_following);
+        SimpleDraweeView profilePicture = (SimpleDraweeView) mainView.findViewById(R.id.profile);
 
         SpannableString postsString = new SpannableString(posts + "\nPOSTS");
         SpannableString followersString = new SpannableString(followers + "\nFOLLOWERS");

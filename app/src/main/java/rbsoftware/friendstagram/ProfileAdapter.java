@@ -2,6 +2,7 @@ package rbsoftware.friendstagram;
 
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +66,13 @@ public class ProfileAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public void setImages(List<String> urls) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new ImagesDiffCallback(this.imageURLs, urls));
+        this.imageURLs.clear();
+        this.imageURLs.addAll(urls);
+        diffResult.dispatchUpdatesTo(this);
+    }
+
     @Override
     public int getItemCount() {
         return imageURLs.size() + (user != null ? 1 : 0);
@@ -92,5 +100,36 @@ public class ProfileAdapter extends RecyclerView.Adapter {
 
     interface ImageClickListener {
         void onImageClick(Post post);
+    }
+
+    private class ImagesDiffCallback extends DiffUtil.Callback {
+
+        private final List<String> oldImageURLs;
+        private final List<String> newImageURLs;
+
+        ImagesDiffCallback(List<String> oldImageURLs, List<String> newImageURLs) {
+            this.oldImageURLs = oldImageURLs;
+            this.newImageURLs = newImageURLs;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldImageURLs.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newImageURLs.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldImageURLs.get(oldItemPosition).equals(newImageURLs.get(newItemPosition));
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldImageURLs.get(oldItemPosition).equals(newImageURLs.get(newItemPosition));
+        }
     }
 }
