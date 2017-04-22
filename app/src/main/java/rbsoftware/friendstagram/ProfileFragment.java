@@ -105,10 +105,8 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
                 if (response.isSuccessful()) {
                     Log.d(TAG, "onResponse: Get user info successful");
                     User user = response.body().getData();
-                    user.setName("Aleksandar");
-                    user.setDescription("Time present & time past are both perhaps present in time future");
                     adapter.setUser(user);
-                    update(user.getPostIDs().size(), user.getFollowersUserIDs().size(), user.getFollowingUserIDs().size(), "http://tracara.com/wp-content/uploads/2016/04/aleksandar-radojicic-i-aja-e1461054273916.jpg?fa0c3d", view);
+                    update(user.getPosts().size(), user.getFollowersUserIDs().size(), user.getFollowingUserIDs().size(), "http://tracara.com/wp-content/uploads/2016/04/aleksandar-radojicic-i-aja-e1461054273916.jpg?fa0c3d", view);
                 } else {
                     Error error = NetworkService.parseError(response);
                     //TODO: Handle error
@@ -119,26 +117,6 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
             public void onFailure(Call<Response<User>> call, Throwable t) {
                 Log.e(TAG, "onFailure: Failed to retrieve user info", t);
                 Toast.makeText(getContext(), getString(R.string.error_occurred_user_info), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        Call<Response<ArrayList<Post>>> getPostsTask = PostsService.getInstance().getAPI().getPosts(username);
-        getPostsTask.enqueue(new Callback<Response<ArrayList<Post>>>() {
-            @Override
-            public void onResponse(Call<Response<ArrayList<Post>>> call, retrofit2.Response<Response<ArrayList<Post>>> response) {
-                if (response.isSuccessful()) {
-                    Log.d(TAG, "onResponse: Retrieved posts successfully");
-                    adapter.setPosts(response.body().getData());
-                } else {
-                    Error error = NetworkService.parseError(response);
-                    // TODO: Handle error
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Response<ArrayList<Post>>> call, Throwable t) {
-                Log.e(TAG, "onFailure: Failed to retrieve posts", t);
-                Toast.makeText(getContext(), getString(R.string.error_occurred_posts), Toast.LENGTH_SHORT).show();
             }
         });
 

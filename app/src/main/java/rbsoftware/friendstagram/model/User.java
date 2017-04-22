@@ -15,7 +15,7 @@ public class User {
     private String name;
     private String description;
     @SerializedName("posts")
-    private ArrayList<String> postIDs;
+    private ArrayList<Post> posts;
     @SerializedName("following")
     private ArrayList<String> followingUserIDs;
     @SerializedName("followers")
@@ -52,8 +52,8 @@ public class User {
         this.description = description;
     }
 
-    public ArrayList<String> getPostIDs() {
-        return postIDs;
+    public ArrayList<Post> getPosts() {
+        return posts;
     }
 
     public ArrayList<String> getFollowingUserIDs() {
