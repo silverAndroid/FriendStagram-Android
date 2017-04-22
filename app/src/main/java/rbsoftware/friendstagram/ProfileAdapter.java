@@ -113,6 +113,8 @@ public class ProfileAdapter extends RecyclerView.Adapter {
             notifyItemInserted(0);
         else
             notifyItemChanged(0);
+
+        setPosts(user.getPosts());
     }
 
     boolean isHeader(int position) {
