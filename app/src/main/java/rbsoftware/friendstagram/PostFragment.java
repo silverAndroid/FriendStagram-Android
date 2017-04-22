@@ -45,7 +45,7 @@ public class PostFragment extends Fragment {
         toolbarManipulator.setToolbar(toolbar);
 
         View pictureView = view.findViewById(R.id.picture);
-        PostViewHolder picture = new PostViewHolder(pictureView);
+        PostViewHolder picture = new PostViewHolder(pictureView, getActivity());
         picture.init(post);
     }
 }

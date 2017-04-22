@@ -110,7 +110,7 @@ public class HomeFragment extends Fragment {
             posts.add(post);
         }*/
 
-        adapter = new HomeAdapter(posts);
+        adapter = new HomeAdapter(posts, getActivity());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 //        getPosts();

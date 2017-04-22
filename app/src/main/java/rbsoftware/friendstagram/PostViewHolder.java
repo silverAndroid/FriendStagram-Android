@@ -1,5 +1,6 @@
 package rbsoftware.friendstagram;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,35 +22,46 @@ import rbsoftware.friendstagram.service.ImageService;
 
 class PostViewHolder extends RecyclerView.ViewHolder {
 
-    SimpleDraweeView profilePicture;
-    SimpleDraweeView image;
-    TextView username;
+    private final Activity activity;
+    private SimpleDraweeView profilePicture;
+    private SimpleDraweeView image;
+    private TextView username;
 
-    PostViewHolder(View itemView) {
+    PostViewHolder(View itemView, Activity activity) {
         super(itemView);
         profilePicture = (SimpleDraweeView) itemView.findViewById(R.id.profile);
         image = (SimpleDraweeView) itemView.findViewById(R.id.image);
         username = (TextView) itemView.findViewById(R.id.username);
+        this.activity = activity;
     }
 
     public void init(final Post post) {
         ImageService.getInstance().getImageURI(post.getImageID(), new ImageService.ImageResponseHandler<String>() {
             @Override
             public void onComplete(String response) {
-                Uri imageURI = Uri.parse(response);
+                final Uri imageURI = Uri.parse(response);
 
                 ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(imageURI)
                         .setResizeOptions(new ResizeOptions(500, 500))
                         .build();
-                PipelineDraweeController imageController = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                final PipelineDraweeController imageController = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
                         .setOldController(image.getController())
                         .setImageRequest(imageRequest)
                         .build();
-                image.setController(imageController);
-                image.setImageURI(imageURI);
+
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        image.setController(imageController);
+                        image.setImageURI(imageURI);
+                    }
+                });
             }
         });
-        Uri profilePicURI = Uri.parse(post.getUser().getProfilePictureURL());
+        Uri profilePicURI = Uri.parse(
+                "http://tracara.com/wp-content/uploads/2016/04/aleksandar-radojicic-i-aja-e1461054273916.jpg?fa0c3d"
+                /*post.getUser().getProfilePictureURL()*/
+        );
 
         ImageRequest profilePicRequest = ImageRequestBuilder.newBuilderWithSource(profilePicURI)
                 .setResizeOptions(new ResizeOptions(300, 300))

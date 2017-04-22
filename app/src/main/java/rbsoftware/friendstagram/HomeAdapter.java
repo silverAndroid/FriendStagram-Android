@@ -1,5 +1,6 @@
 package rbsoftware.friendstagram;
 
+import android.app.Activity;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,15 +19,17 @@ import rbsoftware.friendstagram.model.Post;
 public class HomeAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
     private ArrayList<Post> posts;
+    private final Activity activity;
 
-    public HomeAdapter(ArrayList<Post> posts) {
+    public HomeAdapter(ArrayList<Post> posts, Activity activity) {
         this.posts = posts;
+        this.activity = activity;
     }
 
     @Override
     public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
-        return new PostViewHolder(view);
+        return new PostViewHolder(view, activity);
     }
 
     @Override
