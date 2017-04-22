@@ -57,7 +57,7 @@ public class ImageService {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                callback.onComplete(cloudinary.url().signed(true).type("authenticated").generate(publicID));
+                callback.onComplete(cloudinary.url().format("jpg").generate(publicID));
             }
         }).start();
     }
