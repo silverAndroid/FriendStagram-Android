@@ -43,7 +43,7 @@ public class UsersService extends NetworkService {
         @GET("/users/{username}")
         Call<Response<User>> getUser(@Path("username") String username);
 
-        @POST("/logOff")
+        @POST("/users/logoff")
         Call<User> logout();
     }
 }

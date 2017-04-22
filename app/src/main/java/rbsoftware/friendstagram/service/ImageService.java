@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.google.common.base.Function;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,18 +23,18 @@ public class ImageService {
     private static ImageService ourInstance;
     private Cloudinary cloudinary;
 
-    public static ImageService getInstance() {
-        if (ourInstance == null)
-            ourInstance = new ImageService();
-        return ourInstance;
-    }
-
     private ImageService() {
         Map<String, String> config = new HashMap<>();
         config.put("cloud_name", Constants.Cloudinary.CLOUD_NAME);
         config.put("api_key", Constants.Cloudinary.API_KEY);
         config.put("api_secret", Constants.Cloudinary.API_SECRET);
         cloudinary = new Cloudinary(config);
+    }
+
+    public static ImageService getInstance() {
+        if (ourInstance == null)
+            ourInstance = new ImageService();
+        return ourInstance;
     }
 
     public void uploadImage(final InputStream uploadFileStream, final String username, final ImageResponseHandler<Map> callback) {

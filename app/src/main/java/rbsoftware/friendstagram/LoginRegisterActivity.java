@@ -17,9 +17,6 @@ import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import rbsoftware.friendstagram.model.Error;
 import rbsoftware.friendstagram.model.Response;
 import rbsoftware.friendstagram.model.User;
@@ -158,7 +155,9 @@ public class LoginRegisterActivity extends AppCompatActivity implements LoginFra
 
     private void handleError(Error error) {
         showProgress(false);
-        if (error.getMessage().equals("Username is Null") || error.getMessage().equals("Password is Null")) {
+        if (error.getMessage() == null) {
+            Toast.makeText(getBaseContext(), getString(R.string.error_occurred), Toast.LENGTH_SHORT).show();
+        } else if (error.getMessage().contains("is Null")) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
             if (fragment instanceof LoginFragment) {
                 LoginFragment loginFragment = (LoginFragment) fragment;
