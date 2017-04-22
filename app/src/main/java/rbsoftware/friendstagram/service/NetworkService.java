@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 
 import okhttp3.ResponseBody;
+import rbsoftware.friendstagram.Constants;
 import rbsoftware.friendstagram.model.Error;
 import retrofit2.Converter;
 import retrofit2.Response;
@@ -15,10 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class NetworkService {
-//    private static final String baseURL = "http://159.203.24.18";
-    private static final String baseURL = "https://12d88041.ngrok.io";
     final Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-            .baseUrl(baseURL)
+            .baseUrl(Constants.Application.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create());
 
     Retrofit getRetrofit() {
@@ -27,7 +26,7 @@ public class NetworkService {
 
     public static Error parseError(Response<?> response) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(baseURL)
+                .baseUrl(Constants.Application.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build();
         Converter<ResponseBody, Error> converter = retrofit.responseBodyConverter(Error.class, new Annotation[0]);
 

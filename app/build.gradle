@@ -16,6 +16,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes.each {
+        it.buildConfigField "String", "BASE_URL", properties['BASE_URL']
         it.buildConfigField "String", "CLOUDINARY_API_KEY", properties['CLOUDINARY_API_KEY']
         it.buildConfigField "String", "CLOUDINARY_API_SECRET", properties['CLOUDINARY_API_SECRET']
         it.buildConfigField "String", "CLOUDINARY_CLOUD_NAME", properties['CLOUDINARY_CLOUD']

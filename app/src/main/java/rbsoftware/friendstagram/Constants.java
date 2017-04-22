@@ -11,4 +11,7 @@ public class Constants {
         public static final String API_SECRET = BuildConfig.CLOUDINARY_API_SECRET;
         public static final String CLOUD_NAME = BuildConfig.CLOUDINARY_CLOUD_NAME;
     }
+    public class Application {
+        public static final String BASE_URL = BuildConfig.BASE_URL;
+    }
 }
