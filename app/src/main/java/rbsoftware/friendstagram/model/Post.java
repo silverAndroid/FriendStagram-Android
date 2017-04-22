@@ -10,12 +10,13 @@ import java.util.ArrayList;
 
 public class Post {
     private int id;
-    @SerializedName("url")
+    @SerializedName("image_url")
     private String imageID;
     @SerializedName("description")
     private String description;
     @SerializedName("tags")
     private ArrayList<String> hashTags;
+    @SerializedName("user")
     private User user;
     private String imageURL; // Temporary until server is up
 
