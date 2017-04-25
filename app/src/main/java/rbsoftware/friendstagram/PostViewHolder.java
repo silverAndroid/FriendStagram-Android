@@ -36,28 +36,19 @@ class PostViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void init(final Post post) {
-        ImageService.getInstance().getImageURI(post.getImageID(), new ImageService.ImageResponseHandler<String>() {
-            @Override
-            public void onComplete(String response) {
-                final Uri imageURI = Uri.parse(response);
+        final Uri imageURI = Uri.parse(post.getImageURL());
 
-                ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(imageURI)
-                        .setResizeOptions(new ResizeOptions(500, 500))
-                        .build();
-                final PipelineDraweeController imageController = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
-                        .setOldController(image.getController())
-                        .setImageRequest(imageRequest)
-                        .build();
+        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(imageURI)
+                .setResizeOptions(new ResizeOptions(500, 500))
+                .build();
+        final PipelineDraweeController imageController = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                .setOldController(image.getController())
+                .setImageRequest(imageRequest)
+                .build();
 
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        image.setController(imageController);
-                        image.setImageURI(imageURI);
-                    }
-                });
-            }
-        });
+        image.setController(imageController);
+        image.setImageURI(imageURI);
+
         Uri profilePicURI = Uri.parse(
                 "http://tracara.com/wp-content/uploads/2016/04/aleksandar-radojicic-i-aja-e1461054273916.jpg?fa0c3d"
                 /*post.getUser().getProfilePictureURL()*/

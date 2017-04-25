@@ -122,11 +122,11 @@ public class CreatePostActivity extends AppCompatActivity implements ImageSelect
                         Log.e(TAG, "nextClicked: Failed to upload image", (IOException) response.get("exception"));
                     } else {
                         Log.d(TAG, "onComplete: Image upload successful!");
-                        final String publicID = (String) response.get("public_id"); // ID to reference image in Cloudinary
+                        final String publicURL = (String) response.get("secure_url"); // ID to reference image in Cloudinary
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                createPost(publicID, caption);
+                                createPost(publicURL, caption);
                             }
                         });
                     }
@@ -144,9 +144,9 @@ public class CreatePostActivity extends AppCompatActivity implements ImageSelect
         }
     }
 
-    private void createPost(String imageID, String caption) {
+    private void createPost(String imageURL, String caption) {
         final ProgressDialog dialog = ProgressDialog.show(this, "", "Sharing post...");
-        Call<Response<Post>> createPostTask = PostsService.getInstance().getAPI().createPost(new Post(imageID, caption, new ArrayList<String>()));
+        Call<Response<Post>> createPostTask = PostsService.getInstance().getAPI().createPost(new Post(imageURL, caption, new ArrayList<String>()));
         createPostTask.enqueue(new Callback<Response<Post>>() {
             @Override
             public void onResponse(Call<Response<Post>> call, retrofit2.Response<Response<Post>> response) {

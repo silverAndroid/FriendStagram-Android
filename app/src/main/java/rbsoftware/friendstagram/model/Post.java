@@ -11,17 +11,16 @@ import java.util.ArrayList;
 public class Post {
     private int id;
     @SerializedName("image_url")
-    private String imageID;
+    private String imageURL;
     @SerializedName("description")
     private String description;
     @SerializedName("tags")
     private ArrayList<String> hashTags;
     @SerializedName("user")
     private User user;
-    private String imageURL; // Temporary until server is up
 
-    public Post(String imageID, String description, ArrayList<String> tags) {
-        this.imageID = imageID;
+    public Post(String imageURL, String description, ArrayList<String> tags) {
+        this.imageURL = imageURL;
         this.description = description;
         hashTags = new ArrayList<>(tags);
     }
@@ -45,14 +44,6 @@ public class Post {
         this.id = id;
     }
 
-    public String getImageID() {
-        return imageID;
-    }
-
-    public void setImageID(String imageID) {
-        this.imageID = imageID;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -65,18 +56,10 @@ public class Post {
         return user;
     }
 
-    /**
-     * Temporary until server is up
-     * @return
-     */
     public String getImageURL() {
         return imageURL;
     }
 
-    /**
-     * Temporary until server is up
-     * @param imageURL
-     */
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
@@ -85,7 +68,7 @@ public class Post {
     public boolean equals(Object obj) {
         if (obj instanceof Post) {
             Post post = (Post) obj;
-            return post.id == id && post.imageID.equals(imageID) && post.description.equals(description) && post.user.equals(user) && post.hashTags.equals(hashTags);
+            return post.id == id && post.imageURL.equals(imageURL) && post.description.equals(description) && post.user.equals(user) && post.hashTags.equals(hashTags);
         }
         return false;
     }

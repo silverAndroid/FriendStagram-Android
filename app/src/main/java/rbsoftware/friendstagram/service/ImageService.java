@@ -53,15 +53,6 @@ public class ImageService {
         }).start();
     }
 
-    public void getImageURI(final String publicID, final ImageResponseHandler<String> callback) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                callback.onComplete(cloudinary.url().format("jpg").generate(publicID));
-            }
-        }).start();
-    }
-
     public interface ImageResponseHandler<T> {
         void onComplete(T response);
     }

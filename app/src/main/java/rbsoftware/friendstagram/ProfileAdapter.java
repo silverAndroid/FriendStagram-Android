@@ -63,20 +63,8 @@ public class ProfileAdapter extends RecyclerView.Adapter {
             int index = position - (user == null ? 0 : 1);
             final Post post = posts.get(index);
             final boolean[] imageLoaded = {false};
-            ImageService.getInstance().getImageURI(post.getImageID(), new ImageService.ImageResponseHandler<String>() {
-                @Override
-                public void onComplete(final String imageURL) {
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.image.setImageURI(Uri.parse(imageURL));
-                            imageLoaded[0] = true;
-                        }
-                    };
-                    handler.post(runnable);
-                }
-            });
+            holder.image.setImageURI(Uri.parse(post.getImageURL()));
+            imageLoaded[0] = true;
             holder.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
