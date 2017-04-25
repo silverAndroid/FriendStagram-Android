@@ -1,4 +1,4 @@
-package rbsoftware.friendstagram;
+package rbsoftware.friendstagram.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,21 +14,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import rbsoftware.friendstagram.R;
+import rbsoftware.friendstagram.Util;
 import rbsoftware.friendstagram.model.Error;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LoginFragment extends Fragment {
+public class RegisterFragment extends Fragment {
 
-    private LoginListener mListener;
+    private RegisterListener mListener;
 
     // UI references.
+    private View mRegisterFormView;
+    private EditText mNameView;
+    private EditText mEmailView;
     private EditText mUsernameView;
     private EditText mPasswordView;
 
-    public LoginFragment() {
+    public RegisterFragment() {
         // Required empty public constructor
     }
 
@@ -41,14 +46,15 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Set up the login form.
+        mNameView = (EditText) view.findViewById(R.id.name);
+        mEmailView = (EditText) view.findViewById(R.id.email);
         mUsernameView = (EditText) view.findViewById(R.id.username);
 
         mPasswordView = (EditText) view.findViewById(R.id.password);
@@ -56,7 +62,7 @@ public class LoginFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptRegister();
                     return true;
                 }
                 return false;
@@ -66,18 +72,18 @@ public class LoginFragment extends Fragment {
         Button signInButton = (Button) view.findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                attemptLogin();
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.loadLoginPage();
+                }
             }
         });
 
         Button registerButton = (Button) view.findViewById(R.id.register_button);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if (mListener != null) {
-                    mListener.loadRegisterPage();
-                }
+            public void onClick(View view) {
+                attemptRegister();
             }
         });
     }
@@ -85,11 +91,11 @@ public class LoginFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof LoginListener) {
-            mListener = (LoginListener) context;
+        if (context instanceof RegisterListener) {
+            mListener = (RegisterListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement LoginListener");
+                    + " must implement RegisterListener");
         }
     }
 
@@ -99,18 +105,21 @@ public class LoginFragment extends Fragment {
         mListener = null;
     }
 
-
     /**
-     * Attempts to sign in or register the account specified by the login form.
+     * Attempts to sign in or register the account specified by the register form.
      * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * errors are presented and no actual register attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptRegister() {
         // Reset errors.
+        mNameView.setError(null);
+        mEmailView.setError(null);
         mUsernameView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
+        String name = mNameView.getText().toString();
+        String email = mEmailView.getText().toString();
         String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
@@ -118,7 +127,7 @@ public class LoginFragment extends Fragment {
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!Util.isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password) && !Util.isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -135,15 +144,33 @@ public class LoginFragment extends Fragment {
             cancel = true;
         }
 
+        // Check for a valid email
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if (!Util.isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        }
+
+        // Check for an empty name
+        if (TextUtils.isEmpty(name)) {
+            mNameView.setError(getString(R.string.error_field_required));
+            focusView = mNameView;
+            cancel = true;
+        }
+
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
+            // There was an error; don't attempt register and focus the first
             // form field with an error.
             focusView.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             if (mListener != null) {
-                mListener.login(username, password);
+                mListener.register(name, email, username, password);
             }
         }
     }
@@ -158,8 +185,8 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    public interface LoginListener {
-        void login(String username, String password);
-        void loadRegisterPage();
+    public interface RegisterListener {
+        void register(String name, String email, String username, String password);
+        void loadLoginPage();
     }
 }

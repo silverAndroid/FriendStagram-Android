@@ -1,9 +1,7 @@
-package rbsoftware.friendstagram;
+package rbsoftware.friendstagram.ui.adapter;
 
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,10 +11,11 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import rbsoftware.friendstagram.ui.viewholder.PictureViewHolder;
+import rbsoftware.friendstagram.R;
 import rbsoftware.friendstagram.databinding.HeaderProfileBinding;
 import rbsoftware.friendstagram.model.Post;
 import rbsoftware.friendstagram.model.User;
-import rbsoftware.friendstagram.service.ImageService;
 
 /**
  * Created by silver_android on 13/10/16.
@@ -105,7 +104,7 @@ public class ProfileAdapter extends RecyclerView.Adapter {
         setPosts(user.getPosts());
     }
 
-    boolean isHeader(int position) {
+    public boolean isHeader(int position) {
         return user != null && position == 0;
     }
 
@@ -120,7 +119,7 @@ public class ProfileAdapter extends RecyclerView.Adapter {
         }
     }
 
-    interface ImageClickListener {
+    public interface ImageClickListener {
         void onImageClick(Post post);
     }
 

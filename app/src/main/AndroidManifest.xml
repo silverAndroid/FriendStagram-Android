@@ -13,9 +13,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.activity.MainActivity">
         </activity>
-        <activity android:name=".LoginRegisterActivity">
+        <activity android:name=".ui.activity.LoginRegisterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -23,12 +23,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreatePostActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".ui.activity.CreatePostActivity"
+            android:parentActivityName=".ui.activity.MainActivity"
             android:theme="@style/PicturesTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="rbsoftware.friendstagram.MainActivity"/>
+                android:value="rbsoftware.friendstagram.ui.activity.MainActivity"/>
         </activity>
         <provider
             android:name="android.support.v4.content.FileProvider"

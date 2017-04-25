@@ -1,4 +1,4 @@
-package rbsoftware.friendstagram;
+package rbsoftware.friendstagram.ui.viewholder;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -13,6 +13,7 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
+import rbsoftware.friendstagram.R;
 import rbsoftware.friendstagram.model.Post;
 import rbsoftware.friendstagram.service.ImageService;
 
@@ -20,14 +21,14 @@ import rbsoftware.friendstagram.service.ImageService;
  * Created by silver_android on 17/10/16.
  */
 
-class PostViewHolder extends RecyclerView.ViewHolder {
+public class PostViewHolder extends RecyclerView.ViewHolder {
 
     private final Activity activity;
     private SimpleDraweeView profilePicture;
     private SimpleDraweeView image;
     private TextView username;
 
-    PostViewHolder(View itemView, Activity activity) {
+    public PostViewHolder(View itemView, Activity activity) {
         super(itemView);
         profilePicture = (SimpleDraweeView) itemView.findViewById(R.id.profile);
         image = (SimpleDraweeView) itemView.findViewById(R.id.image);

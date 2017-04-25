@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="rbsoftware.friendstagram.MainActivity">
+    tools:context="rbsoftware.friendstagram.ui.activity.MainActivity">
 
     <include layout="@layout/content_main"/>
 

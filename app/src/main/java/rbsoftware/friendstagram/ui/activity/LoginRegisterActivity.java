@@ -1,4 +1,4 @@
-package rbsoftware.friendstagram;
+package rbsoftware.friendstagram.ui.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -17,6 +17,10 @@ import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import rbsoftware.friendstagram.ui.fragment.LoginFragment;
+import rbsoftware.friendstagram.LoginRegisterController;
+import rbsoftware.friendstagram.R;
+import rbsoftware.friendstagram.ui.fragment.RegisterFragment;
 import rbsoftware.friendstagram.model.Error;
 import rbsoftware.friendstagram.model.Response;
 import rbsoftware.friendstagram.model.User;

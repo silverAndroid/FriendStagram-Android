@@ -1,4 +1,4 @@
-package rbsoftware.friendstagram;
+package rbsoftware.friendstagram.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import rbsoftware.friendstagram.ui.fragment.HomeFragment;
+import rbsoftware.friendstagram.ui.fragment.PostFragment;
+import rbsoftware.friendstagram.ui.fragment.ProfileFragment;
+import rbsoftware.friendstagram.R;
+import rbsoftware.friendstagram.ToolbarManipulator;
 import rbsoftware.friendstagram.model.Post;
 import rbsoftware.friendstagram.service.AuthenticationService;
 

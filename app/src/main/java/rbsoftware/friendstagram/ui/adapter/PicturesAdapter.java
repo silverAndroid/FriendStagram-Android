@@ -1,4 +1,4 @@
-package rbsoftware.friendstagram;
+package rbsoftware.friendstagram.ui.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import rbsoftware.friendstagram.ImageSelectListener;
+import rbsoftware.friendstagram.ui.viewholder.PictureViewHolder;
+import rbsoftware.friendstagram.R;
 import rbsoftware.friendstagram.model.Picture;
 
 /**

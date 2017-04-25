@@ -9,7 +9,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="rbsoftware.friendstagram.HomeFragment">
+        tools:context="rbsoftware.friendstagram.ui.fragment.HomeFragment">
 
         <ProgressBar
             android:id="@+id/post_progress"

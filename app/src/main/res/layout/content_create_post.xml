@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="rbsoftware.friendstagram.CreatePostActivity"
+    tools:context="rbsoftware.friendstagram.ui.activity.CreatePostActivity"
     tools:showIn="@layout/activity_create_post">
 
 </FrameLayout>

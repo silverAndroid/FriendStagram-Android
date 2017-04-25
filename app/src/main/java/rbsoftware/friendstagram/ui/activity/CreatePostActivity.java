@@ -1,4 +1,4 @@
-package rbsoftware.friendstagram;
+package rbsoftware.friendstagram.ui.activity;
 
 import android.app.ProgressDialog;
 import android.net.Uri;
@@ -23,6 +23,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import rbsoftware.friendstagram.ImageSelectListener;
+import rbsoftware.friendstagram.R;
+import rbsoftware.friendstagram.ui.fragment.SelectFilterFragment;
+import rbsoftware.friendstagram.ui.fragment.SelectImageFragment;
+import rbsoftware.friendstagram.ui.fragment.SharePostFragment;
 import rbsoftware.friendstagram.model.Error;
 import rbsoftware.friendstagram.model.Post;
 import rbsoftware.friendstagram.model.Response;

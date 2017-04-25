@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="rbsoftware.friendstagram.SelectFilterFragment">
+    tools:context="rbsoftware.friendstagram.ui.fragment.SelectFilterFragment">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/image"

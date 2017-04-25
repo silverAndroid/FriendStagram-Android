@@ -1,6 +1,5 @@
-package rbsoftware.friendstagram;
+package rbsoftware.friendstagram.ui.fragment;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+
+import rbsoftware.friendstagram.R;
 
 
 /**

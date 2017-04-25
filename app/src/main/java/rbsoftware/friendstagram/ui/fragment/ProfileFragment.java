@@ -1,4 +1,4 @@
-package rbsoftware.friendstagram;
+package rbsoftware.friendstagram.ui.fragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -20,15 +20,16 @@ import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.util.ArrayList;
-
+import rbsoftware.friendstagram.Constants;
+import rbsoftware.friendstagram.R;
+import rbsoftware.friendstagram.ToolbarManipulator;
 import rbsoftware.friendstagram.model.Error;
 import rbsoftware.friendstagram.model.Post;
 import rbsoftware.friendstagram.model.Response;
 import rbsoftware.friendstagram.model.User;
 import rbsoftware.friendstagram.service.NetworkService;
-import rbsoftware.friendstagram.service.PostsService;
 import rbsoftware.friendstagram.service.UsersService;
+import rbsoftware.friendstagram.ui.adapter.ProfileAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 

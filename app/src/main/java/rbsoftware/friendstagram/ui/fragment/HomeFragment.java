@@ -1,4 +1,4 @@
-package rbsoftware.friendstagram;
+package rbsoftware.friendstagram.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,14 +16,15 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import rbsoftware.friendstagram.R;
+import rbsoftware.friendstagram.ToolbarManipulator;
 import rbsoftware.friendstagram.model.Error;
 import rbsoftware.friendstagram.model.Post;
 import rbsoftware.friendstagram.model.Response;
-import rbsoftware.friendstagram.model.User;
 import rbsoftware.friendstagram.service.AuthenticationService;
 import rbsoftware.friendstagram.service.NetworkService;
 import rbsoftware.friendstagram.service.PostsService;
-import rbsoftware.friendstagram.temp.RandomString;
+import rbsoftware.friendstagram.ui.adapter.HomeAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 

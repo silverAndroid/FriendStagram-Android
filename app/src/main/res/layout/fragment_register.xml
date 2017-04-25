@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="rbsoftware.friendstagram.LoginRegisterActivity">
+    tools:context="rbsoftware.friendstagram.ui.activity.LoginRegisterActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

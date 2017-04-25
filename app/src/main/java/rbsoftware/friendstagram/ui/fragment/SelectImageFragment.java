@@ -1,4 +1,4 @@
-package rbsoftware.friendstagram;
+package rbsoftware.friendstagram.ui.fragment;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -34,6 +34,10 @@ import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
+import rbsoftware.friendstagram.ImageHandler;
+import rbsoftware.friendstagram.ImageSelectListener;
+import rbsoftware.friendstagram.R;
+import rbsoftware.friendstagram.ui.adapter.PicturesAdapter;
 
 
 /**

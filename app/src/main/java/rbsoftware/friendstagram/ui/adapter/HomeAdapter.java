@@ -1,4 +1,4 @@
-package rbsoftware.friendstagram;
+package rbsoftware.friendstagram.ui.adapter;
 
 import android.app.Activity;
 import android.support.v7.util.DiffUtil;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import rbsoftware.friendstagram.ui.viewholder.PostViewHolder;
+import rbsoftware.friendstagram.R;
 import rbsoftware.friendstagram.model.Post;
 
 /**
