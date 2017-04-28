@@ -5,7 +5,7 @@
     android:orientation="vertical"
     tools:context="rbsoftware.friendstagram.ui.fragment.PostFragment">
 
-    <include layout="@layout/layout_toolbar" />
+    <include layout="@layout/layout_main_toolbar" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
