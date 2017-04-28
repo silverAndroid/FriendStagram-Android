@@ -50,4 +50,7 @@
     <!-- Strings related to retrieving information -->
     <string name="error_occurred_user_info">Failed to retrieve user info</string>
     <string name="error_occurred_posts">Unable to retrieve posts</string>
+
+    <!-- Strings related to profile information -->
+    <string name="prompt_bio">Biography</string>
 </resources>
