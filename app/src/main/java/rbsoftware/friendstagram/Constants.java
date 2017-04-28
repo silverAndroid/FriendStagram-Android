@@ -14,4 +14,8 @@ public class Constants {
     public class Application {
         public static final String BASE_URL = BuildConfig.BASE_URL;
     }
+
+    public class Action {
+        public static final String EDIT_PROFILE = "edit_profile";
+    }
 }

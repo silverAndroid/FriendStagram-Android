@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import rbsoftware.friendstagram.ActionExecuteListener;
 import rbsoftware.friendstagram.Constants;
 import rbsoftware.friendstagram.R;
 import rbsoftware.friendstagram.ToolbarManipulator;
@@ -33,7 +34,7 @@ import rbsoftware.friendstagram.ui.adapter.ProfileAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-public class ProfileFragment extends Fragment implements ProfileAdapter.ImageClickListener {
+public class ProfileFragment extends Fragment implements ProfileAdapter.ImageClickListener, ActionExecuteListener {
 
     private static final String ARG_USERNAME = "username";
     private static final String TAG = "ProfileFragment";
@@ -56,7 +57,7 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
             "http://s7.favim.com/610/151205/beach-boho-bright-instagram-Favim.com-3708977.jpg"
     };
 
-    private UpdateListener mListener;
+    private UpdateListener listener;
     private ToolbarManipulator toolbarManipulator;
     private String username;
 
@@ -97,7 +98,7 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(0);
         toolbarManipulator.setToolbar(toolbar);
-        final ProfileAdapter adapter = new ProfileAdapter(this);
+        final ProfileAdapter adapter = new ProfileAdapter(this, this);
 
         Call<Response<User>> getUserTask = UsersService.getInstance().getAPI().getUser(username);
         getUserTask.enqueue(new Callback<Response<User>>() {
@@ -145,7 +146,7 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof UpdateListener) {
-            mListener = (UpdateListener) context;
+            listener = (UpdateListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement UpdateListener");
@@ -155,7 +156,7 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
 
     public void update(int posts, int followers, int following, String profilePictureURL, View mainView) {
@@ -184,20 +185,16 @@ public class ProfileFragment extends Fragment implements ProfileAdapter.ImageCli
 
     @Override
     public void onImageClick(Post post) {
-        mListener.onImageClick(post);
+        listener.onImageClick(post);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    @Override
+    public void runAction(String action) {
+        listener.onActionExecution(action);
+    }
+
     public interface UpdateListener {
         void onImageClick(Post post);
+        void onActionExecution(String action);
     }
 }

@@ -4,13 +4,17 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import rbsoftware.friendstagram.ActionExecuteListener;
+import rbsoftware.friendstagram.Constants;
 import rbsoftware.friendstagram.ui.viewholder.PictureViewHolder;
 import rbsoftware.friendstagram.R;
 import rbsoftware.friendstagram.databinding.HeaderProfileBinding;
@@ -27,17 +31,13 @@ public class ProfileAdapter extends RecyclerView.Adapter {
     private static final int ITEM_VIEW_TYPE_ITEM = 1;
     private User user;
     private ArrayList<Post> posts;
-    private ImageClickListener listener;
+    private final ImageClickListener listener;
+    private final ActionExecuteListener actionExecuteListener;
 
-    public ProfileAdapter(ImageClickListener imageClickListener) {
+    public ProfileAdapter(ImageClickListener imageClickListener, ActionExecuteListener actionExecuteListener) {
         listener = imageClickListener;
+        this.actionExecuteListener = actionExecuteListener;
         posts = new ArrayList<>();
-    }
-
-    public ProfileAdapter(User user, ArrayList<Post> posts, ImageClickListener imageClickListener) {
-        this.user = user;
-        this.posts = new ArrayList<>(posts);
-        listener = imageClickListener;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ProfileAdapter extends RecyclerView.Adapter {
         if (viewType == ITEM_VIEW_TYPE_HEADER) {
             HeaderProfileBinding viewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                     R.layout.header_profile, parent, false);
-            return new HeaderViewHolder(viewDataBinding);
+            return new HeaderViewHolder(viewDataBinding, actionExecuteListener);
         }
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_image, parent, false);
@@ -108,14 +108,26 @@ public class ProfileAdapter extends RecyclerView.Adapter {
         return user != null && position == 0;
     }
 
-    private class HeaderViewHolder extends RecyclerView.ViewHolder {
+    public class HeaderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private static final String TAG = "HeaderViewHolder";
         private final HeaderProfileBinding itemView;
+        private final ActionExecuteListener listener;
+        private final ImageView editProfile;
 
-        HeaderViewHolder(HeaderProfileBinding itemView) {
+        HeaderViewHolder(HeaderProfileBinding itemView, ActionExecuteListener listener) {
             super(itemView.getRoot());
             this.itemView = itemView;
+            this.listener = listener;
             this.itemView.executePendingBindings();
+            editProfile = (ImageView) itemView.getRoot().findViewById(R.id.edit_profile);
+            editProfile.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "editProfileClick: Edit Profile");
+            listener.runAction(Constants.Action.EDIT_PROFILE);
         }
     }
 
