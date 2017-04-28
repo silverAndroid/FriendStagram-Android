@@ -12,13 +12,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
-import rbsoftware.friendstagram.ui.fragment.HomeFragment;
-import rbsoftware.friendstagram.ui.fragment.PostFragment;
-import rbsoftware.friendstagram.ui.fragment.ProfileFragment;
+import rbsoftware.friendstagram.Constants;
 import rbsoftware.friendstagram.R;
 import rbsoftware.friendstagram.ToolbarManipulator;
 import rbsoftware.friendstagram.model.Post;
 import rbsoftware.friendstagram.service.AuthenticationService;
+import rbsoftware.friendstagram.ui.fragment.HomeFragment;
+import rbsoftware.friendstagram.ui.fragment.PostFragment;
+import rbsoftware.friendstagram.ui.fragment.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity implements ProfileFragment.UpdateListener, ToolbarManipulator {
 
@@ -89,6 +90,11 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
         showFragment(ProfileFragment.newInstance(this, AuthenticationService.getInstance().getUsername()), false);
     }
 
+    private void showEditProfileActivity() {
+        Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
+        startActivity(intent);
+    }
+
     private void showPostFragment(Post post) {
         showFragment(PostFragment.newInstance(this, post), true);
     }
@@ -120,6 +126,15 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.U
     @Override
     public void onImageClick(Post post) {
         showPostFragment(post);
+    }
+
+    @Override
+    public void onActionExecution(String action) {
+        switch (action) {
+            case Constants.Action.EDIT_PROFILE:
+                showEditProfileActivity();
+                break;
+        }
     }
 
     @Override
