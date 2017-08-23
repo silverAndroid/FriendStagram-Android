@@ -4,7 +4,7 @@
     <data>
         <variable
             name="user"
-            type="rbsoftware.friendstagram.model.User"/>
+            type="rbsoftware.friendstagram.model.User" />
     </data>
 
     <RelativeLayout
@@ -23,14 +23,15 @@
             android:textAllCaps="true"
             android:textColor="#42A5F5"
             android:textSize="19sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_settings"/>
+            android:contentDescription="@string/description_settings"
+            android:src="@drawable/ic_settings" />
 
         <ImageView
             android:id="@+id/edit_profile"
@@ -38,7 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="32dp"
             android:layout_toLeftOf="@+id/settings"
-            android:src="@drawable/ic_pencil"/>
+            android:contentDescription="@string/description_edit_profile"
+            android:src="@drawable/ic_pencil" />
 
         <TextView
             android:id="@+id/name"
@@ -49,7 +51,7 @@
             android:text="@{user.name}"
             android:textAllCaps="true"
             android:textColor="#000"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/description"
@@ -57,6 +59,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
             android:text="@{user.description}"
-            android:textSize="15sp"/>
+            android:textSize="15sp" />
     </RelativeLayout>
 </layout>

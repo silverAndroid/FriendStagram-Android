@@ -8,9 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import rbsoftware.friendstagram.GenericDiffCallback
-import rbsoftware.friendstagram.PostSelectListener
-import rbsoftware.friendstagram.R
+import rbsoftware.friendstagram.*
 import rbsoftware.friendstagram.databinding.HeaderProfileBinding
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.model.User
@@ -21,6 +19,7 @@ import rbsoftware.friendstagram.ui.viewholder.PictureViewHolder
  */
 class ProfileAdapter(private var posts: List<Post>, private var user: User) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var onPostSelected: PostSelectListener
+    private lateinit var onActionExecuted: ActionExecuteListener
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == ITEM_VIEW_TYPE_HEADER) {
@@ -70,6 +69,10 @@ class ProfileAdapter(private var posts: List<Post>, private var user: User) : Re
         this.onPostSelected = postSelectListener
     }
 
+    fun setOnActionExecuteListener(actionExecuteListener: ActionExecuteListener) {
+        this.onActionExecuted = actionExecuteListener
+    }
+
     private fun setPosts(posts: List<Post>) {
         val diffResult = DiffUtil.calculateDiff(GenericDiffCallback(this.posts, posts))
         this.posts = List(posts.size, { i -> posts[i] })
@@ -88,7 +91,7 @@ class ProfileAdapter(private var posts: List<Post>, private var user: User) : Re
             this.profileBinding.executePendingBindings()
             editProfile = profileBinding.root.findViewById(R.id.edit_profile)
             editProfile.setOnClickListener {
-                Log.d("HeaderViewHolder", "Click")
+                onActionExecuted(Constants.Action.EDIT_PROFILE)
             }
         }
     }
