@@ -20,7 +20,6 @@ import java.util.Locale
  * Used by the camera Intent
  */
 object ImageHandler {
-
     private val TAG = "ImageHandler"
 
     /**

@@ -17,7 +17,6 @@ import rbsoftware.friendstagram.ui.fragment.PostFragment
 import rbsoftware.friendstagram.ui.fragment.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
-
     private val bottomNavItems: List<BottomNavItem> = listOf(
             BottomNavItem(R.id.tab_home, this::showHomeFragment),
             BottomNavItem(R.id.tab_camera, this::showCameraActivity),
@@ -25,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     )
     private var currentTab: Int = 0
     private var bottomNav: BottomNavigationView? = null
+    private var homeFragment: HomeFragment? = null
+    private var profileFragment: ProfileFragment? = null
     private lateinit var authService: AuthenticationService
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,9 +62,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun showHomeFragment() {
         currentTab = 0
-        val fragment = HomeFragment.newInstance()
-        fragment.setToolbarManipulator(this::setToolbar)
-        showFragment(fragment)
+        if (homeFragment == null)
+            homeFragment = HomeFragment.newInstance()
+
+        homeFragment?.let {
+            it.setToolbarManipulator(this::setToolbar)
+            showFragment(it)
+        }
     }
 
     private fun showCameraActivity() {
@@ -73,11 +78,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun showProfileFragment() {
         currentTab = 2
-        // TODO: Add callback for when edit profile and when image is clicked inside profile
-        val fragment = ProfileFragment.newInstance(authService.username)
-        fragment.setToolbarManipulator(this::setToolbar)
-        fragment.setOnPostSelectListener(this::showPostFragment)
-        showFragment(fragment)
+        // TODO: Add callback for when edit profile
+        if (profileFragment == null)
+            profileFragment = ProfileFragment.newInstance(authService.username)
+
+        profileFragment?.let {
+            it.setToolbarManipulator(this::setToolbar)
+            it.setOnPostSelectListener(this::showPostFragment)
+            showFragment(it)
+        }
     }
 
     private fun showPostFragment(post: Post) {
