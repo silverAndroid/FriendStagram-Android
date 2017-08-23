@@ -6,7 +6,7 @@
     <string name="prompt_password">Password</string>
     <string name="prompt_name">Name</string>
     <string name="prompt_username">Username</string>
-    <string name="action_log_in">Log in</string>
+    <string name="action_login">Log in</string>
     <string name="action_register">Register</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -40,12 +40,14 @@
     <string name="error_occurred">An error occurred</string>
     <string name="success_register">Successfully registered user</string>
     <string name="success_login">Successfully logged in</string>
+    <string name="error_login_invalid">Your login session is no longer valid. Please log in again!</string>
 
     <!-- Strings related to creating posts -->
     <string name="action_next">Next</string>
     <string name="message_filters_coming_soon">Filters Coming Soon</string>
     <string name="prompt_caption">Write a caption…</string>
     <string name="success_image_upload">Uploaded image successfully</string>
+    <string name="error_image_upload">Failed to upload image!</string>
 
     <!-- Strings related to retrieving information -->
     <string name="error_occurred_user_info">Failed to retrieve user info</string>

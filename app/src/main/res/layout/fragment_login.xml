@@ -42,8 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_password"
-                android:imeActionId="@+id/login"
-                android:imeActionLabel="@string/action_log_in"
+                android:imeActionId="@integer/action_login_id"
+                android:imeActionLabel="@string/action_login"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
@@ -52,13 +52,13 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            android:id="@+id/sign_in_button"
+            android:id="@+id/login_button"
             android:theme="@style/AppTheme.LoginButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:text="@string/action_log_in"/>
+            android:text="@string/action_login"/>
     </LinearLayout>
 
     <Button
