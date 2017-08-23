@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="@color/colorWhite"
         android:state_checked="true"/>
-    <item android:color="@color/white_trans"
+    <item android:color="@color/colorWhiteTrans"
         android:state_checked="false"/>
-    <item android:color="@color/white_trans"/>
+    <item android:color="@color/colorWhiteTrans"/>
 </selector>
