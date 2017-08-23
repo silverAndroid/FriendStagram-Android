@@ -1,16 +1,18 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 Properties properties = new Properties()
 File propertiesFile = rootProject.file("secret.properties")
 properties.load(new FileInputStream(propertiesFile))
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "rbsoftware.friendstagram"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -33,20 +35,40 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.cloudinary:cloudinary-android:1.2.2'
-    compile 'com.facebook.fresco:fresco:0.14.1'
-    compile 'com.github.hotchemi:permissionsdispatcher:2.3.0'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+
+    implementation 'android.arch.lifecycle:extensions:1.0.0-alpha9'
+    implementation 'android.arch.lifecycle:runtime:1.0.0-alpha9'
+    implementation 'com.android.support:appcompat-v7:26.0.1'
+    implementation 'com.android.support:cardview-v7:26.0.1'
+    implementation 'com.android.support:design:26.0.1'
+    implementation 'com.android.support:recyclerview-v7:26.0.1'
+    implementation 'com.android.support:support-v4:26.0.1'
+    implementation 'com.cloudinary:cloudinary-android:1.2.2'
+    implementation 'com.facebook.fresco:fresco:1.5.0'
+    implementation 'com.google.dagger:dagger:2.11'
+    implementation 'com.github.hotchemi:permissionsdispatcher:2.4.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.3'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    kapt 'android.arch.lifecycle:compiler:1.0.0-alpha9'
+    kapt "com.android.databinding:compiler:$android_plugin_version"
+    kapt 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
+    kapt 'com.google.dagger:dagger-compiler:2.11'
+
     testCompile 'junit:junit:4.12'
-    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.0'
+}
+repositories {
+    mavenCentral()
+}
+
+kapt {
+    generateStubs = true
 }
