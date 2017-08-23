@@ -61,6 +61,12 @@ class LoginRegisterActivity : AppCompatActivity() {
             window.statusBarColor = Color.TRANSPARENT
         }
 
+        supportFragmentManager.addOnBackStackChangedListener {
+            if (supportFragmentManager.backStackEntryCount == 0) {
+                loadLoginBackground()
+            }
+        }
+
         if (authService.isLoggedIn) {
             onLoginSuccess()
         } else {
@@ -95,13 +101,7 @@ class LoginRegisterActivity : AppCompatActivity() {
     }
 
     private fun loadLoginPage() {
-        val stackCount = supportFragmentManager.backStackEntryCount
-        supportFragmentManager.addOnBackStackChangedListener {
-            if (stackCount == 0) {
-                loadLoginBackground()
-            }
-        }
-        if (stackCount == 0) {
+        if (supportFragmentManager.backStackEntryCount == 0) {
             val fragment = LoginFragment.newInstance()
             fragment.setLoginCallback(this::login)
             fragment.setLoadRegisterCallback(this::loadRegisterPage)
