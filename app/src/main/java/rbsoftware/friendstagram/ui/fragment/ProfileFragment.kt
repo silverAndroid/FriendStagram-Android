@@ -62,9 +62,9 @@ class ProfileFragment : Fragment() {
         profilePicture = view?.findViewById(R.id.profile)
         backgroundPicture = view?.findViewById(R.id.backdrop)
         updateViews = listOf(
-                UpdateView("posts", view?.findViewById(R.id.num_posts), { user -> user.posts.size }),
-                UpdateView("followers", view?.findViewById(R.id.num_followers), { user -> user.followerUserIDs.size }),
-                UpdateView("following", view?.findViewById(R.id.num_following), { user -> user.followingUserIDs.size })
+                UpdateView("posts", view?.findViewById(R.id.num_posts), { it.posts.size }),
+                UpdateView("followers", view?.findViewById(R.id.num_followers), { it.followerUserIDs.size }),
+                UpdateView("following", view?.findViewById(R.id.num_following), { it.followingUserIDs.size })
         )
 
         toolbar?.setBackgroundColor(0)
