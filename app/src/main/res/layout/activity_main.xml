@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,13 +7,16 @@
     android:fitsSystemWindows="true"
     tools:context="rbsoftware.friendstagram.ui.activity.MainActivity">
 
-    <include layout="@layout/content_main"/>
+    <include layout="@layout/content_main" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:menu="@menu/nav_tabs"/>
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/nav_item_state_list"
+        app:itemTextColor="@color/nav_item_state_list"
+        app:menu="@menu/nav_tabs" />
 
 </android.support.design.widget.CoordinatorLayout>
