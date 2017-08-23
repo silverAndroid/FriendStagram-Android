@@ -55,4 +55,6 @@
 
     <!-- Strings related to profile information -->
     <string name="prompt_bio">Biography</string>
+    <string name="description_settings">Open Settings</string>
+    <string name="description_edit_profile">Edit Profile</string>
 </resources>

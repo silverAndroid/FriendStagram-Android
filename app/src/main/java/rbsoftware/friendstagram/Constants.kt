@@ -14,4 +14,8 @@ class Constants {
     object Application {
         val BASE_URL = BuildConfig.BASE_URL
     }
+
+    object Action {
+        val EDIT_PROFILE = "edit_profile"
+    }
 }

@@ -10,3 +10,4 @@ import rbsoftware.friendstagram.model.Post
 typealias ImageSelectListener = (Uri) -> Unit
 typealias PostSelectListener = (Post) -> Unit
 typealias ToolbarManipulator = (Toolbar) -> Unit
+typealias ActionExecuteListener = (String) -> Unit

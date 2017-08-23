@@ -13,14 +13,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.facebook.drawee.view.SimpleDraweeView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import rbsoftware.friendstagram.PostSelectListener
-import rbsoftware.friendstagram.R
-import rbsoftware.friendstagram.ToolbarManipulator
+import rbsoftware.friendstagram.*
 import rbsoftware.friendstagram.dagger.component.DaggerServicesComponent
 import rbsoftware.friendstagram.dagger.module.AppModule
 import rbsoftware.friendstagram.dagger.module.ServicesModule
@@ -35,12 +34,14 @@ import retrofit2.HttpException
 class ProfileFragment : Fragment() {
 
     private var toolbar: Toolbar? = null
+    private var adapter: ProfileAdapter? = null
     private var recyclerView: RecyclerView? = null
     private var profilePicture: SimpleDraweeView? = null
     private var backgroundPicture: SimpleDraweeView? = null
     private lateinit var username: String
     private lateinit var setToolbar: ToolbarManipulator
     private lateinit var onPostSelected: PostSelectListener
+    private lateinit var onActionExecuted: ActionExecuteListener
     private lateinit var updateViews: List<UpdateView>
     private lateinit var userViewModel: UserViewModel
 
@@ -100,6 +101,10 @@ class ProfileFragment : Fragment() {
         this.onPostSelected = postSelectListener
     }
 
+    fun setOnActionExecuteListener(actionExecuteListener: ActionExecuteListener) {
+        this.onActionExecuted = actionExecuteListener
+    }
+
     private fun loadProfile() {
         userViewModel.getUser(username)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -118,17 +123,20 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setAdapter(user: User) {
-        val adapter = recyclerView?.adapter
+        val profileAdapter: ProfileAdapter
 
         if (adapter == null) {
-            val profileAdapter = ProfileAdapter(user.posts, user)
-            profileAdapter.setOnPostSelectListener(onPostSelected)
-            recyclerView?.adapter = profileAdapter
+            profileAdapter = ProfileAdapter(user.posts, user)
         } else {
-            val profileAdapter = adapter as ProfileAdapter
-            profileAdapter.setOnPostSelectListener(onPostSelected)
+            profileAdapter = adapter as ProfileAdapter
             profileAdapter.setUser(user)
         }
+
+        profileAdapter.setOnPostSelectListener(onPostSelected)
+        profileAdapter.setOnActionExecuteListener(onActionExecuted)
+
+        adapter = profileAdapter
+        recyclerView?.adapter = adapter
     }
 
     private fun update(user: User) {

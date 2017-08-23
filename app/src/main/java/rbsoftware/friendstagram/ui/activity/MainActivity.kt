@@ -2,10 +2,12 @@ package rbsoftware.friendstagram.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.IdRes
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import rbsoftware.friendstagram.Constants
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.dagger.component.DaggerServicesComponent
 import rbsoftware.friendstagram.dagger.module.AppModule
@@ -85,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         profileFragment?.let {
             it.setToolbarManipulator(this::setToolbar)
             it.setOnPostSelectListener(this::showPostFragment)
+            it.setOnActionExecuteListener(this::onActionExecution)
             showFragment(it)
         }
     }
@@ -118,5 +121,11 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
-    private data class BottomNavItem(val itemID: Int, val loadFragment: () -> Unit)
+    private fun onActionExecution(action: String) {
+        when (action) {
+            Constants.Action.EDIT_PROFILE -> showEditProfileActivity()
+        }
+    }
+
+    private data class BottomNavItem(@IdRes val itemID: Int, val loadFragment: () -> Unit)
 }
