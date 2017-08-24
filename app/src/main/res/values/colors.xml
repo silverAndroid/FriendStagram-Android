@@ -14,7 +14,6 @@
     <color name="colorLighterGray">#DDD</color>
     <color name="colorToolbarBlack">#191919</color>
     <color name="colorToolbarBlackDark">#131313</color>
-    <color name="colorWhite">#FFFFFF</color>
     <color name="colorWhiteTrans">#99FFFFFF</color>
     <color name="colorMaterialGray">#737373</color>
 </resources>
