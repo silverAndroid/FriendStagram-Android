@@ -1,6 +1,7 @@
 package rbsoftware.friendstagram.ui.fragment
 
 import android.os.Bundle
+import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -8,19 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.Util
+import rbsoftware.friendstagram.addValidation
+import rbsoftware.friendstagram.validate
 
 /**
  * Created by Rushil on 8/21/2017.
  */
 class RegisterFragment : Fragment(), ErrorDisplay {
-    private var editName: EditText? = null
-    private var editEmail: EditText? = null
-    private var editUsername: EditText? = null
-    private var editPassword: EditText? = null
+    private var nameInputLayout: TextInputLayout? = null
+    private var emailInputLayout: TextInputLayout? = null
+    private var usernameInputLayout: TextInputLayout? = null
+    private var passwordInputLayout: TextInputLayout? = null
     private lateinit var loadLoginPage: () -> Unit
     private lateinit var register: (String, String, String, String) -> Unit
 
@@ -31,14 +33,18 @@ class RegisterFragment : Fragment(), ErrorDisplay {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        editName = view?.findViewById(R.id.name)
-        editEmail = view?.findViewById(R.id.email)
-        editUsername = view?.findViewById(R.id.username)
-        editPassword = view?.findViewById(R.id.password)
+        /*val nameInputLayout: TextInputLayout? = view?.findViewById(R.id.name_layout)
+        val emailInputLayout: TextInputLayout? = view?.findViewById(R.id.email_layout)
+        val usernameInputLayout: TextInputLayout? = view?.findViewById(R.id.username_layout)
+        val passwordInputLayout: TextInputLayout? = view?.findViewById(R.id.password_layout)*/
+        nameInputLayout = view?.findViewById(R.id.name_layout)
+        emailInputLayout = view?.findViewById(R.id.email_layout)
+        usernameInputLayout = view?.findViewById(R.id.username_layout)
+        passwordInputLayout = view?.findViewById(R.id.password_layout)
         val loginButton: Button? = view?.findViewById(R.id.login_button)
         val registerButton: Button? = view?.findViewById(R.id.register_button)
 
-        editPassword?.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
+        passwordInputLayout?.editText?.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
             if (id == R.integer.action_register_id || id == EditorInfo.IME_NULL) {
                 attemptRegister()
                 return@OnEditorActionListener true
@@ -47,15 +53,21 @@ class RegisterFragment : Fragment(), ErrorDisplay {
         })
         loginButton?.setOnClickListener { loadLoginPage() }
         registerButton?.setOnClickListener { attemptRegister() }
+        nameInputLayout?.addValidation({ !TextUtils.isEmpty(it) }, R.string.error_field_required)
+        emailInputLayout?.addValidation({ !TextUtils.isEmpty(it) }, R.string.error_field_required)
+        emailInputLayout?.addValidation(Util::isEmailValid, R.string.error_invalid_email)
+        usernameInputLayout?.addValidation({ !TextUtils.isEmpty(it) }, R.string.error_field_required)
+        passwordInputLayout?.addValidation({ !TextUtils.isEmpty(it) }, R.string.error_field_required)
+        passwordInputLayout?.addValidation(Util::isPasswordValid, R.string.error_invalid_password)
     }
 
     override fun showError(error: String?) {
         if (error == "Username is Null") {
-            editUsername?.error = getString(R.string.error_field_required)
-            editUsername?.requestFocus()
+            usernameInputLayout?.error = getString(R.string.error_field_required)
+            usernameInputLayout?.requestFocus()
         } else if (error == "Password is Null") {
-            editPassword?.error = getString(R.string.error_field_required)
-            editPassword?.requestFocus()
+            passwordInputLayout?.error = getString(R.string.error_field_required)
+            passwordInputLayout?.requestFocus()
         }
     }
 
@@ -68,45 +80,34 @@ class RegisterFragment : Fragment(), ErrorDisplay {
     }
 
     private fun attemptRegister() {
-        editName?.error = null
-        editEmail?.error = null
-        editUsername?.error = null
-        editPassword?.error = null
-
-        val name = editName?.text.toString()
-        val email = editEmail?.text.toString()
-        val username = editUsername?.text.toString()
-        val password = editPassword?.text.toString()
-        val focusView = validate(name, email, username, password)
+        val focusView = validate()
 
         if (focusView != null) {
             focusView.requestFocus()
         } else {
+            val name = nameInputLayout?.editText?.text.toString()
+            val email = emailInputLayout?.editText?.text.toString()
+            val username = usernameInputLayout?.editText?.text.toString()
+            val password = passwordInputLayout?.editText?.text.toString()
             register(name, email, username, password)
         }
     }
 
-    private fun validate(name: String, email: String, username: String, password: String): EditText? {
-        if (TextUtils.isEmpty(name)) {
-            editName?.error = getString(R.string.error_field_required)
-            return editName
-        } else if (TextUtils.isEmpty(email)) {
-            editEmail?.error = getString(R.string.error_field_required)
-            return editEmail
-        } else if (!Util.isEmailValid(email)) {
-            editEmail?.error = getString(R.string.error_invalid_email)
-            return editEmail
-        } else if (TextUtils.isEmpty(username)) {
-            editUsername?.error = getString(R.string.error_field_required)
-            return editUsername
-        } else if (!Util.isUsernameValid(username)) {
-            editUsername?.error = getString(R.string.error_invalid_username)
-            return editUsername
-        } else if (!Util.isPasswordValid(password)) {
-            editPassword?.error = getString(R.string.error_invalid_password)
-            return editPassword
+    private fun validate(): TextInputLayout? {
+        var focusView: TextInputLayout? = null
+        if (nameInputLayout?.validate() == false) {
+            focusView = nameInputLayout
         }
-        return null
+        if (emailInputLayout?.validate() == false) {
+            focusView = focusView ?: emailInputLayout
+        }
+        if (usernameInputLayout?.validate() == false) {
+            focusView = focusView ?: usernameInputLayout
+        }
+        if (passwordInputLayout?.validate() == false) {
+            focusView = focusView ?: passwordInputLayout
+        }
+        return focusView
     }
 
     companion object {
