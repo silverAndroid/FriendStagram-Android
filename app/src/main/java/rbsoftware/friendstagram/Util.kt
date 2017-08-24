@@ -15,8 +15,4 @@ object Util {
         //TODO: Replace this with your own logic
         return password.length > 4
     }
-
-    fun isUsernameValid(username: String): Boolean {
-        return username.length <= 25
-    }
 }
