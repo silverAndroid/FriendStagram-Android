@@ -1,5 +1,4 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        fresco:viewAspectRatio="1"/>
+        fresco:viewAspectRatio="1" />
 
     <!--<android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
@@ -23,11 +22,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center_vertical"
-        android:text="@string/message_filters_coming_soon"
-        android:layout_marginTop="48dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:textSize="32sp"/>
+        android:layout_marginTop="48dp"
+        android:gravity="center_vertical"
+        android:text="@string/message_filters_coming_soon"
+        android:textSize="32sp" />
 
 </LinearLayout>

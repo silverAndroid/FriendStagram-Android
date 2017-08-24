@@ -15,7 +15,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/description_search"
-        android:src="@drawable/ic_magnify" />
+        android:src="@drawable/ic_magnify"
+        android:tint="@android:color/white" />
 
     <TextView
         style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
@@ -33,6 +34,7 @@
         android:layout_gravity="right"
         android:layout_marginRight="16dp"
         android:contentDescription="@string/description_notifications"
-        android:src="@drawable/ic_bell_outline" />
+        android:src="@drawable/ic_bell_outline"
+        android:tint="@android:color/white" />
 
 </android.support.v7.widget.Toolbar>

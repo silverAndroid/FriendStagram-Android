@@ -1,5 +1,4 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,9 +16,10 @@
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
-            android:theme="@style/AppTheme.LoginEditTextHint"
+            android:id="@+id/username_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.LoginEditTextHint">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/username"
@@ -28,14 +28,15 @@
                 android:hint="@string/prompt_username"
                 android:inputType="textNoSuggestions"
                 android:maxLines="1"
-                android:textColor="#fff"/>
+                android:textColor="#fff" />
 
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:theme="@style/AppTheme.LoginEditTextHint"
+            android:id="@+id/password_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.LoginEditTextHint">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/password"
@@ -47,18 +48,18 @@
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:textColor="#fff"/>
+                android:textColor="#fff" />
 
         </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/login_button"
-            android:theme="@style/AppTheme.LoginButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
-            android:text="@string/action_login"/>
+            android:text="@string/action_login"
+            android:theme="@style/AppTheme.LoginButton" />
     </LinearLayout>
 
     <Button
@@ -70,7 +71,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
         android:text="@string/action_register"
-        android:textColor="#fff"/>
+        android:textColor="#fff" />
 
 </RelativeLayout>
 
