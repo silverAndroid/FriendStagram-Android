@@ -14,6 +14,7 @@ import rbsoftware.friendstagram.dagger.module.AppModule
 import rbsoftware.friendstagram.dagger.module.ServicesModule
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.service.AuthenticationService
+import rbsoftware.friendstagram.showFragment
 import rbsoftware.friendstagram.ui.fragment.HomeFragment
 import rbsoftware.friendstagram.ui.fragment.PostFragment
 import rbsoftware.friendstagram.ui.fragment.ProfileFragment
@@ -105,15 +106,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun showFragment(currentTab: Int) {
         bottomNavItems[currentTab].loadFragment()
-    }
-
-    private fun showFragment(fragment: Fragment, addToStack: Boolean = false, name: String? = "") {
-        val transaction = supportFragmentManager.beginTransaction()
-
-        transaction.replace(R.id.container, fragment)
-        if (addToStack)
-            transaction.addToBackStack(name)
-        transaction.commit()
     }
 
     private fun setToolbar(toolbar: Toolbar) {

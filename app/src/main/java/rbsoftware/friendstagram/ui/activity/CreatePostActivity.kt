@@ -24,6 +24,7 @@ import rbsoftware.friendstagram.dagger.module.AppModule
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.service.AuthenticationService
 import rbsoftware.friendstagram.service.NetworkService
+import rbsoftware.friendstagram.showFragment
 import rbsoftware.friendstagram.ui.fragment.SelectFilterFragment
 import rbsoftware.friendstagram.ui.fragment.SelectImageFragment
 import rbsoftware.friendstagram.ui.fragment.SharePostFragment
@@ -166,15 +167,6 @@ class CreatePostActivity : AppCompatActivity() {
                         dialog.dismiss()
                     }
                 }, this::onNetworkError)
-    }
-
-    private fun showFragment(fragment: Fragment, addToStack: Boolean = false, name: String? = "") {
-        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-
-        transaction.replace(R.id.container, fragment)
-        if (addToStack)
-            transaction.addToBackStack(name)
-        transaction.commit()
     }
 
     private fun handleError(error: String?) {

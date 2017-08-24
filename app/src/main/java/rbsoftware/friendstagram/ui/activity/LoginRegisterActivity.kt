@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -21,6 +22,7 @@ import rbsoftware.friendstagram.dagger.module.AppModule
 import rbsoftware.friendstagram.dagger.module.ServicesModule
 import rbsoftware.friendstagram.service.AuthenticationService
 import rbsoftware.friendstagram.service.NetworkService
+import rbsoftware.friendstagram.showFragment
 import rbsoftware.friendstagram.ui.fragment.ErrorDisplay
 import rbsoftware.friendstagram.ui.fragment.LoginFragment
 import rbsoftware.friendstagram.ui.fragment.RegisterFragment
@@ -105,7 +107,7 @@ class LoginRegisterActivity : AppCompatActivity() {
             val fragment = LoginFragment.newInstance()
             fragment.setLoginCallback(this::login)
             fragment.setLoadRegisterCallback(this::loadRegisterPage)
-            showFragment(fragment)
+            showFragment(fragment, setAnimations = this::showFragmentAnimations)
         } else {
             supportFragmentManager.popBackStack()
         }
@@ -131,10 +133,10 @@ class LoginRegisterActivity : AppCompatActivity() {
     }
 
     private fun loadRegisterPage() {
-        val registerFragment = RegisterFragment.newInstance()
-        registerFragment.setRegisterCallback(this::register)
-        registerFragment.setLoadLoginCallback(this::loadLoginPage)
-        showFragment(registerFragment, true, "Register")
+        val fragment = RegisterFragment.newInstance()
+        fragment.setRegisterCallback(this::register)
+        fragment.setLoadLoginCallback(this::loadLoginPage)
+        showFragment(fragment, true, "Register", setAnimations = this::showFragmentAnimations)
         loadRegisterBackground()
     }
 
@@ -150,14 +152,8 @@ class LoginRegisterActivity : AppCompatActivity() {
         background.setImageURI(Uri.parse(backgroundURI))
     }
 
-    private fun showFragment(fragment: Fragment, addToStack: Boolean = false, name: String? = "") {
-        val transaction = supportFragmentManager.beginTransaction()
-
+    private fun showFragmentAnimations(transaction: FragmentTransaction) {
         transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-        transaction.replace(R.id.container, fragment)
-        if (addToStack)
-            transaction.addToBackStack(name)
-        transaction.commit()
     }
 
     private fun onNetworkError(error: Throwable) {
