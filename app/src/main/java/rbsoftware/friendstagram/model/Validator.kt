@@ -5,6 +5,6 @@ package rbsoftware.friendstagram.model
  */
 data class Validator(val validate: (String) -> Boolean, val errorMessage: String) {
     companion object {
-        fun empty(): Validator = Validator({ it.isBlank() }, "This field is required")
+        fun empty(): Validator = Validator({ it.isNotBlank() }, "This field is required")
     }
 }
