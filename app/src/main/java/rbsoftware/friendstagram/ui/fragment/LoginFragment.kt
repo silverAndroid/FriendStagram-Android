@@ -12,6 +12,7 @@ import android.widget.Button
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.Util
 import rbsoftware.friendstagram.addValidation
+import rbsoftware.friendstagram.model.Validator
 import rbsoftware.friendstagram.validate
 
 /**
@@ -20,6 +21,7 @@ import rbsoftware.friendstagram.validate
 class LoginFragment : Fragment(), ErrorDisplay {
     private var usernameInputLayout: TextInputLayout? = null
     private var passwordInputLayout: TextInputLayout? = null
+    private lateinit var inputValidators: Map<TextInputLayout?, List<Validator>>
     private lateinit var loadRegisterPage: () -> Unit
     private lateinit var login: (String, String) -> Unit
 
@@ -34,19 +36,38 @@ class LoginFragment : Fragment(), ErrorDisplay {
         val registerButton: Button? = view?.findViewById(R.id.register_button)
         usernameInputLayout = view?.findViewById(R.id.username_layout)
         passwordInputLayout = view?.findViewById(R.id.password_layout)
+        inputValidators = mapOf(
+                Pair(usernameInputLayout,
+                        listOf(
+                                Validator({ !TextUtils.isEmpty(it) }, getString(R.string.error_field_required))
+                        )
+                ),
+                Pair(passwordInputLayout,
+                        listOf(
+                                Validator({ !TextUtils.isEmpty(it) }, getString(R.string.error_field_required)),
+                                Validator(Util::isPasswordValid, getString(R.string.error_invalid_password))
+                        )
+                )
+        )
 
         passwordInputLayout?.editText?.setOnEditorActionListener { _, id, _ ->
             if (id == R.integer.action_login_id || id == EditorInfo.IME_ACTION_UNSPECIFIED) {
                 attemptLogin()
                 return@setOnEditorActionListener true
+            } else {
+                false
             }
-            false
         }
         loginButton?.setOnClickListener { attemptLogin() }
         registerButton?.setOnClickListener { loadRegisterPage() }
-        usernameInputLayout?.addValidation({ !TextUtils.isEmpty(it) }, R.string.error_field_required)
-        passwordInputLayout?.addValidation({ !TextUtils.isEmpty(it) }, R.string.error_field_required)
-        passwordInputLayout?.addValidation({ Util.isPasswordValid(it) }, R.string.error_invalid_password)
+        inputValidators.forEach {
+            val inputLayout = it.key
+            val validators = it.value
+
+            validators.forEach {
+                inputLayout?.addValidation(it.validate, it.errorMessage)
+            }
+        }
     }
 
     override fun showError(error: String?) {
@@ -81,11 +102,12 @@ class LoginFragment : Fragment(), ErrorDisplay {
 
     private fun validate(): TextInputLayout? {
         var focusView: TextInputLayout? = null
-        if (usernameInputLayout?.validate() == false) {
-            focusView = usernameInputLayout
-        }
-        if (passwordInputLayout?.validate() == false) {
-            focusView = focusView ?: passwordInputLayout
+        inputValidators.keys.forEach { textInputLayout ->
+            focusView = if (textInputLayout?.validate() == false) {
+                focusView ?: textInputLayout
+            } else {
+                focusView
+            }
         }
         return focusView
     }

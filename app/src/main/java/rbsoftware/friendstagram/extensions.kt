@@ -1,11 +1,9 @@
 package rbsoftware.friendstagram
 
-import android.support.annotation.StringRes
 import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
-import android.widget.EditText
 import rbsoftware.friendstagram.model.Validator
 
 /**
@@ -21,8 +19,8 @@ fun AppCompatActivity.showFragment(fragment: Fragment, addToStack: Boolean = fal
     transaction.commit()
 }
 
-fun TextInputLayout.addValidation(validate: (String) -> Boolean, @StringRes errorMessage: Int) {
-    Validators.addValidation(this.id, Validator(validate, context.getString(errorMessage)))
+fun TextInputLayout.addValidation(validate: (String) -> Boolean, errorMessage: String) {
+    Validators.addValidation(this.id, Validator(validate, errorMessage))
 }
 
 fun TextInputLayout.validate(): Boolean {
