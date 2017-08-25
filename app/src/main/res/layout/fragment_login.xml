@@ -7,6 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:theme="@style/LoginTheme"
     tools:context="rbsoftware.friendstagram.ui.activity.LoginRegisterActivity">
 
     <LinearLayout
@@ -19,7 +20,7 @@
             android:id="@+id/username_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.LoginEditTextHint">
+            android:theme="@style/EditTextHint">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/username"
@@ -36,7 +37,7 @@
             android:id="@+id/password_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.LoginEditTextHint">
+            android:theme="@style/EditTextHint">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/password"

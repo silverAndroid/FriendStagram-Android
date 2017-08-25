@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -8,11 +7,17 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="PicturesTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+    <style name="PicturesTheme" parent="AppTheme">
         <item name="colorPrimary">@color/colorToolbarBlack</item>
         <item name="colorPrimaryDark">@color/colorToolbarBlackDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="LoginTheme" parent="AppTheme">
+        <item name="colorAccent">@color/colorLoginAccent</item>
+    </style>
+
+    <style name="RegisterTheme"  parent="AppTheme">
+        <item name="colorAccent">@color/colorRegisterAccent</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -26,27 +31,17 @@
 
     <style name="AppTheme.LoginButton" parent="Base.Widget.AppCompat.Button">
         <item name="colorButtonNormal">@color/colorLoginButton</item>
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="AppTheme.RegisterButton" parent="Base.Widget.AppCompat.Button">
         <item name="colorButtonNormal">@color/colorRegisterButton</item>
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="AppTheme.EditTextHint">
-        <item name="colorAccent">@android:color/white</item>
-        <item name="android:textColorHint">#fff</item>
+    <style name="EditTextHint">
+        <item name="android:textColorHint">@android:color/white</item>
         <item name="colorControlNormal">#fff</item>
         <item name="colorControlHighlight">#fff</item>
     </style>
-
-    <style name="AppTheme.LoginEditTextHint" parent="AppTheme.EditTextHint">
-        <item name="colorControlActivated">@color/colorLoginAccent</item>
-    </style>
-
-    <style name="AppTheme.RegisterEditTextHint" parent="AppTheme.EditTextHint">
-        <item name="colorControlActivated">@color/colorRegisterAccent</item>
-    </style>
-
 </resources>
