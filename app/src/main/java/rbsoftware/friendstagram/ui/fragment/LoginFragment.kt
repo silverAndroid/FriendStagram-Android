@@ -3,17 +3,13 @@ package rbsoftware.friendstagram.ui.fragment
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
-import rbsoftware.friendstagram.R
-import rbsoftware.friendstagram.Util
-import rbsoftware.friendstagram.addValidation
+import rbsoftware.friendstagram.*
 import rbsoftware.friendstagram.model.Validator
-import rbsoftware.friendstagram.validate
 
 /**
  * Created by Rushil on 8/21/2017.
@@ -39,12 +35,12 @@ class LoginFragment : Fragment(), ErrorDisplay {
         inputValidators = mapOf(
                 Pair(usernameInputLayout,
                         listOf(
-                                Validator({ !TextUtils.isEmpty(it) }, getString(R.string.error_field_required))
+                            Validator.empty()
                         )
                 ),
                 Pair(passwordInputLayout,
                         listOf(
-                                Validator({ !TextUtils.isEmpty(it) }, getString(R.string.error_field_required)),
+                                Validator.empty(),
                                 Validator(Util::isPasswordValid, getString(R.string.error_invalid_password))
                         )
                 )

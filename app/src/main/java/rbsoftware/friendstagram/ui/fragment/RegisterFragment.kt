@@ -3,7 +3,6 @@ package rbsoftware.friendstagram.ui.fragment
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,23 +43,23 @@ class RegisterFragment : Fragment(), ErrorDisplay {
         inputValidators = mapOf(
                 Pair(nameInputLayout,
                         listOf(
-                                Validator({ !TextUtils.isEmpty(it) }, getString(R.string.error_field_required))
+                                Validator.empty()
                         )
                 ),
                 Pair(emailInputLayout,
                         listOf(
-                                Validator({ !TextUtils.isEmpty(it) }, getString(R.string.error_field_required)),
+                                Validator.empty(),
                                 Validator(Util::isEmailValid, getString(R.string.error_invalid_email))
                         )
                 ),
                 Pair(usernameInputLayout,
                         listOf(
-                                Validator({ !TextUtils.isEmpty(it) }, getString(R.string.error_field_required))
+                                Validator.empty()
                         )
                 ),
                 Pair(passwordInputLayout,
                         listOf(
-                                Validator({ !TextUtils.isEmpty(it) }, getString(R.string.error_field_required)),
+                                Validator.empty(),
                                 Validator(Util::isPasswordValid, getString(R.string.error_invalid_password))
                         )
                 )
