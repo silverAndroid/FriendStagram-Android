@@ -73,6 +73,8 @@ class PicturesAdapter(cursor: Cursor, private val context: Context) : RecyclerVi
 
     fun setOnImageSelectListener(imageSelectListener: ImageSelectListener) {
         this.onImageSelected = imageSelectListener
-        onImageSelected(images[selectedPosition].uri)
+        if (images.isNotEmpty()) {
+            onImageSelected(images[selectedPosition].uri)
+        }
     }
 }
