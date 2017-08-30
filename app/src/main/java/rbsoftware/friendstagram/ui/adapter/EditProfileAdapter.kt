@@ -21,7 +21,10 @@ class EditProfileAdapter : RecyclerView.Adapter<EditProfileAdapter.EditProfileRo
         listEditableItems = listOf(
                 EditProfileItem("Name", R.drawable.ic_account, InputType.TYPE_TEXT_VARIATION_PERSON_NAME),
                 EditProfileItem("Username", inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS),
-                EditProfileItem("Biography", R.drawable.ic_note_text, InputType.TYPE_TEXT_FLAG_MULTI_LINE, 3)
+                EditProfileItem("Biography", R.drawable.ic_note_text, InputType.TYPE_TEXT_FLAG_MULTI_LINE, maxLines = 3),
+                EditProfileItem("Current Password", R.drawable.ic_lock, InputType.TYPE_TEXT_VARIATION_PASSWORD),
+                EditProfileItem("New Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD),
+                EditProfileItem("Verify Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD)
         )
     }
 
