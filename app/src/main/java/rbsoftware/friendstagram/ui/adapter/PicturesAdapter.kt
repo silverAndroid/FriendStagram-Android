@@ -54,10 +54,10 @@ class PicturesAdapter(cursor: Cursor, private val context: Context) : RecyclerVi
 
     fun changeCursor(cursor: Cursor?) {
         images = if (cursor?.moveToFirst() == true) {
-            List(cursor.count, {
-                val dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
-                val idColumnIndex = cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID)
+            val dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+            val idColumnIndex = cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID)
 
+            List(cursor.count, {
                 val data = Uri.parse("file://${cursor.getString(dataColumnIndex)}")
                 val id = cursor.getInt(idColumnIndex)
 
