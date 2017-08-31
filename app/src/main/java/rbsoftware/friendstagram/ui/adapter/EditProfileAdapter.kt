@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import rbsoftware.friendstagram.R
+import rbsoftware.friendstagram.Validators
 import rbsoftware.friendstagram.model.Validator
 
 /**
@@ -41,6 +42,11 @@ class EditProfileAdapter : RecyclerView.Adapter<EditProfileAdapter.EditProfileRo
         holder?.input?.inputType = item.inputType
         holder?.input?.maxLines = item.maxLines
         item.icon?.let { holder?.icon?.setImageResource(it) }
+        holder?.input?.let { input ->
+            item.validators.forEach {
+                Validators.addValidation(input.id, it)
+            }
+        }
     }
 
     override fun getItemCount(): Int = editableItems.size
