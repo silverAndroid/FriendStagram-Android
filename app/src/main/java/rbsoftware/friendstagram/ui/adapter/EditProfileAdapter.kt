@@ -38,9 +38,12 @@ class EditProfileAdapter : RecyclerView.Adapter<EditProfileAdapter.EditProfileRo
     override fun onBindViewHolder(holder: EditProfileRow?, position: Int) {
         val item: EditProfileItem = editableItems[position]
 
-        holder?.hint?.hint = item.hint
-        holder?.input?.inputType = item.inputType
-        holder?.input?.maxLines = item.maxLines
+        with (item) {
+            holder?.hint?.hint = hint
+            holder?.input?.inputType = inputType
+            holder?.input?.maxLines = maxLines
+        }
+
         item.icon?.let { holder?.icon?.setImageResource(it) }
         holder?.input?.let { input ->
             item.validators.forEach {
