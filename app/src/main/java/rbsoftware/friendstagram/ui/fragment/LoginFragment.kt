@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import rbsoftware.friendstagram.R
-import rbsoftware.friendstagram.Util
 import rbsoftware.friendstagram.addValidation
 import rbsoftware.friendstagram.model.Validator
 import rbsoftware.friendstagram.validate
@@ -44,7 +43,7 @@ class LoginFragment : Fragment(), ErrorDisplay {
                 Pair(passwordInputLayout,
                         listOf(
                                 Validator.empty(),
-                                Validator(Util::isPasswordValid, getString(R.string.error_invalid_password))
+                                Validator.passwordValid()
                         )
                 )
         )
