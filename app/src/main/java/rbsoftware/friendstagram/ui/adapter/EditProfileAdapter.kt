@@ -10,17 +10,18 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import rbsoftware.friendstagram.R
+import rbsoftware.friendstagram.model.Validator
 
 /**
  * Created by Rushil on 8/23/2017.
  */
 class EditProfileAdapter : RecyclerView.Adapter<EditProfileAdapter.EditProfileRow>() {
-    private val listEditableItems: List<EditProfileItem>
+    private val editableItems: List<EditProfileItem>
 
     init {
-        listEditableItems = listOf(
-                EditProfileItem("Name", R.drawable.ic_account, InputType.TYPE_TEXT_VARIATION_PERSON_NAME),
-                EditProfileItem("Username", inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS),
+        editableItems = listOf(
+                EditProfileItem("Name", R.drawable.ic_account, InputType.TYPE_TEXT_VARIATION_PERSON_NAME, listOf(Validator.empty())),
+                EditProfileItem("Username", inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS, validators = listOf(Validator.empty())),
                 EditProfileItem("Biography", R.drawable.ic_note_text, InputType.TYPE_TEXT_FLAG_MULTI_LINE, maxLines = 3),
                 EditProfileItem("Current Password", R.drawable.ic_lock, InputType.TYPE_TEXT_VARIATION_PASSWORD),
                 EditProfileItem("New Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD),
@@ -34,7 +35,7 @@ class EditProfileAdapter : RecyclerView.Adapter<EditProfileAdapter.EditProfileRo
     }
 
     override fun onBindViewHolder(holder: EditProfileRow?, position: Int) {
-        val item: EditProfileItem = listEditableItems[position]
+        val item: EditProfileItem = editableItems[position]
 
         holder?.hint?.hint = item.hint
         holder?.input?.inputType = item.inputType
@@ -42,7 +43,7 @@ class EditProfileAdapter : RecyclerView.Adapter<EditProfileAdapter.EditProfileRo
         item.icon?.let { holder?.icon?.setImageResource(it) }
     }
 
-    override fun getItemCount(): Int = listEditableItems.size
+    override fun getItemCount(): Int = editableItems.size
 
     inner class EditProfileRow(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         val icon: ImageView? = itemView?.findViewById(R.id.icon)
@@ -50,5 +51,5 @@ class EditProfileAdapter : RecyclerView.Adapter<EditProfileAdapter.EditProfileRo
         val hint: TextInputLayout? = itemView?.findViewById(R.id.input_hint)
     }
 
-    data class EditProfileItem(val hint: String, @DrawableRes val icon: Int? = null, val inputType: Int = InputType.TYPE_CLASS_TEXT, val maxLines: Int = 1)
+    data class EditProfileItem(val hint: String, @DrawableRes val icon: Int? = null, val inputType: Int = InputType.TYPE_CLASS_TEXT, val validators: List<Validator> = listOf(), val maxLines: Int = 1)
 }
