@@ -3,11 +3,11 @@ package rbsoftware.friendstagram.dagger.component
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import dagger.Component
-import rbsoftware.friendstagram.viewmodel.UserViewModel
 import rbsoftware.friendstagram.dagger.module.AppModule
 import rbsoftware.friendstagram.dagger.module.ServicesModule
 import rbsoftware.friendstagram.service.AuthenticationService
 import rbsoftware.friendstagram.viewmodel.PostViewModel
+import rbsoftware.friendstagram.viewmodel.UserViewModel
 import javax.inject.Singleton
 
 /**
