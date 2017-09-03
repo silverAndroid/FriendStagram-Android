@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.TargetApi
 import android.content.Intent
 import android.database.Cursor
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -21,9 +22,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import io.reactivex.subjects.CompletableSubject
+import io.reactivex.subjects.PublishSubject
 import permissions.dispatcher.*
 import rbsoftware.friendstagram.ImageHandler
-import rbsoftware.friendstagram.ImageSelectListener
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.ui.adapter.PicturesAdapter
 
@@ -32,9 +34,10 @@ import rbsoftware.friendstagram.ui.adapter.PicturesAdapter
  */
 @RuntimePermissions()
 class SelectImageFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
+    private val adapterInitialized: CompletableSubject = CompletableSubject.create()
+
     private var adapter: PicturesAdapter? = null
     private var recyclerView: RecyclerView? = null
-    private lateinit var onImageSelected: ImageSelectListener
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_select_image, container, false)
@@ -75,7 +78,7 @@ class SelectImageFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         Log.d(TAG, "Finished loading")
         if (adapter == null) {
             adapter = data?.let { PicturesAdapter(it, context) }
-            adapter?.setOnImageSelectListener(onImageSelected)
+            adapterInitialized.onComplete()
             recyclerView?.adapter = adapter
         } else {
             adapter?.changeCursor(data)
@@ -92,10 +95,9 @@ class SelectImageFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         SelectImageFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults)
     }
 
-    fun setOnImageSelectListener(imageSelectListener: ImageSelectListener) {
-        this.onImageSelected = imageSelectListener
-        adapter?.setOnImageSelectListener(onImageSelected)
-    }
+    fun isAdapterInitialized(): CompletableSubject = adapterInitialized
+
+    fun getOnImageSelected(): PublishSubject<Uri>? = adapter?.getOnImageSelected()
 
     @TargetApi(Build.VERSION_CODES.M)
     @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)

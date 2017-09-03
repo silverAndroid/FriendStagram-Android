@@ -8,6 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import rbsoftware.friendstagram.*
 import rbsoftware.friendstagram.databinding.HeaderProfileBinding
 import rbsoftware.friendstagram.model.Post
@@ -18,8 +22,8 @@ import rbsoftware.friendstagram.ui.viewholder.PictureViewHolder
  * Created by Rushil on 8/18/2017.
  */
 class ProfileAdapter(private var posts: List<Post>, private var user: User) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private lateinit var onPostSelected: PostSelectListener
-    private lateinit var onActionExecuted: ActionExecuteListener
+    private val onPostSelected: PublishSubject<Post> = PublishSubject.create()
+    private val onActionExecuted: PublishSubject<String> = PublishSubject.create()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == ITEM_VIEW_TYPE_HEADER) {
@@ -39,7 +43,7 @@ class ProfileAdapter(private var posts: List<Post>, private var user: User) : Re
             val holder = parent as PictureViewHolder
             val post = posts[position - 1]
             holder.image.setImageURI(Uri.parse(post.imageURL))
-            holder.image.setOnClickListener { onPostSelected(post) }
+            holder.image.setOnClickListener { onPostSelected.onNext(post) }
         }
     }
 
@@ -65,13 +69,9 @@ class ProfileAdapter(private var posts: List<Post>, private var user: User) : Re
         return position == 0
     }
 
-    fun setOnPostSelectListener(postSelectListener: PostSelectListener) {
-        this.onPostSelected = postSelectListener
-    }
+    fun getOnPostSelected(): PublishSubject<Post> = onPostSelected
 
-    fun setOnActionExecuteListener(actionExecuteListener: ActionExecuteListener) {
-        this.onActionExecuted = actionExecuteListener
-    }
+    fun getOnActionExecuted(): PublishSubject<String> = onActionExecuted
 
     private fun setPosts(posts: List<Post>) {
         val diffResult = DiffUtil.calculateDiff(GenericDiffCallback(this.posts, posts))
@@ -91,7 +91,7 @@ class ProfileAdapter(private var posts: List<Post>, private var user: User) : Re
             this.profileBinding.executePendingBindings()
             editProfile = profileBinding.root.findViewById(R.id.edit_profile)
             editProfile.setOnClickListener {
-                onActionExecuted(Constants.Action.EDIT_PROFILE)
+                onActionExecuted.onNext(Constants.Action.EDIT_PROFILE)
             }
         }
     }

@@ -1,5 +1,6 @@
 package rbsoftware.friendstagram.ui.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -13,16 +14,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.facebook.drawee.view.SimpleDraweeView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import rbsoftware.friendstagram.*
+import io.reactivex.subjects.CompletableSubject
+import io.reactivex.subjects.PublishSubject
+import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.dagger.component.DaggerServicesComponent
 import rbsoftware.friendstagram.dagger.module.AppModule
 import rbsoftware.friendstagram.dagger.module.ServicesModule
+import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.ui.adapter.ProfileAdapter
 import rbsoftware.friendstagram.viewmodel.UserViewModel
@@ -32,6 +35,8 @@ import retrofit2.HttpException
  * Created by Rushil on 8/18/2017.
  */
 class ProfileFragment : Fragment() {
+    private val adapterInitialized: CompletableSubject = CompletableSubject.create()
+    private val setToolbar: PublishSubject<Toolbar> = PublishSubject.create()
 
     private var toolbar: Toolbar? = null
     private var adapter: ProfileAdapter? = null
@@ -39,9 +44,6 @@ class ProfileFragment : Fragment() {
     private var profilePicture: SimpleDraweeView? = null
     private var backgroundPicture: SimpleDraweeView? = null
     private lateinit var username: String
-    private lateinit var setToolbar: ToolbarManipulator
-    private lateinit var onPostSelected: PostSelectListener
-    private lateinit var onActionExecuted: ActionExecuteListener
     private lateinit var updateViews: List<UpdateView>
     private lateinit var userViewModel: UserViewModel
 
@@ -69,7 +71,6 @@ class ProfileFragment : Fragment() {
         )
 
         toolbar?.setBackgroundColor(0)
-        toolbar?.let { setToolbar(it) }
         layoutManager.spanSizeLookup = object : SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 val adapter: ProfileAdapter = recyclerView?.adapter as ProfileAdapter
@@ -79,6 +80,7 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+        toolbar?.let { setToolbar.onNext(it) }
 
         val daggerComponent = DaggerServicesComponent
                 .builder()
@@ -92,19 +94,15 @@ class ProfileFragment : Fragment() {
         loadProfile()
     }
 
-    fun setToolbarManipulator(toolbarManipulator: ToolbarManipulator) {
-        this.setToolbar = toolbarManipulator
-        toolbar?.let { setToolbar(it) }
-    }
+    fun isAdapterInitialized(): CompletableSubject = adapterInitialized
 
-    fun setOnPostSelectListener(postSelectListener: PostSelectListener) {
-        this.onPostSelected = postSelectListener
-    }
+    fun getToolbarManipulator(): PublishSubject<Toolbar> = setToolbar
 
-    fun setOnActionExecuteListener(actionExecuteListener: ActionExecuteListener) {
-        this.onActionExecuted = actionExecuteListener
-    }
+    fun getOnPostSelected(): PublishSubject<Post>? = adapter?.getOnPostSelected()
 
+    fun getOnActionExecuted(): PublishSubject<String>? = adapter?.getOnActionExecuted()
+
+    @SuppressLint("RxLeakedSubscription")
     private fun loadProfile() {
         userViewModel.getUser(username)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -123,19 +121,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setAdapter(user: User) {
-        val profileAdapter: ProfileAdapter
+        adapter = adapter ?: ProfileAdapter(user.posts, user)
 
-        if (adapter == null) {
-            profileAdapter = ProfileAdapter(user.posts, user)
-        } else {
-            profileAdapter = adapter as ProfileAdapter
-            profileAdapter.setUser(user)
-        }
+        adapter?.setUser(user)
+        adapterInitialized.onComplete()
 
-        profileAdapter.setOnPostSelectListener(onPostSelected)
-        profileAdapter.setOnActionExecuteListener(onActionExecuted)
-
-        adapter = profileAdapter
         recyclerView?.adapter = adapter
     }
 

@@ -5,13 +5,12 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import io.reactivex.subjects.PublishSubject
 import rbsoftware.friendstagram.R
-import rbsoftware.friendstagram.ToolbarManipulator
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.temp.RandomString
@@ -21,8 +20,6 @@ import rbsoftware.friendstagram.ui.adapter.HomeAdapter
  * Created by Rushil on 8/18/2017.
  */
 class HomeFragment : Fragment() {
-    private lateinit var setToolbar: ToolbarManipulator
-    private var toolbar: Toolbar? = null
     private val images: Array<String> = arrayOf(
             "http://4.bp.blogspot.com/-F_6SfcFHKRE/UIjJKWfbt8I/AAAAAAAAA6w/AK5H_oGl9io/s1600/nature182.jpg",
             "http://rising.blackstar.com/wp-content/uploads/2012/08/95432c1c89bd11e1a9f71231382044a1_7-450x450.jpg",
@@ -62,6 +59,7 @@ class HomeFragment : Fragment() {
 
     private val postGen = RandomString(250)
     private val usernameGen = RandomString(25)
+    private val setToolbar: PublishSubject<Toolbar> = PublishSubject.create()
     private val posts: List<Post> = List(images.size, { i ->
         val post = Post(images[i], postGen.nextString())
         post.user = User(usernameGen.nextString(), profilePictures[i])
@@ -72,28 +70,22 @@ class HomeFragment : Fragment() {
         return inflater?.inflate(R.layout.fragment_home, container, false)
     }
 
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerView: RecyclerView? = view?.findViewById(R.id.rv)
         val progressBar: ProgressBar? = view?.findViewById(R.id.post_progress)
-        toolbar = view?.findViewById(R.id.toolbar)!!
+        val toolbar: Toolbar? = view?.findViewById(R.id.toolbar)
         val adapter = HomeAdapter(posts)
 
-        toolbar?.let { setToolbar(it) }
+        toolbar?.let { setToolbar.onNext(it) }
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.adapter = adapter
     }
 
-    fun setToolbarManipulator(toolbarManipulator: ToolbarManipulator) {
-        this.setToolbar = toolbarManipulator
-        toolbar?.let { setToolbar(it) }
-    }
+    fun getToolbarManipulator() = setToolbar
 
     companion object {
-        private const val TAG: String = "HomeFragment"
-
         fun newInstance(): HomeFragment {
             return HomeFragment()
         }

@@ -1,12 +1,16 @@
 package rbsoftware.friendstagram.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import rbsoftware.friendstagram.Constants
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.dagger.component.DaggerServicesComponent
@@ -20,11 +24,14 @@ import rbsoftware.friendstagram.ui.fragment.PostFragment
 import rbsoftware.friendstagram.ui.fragment.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
+    private val TAG = "MainActivity"
     private val bottomNavItems: List<BottomNavItem> = listOf(
             BottomNavItem(R.id.tab_home, this::showHomeFragment),
             BottomNavItem(R.id.tab_camera, this::showCameraActivity),
             BottomNavItem(R.id.tab_account, this::showProfileFragment)
     )
+    private val uiSubscriptions: CompositeDisposable = CompositeDisposable()
+
     private var currentTab: Int = 0
     private var bottomNav: BottomNavigationView? = null
     private var homeFragment: HomeFragment? = null
@@ -63,13 +70,32 @@ class MainActivity : AppCompatActivity() {
         showFragment(currentTab)
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            uiSubscriptions.clear()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uiSubscriptions.clear()
+        }
+    }
+
     private fun showHomeFragment() {
         currentTab = 0
         if (homeFragment == null)
             homeFragment = HomeFragment.newInstance()
 
         homeFragment?.let {
-            it.setToolbarManipulator(this::setToolbar)
+            uiSubscriptions.add(
+                    it.getToolbarManipulator()
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.trampoline())
+                            .subscribe(this::setToolbar, this::onSubscriptionError)
+            )
             showFragment(it)
         }
     }
@@ -79,23 +105,50 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    @SuppressLint("RxLeakedSubscription")
     private fun showProfileFragment() {
         currentTab = 2
-        // TODO: Add callback for when edit profile
         if (profileFragment == null)
             profileFragment = ProfileFragment.newInstance(authService.username)
 
         profileFragment?.let {
-            it.setToolbarManipulator(this::setToolbar)
-            it.setOnPostSelectListener(this::showPostFragment)
-            it.setOnActionExecuteListener(this::onActionExecution)
+            it.isAdapterInitialized()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.trampoline())
+                    .subscribe({
+                        uiSubscriptions.add(
+                                it.getToolbarManipulator()
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribeOn(Schedulers.trampoline())
+                                        .subscribe(this::setToolbar, this::onSubscriptionError)
+                        )
+                        it.getOnPostSelected()?.let { subject ->
+                            uiSubscriptions.add(
+                                    subject.observeOn(AndroidSchedulers.mainThread())
+                                            .subscribeOn(Schedulers.trampoline())
+                                            .subscribe(this::showPostFragment, this::onSubscriptionError)
+                            )
+                        }
+                        it.getOnActionExecuted()?.let { subject ->
+                            uiSubscriptions.add(
+                                    subject.observeOn(AndroidSchedulers.mainThread())
+                                            .subscribeOn(Schedulers.trampoline())
+                                            .subscribe(this::onActionExecution, this::onSubscriptionError)
+                            )
+                        }
+                    }, this::onSubscriptionError)
             showFragment(it)
         }
     }
 
     private fun showPostFragment(post: Post) {
         val fragment = PostFragment.newInstance(post)
-        fragment.setToolbarManipulator(this::setToolbar)
+        uiSubscriptions.add(
+                fragment.getToolbarManipulator()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.trampoline())
+                        .subscribe(this::setToolbar, this::onSubscriptionError)
+        )
         showFragment(fragment, true, "PostFragment")
     }
 
@@ -117,6 +170,10 @@ class MainActivity : AppCompatActivity() {
         when (action) {
             Constants.Action.EDIT_PROFILE -> showEditProfileActivity()
         }
+    }
+
+    private fun onSubscriptionError(e: Throwable) {
+        throw RuntimeException(e)
     }
 
     private data class BottomNavItem(@IdRes val itemID: Int, val loadFragment: () -> Unit)

@@ -8,7 +8,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import rbsoftware.friendstagram.ImageSelectListener
+import io.reactivex.subjects.PublishSubject
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.model.Picture
 import rbsoftware.friendstagram.ui.viewholder.PictureViewHolder
@@ -17,10 +17,10 @@ import rbsoftware.friendstagram.ui.viewholder.PictureViewHolder
  * Created by Rushil on 8/18/2017.
  */
 class PicturesAdapter(cursor: Cursor, private val context: Context) : RecyclerView.Adapter<PictureViewHolder>() {
+    private val onImageSelected: PublishSubject<Uri> = PublishSubject.create()
 
     private var images: List<Picture> = listOf()
     private var selectedPosition: Int = 0
-    private lateinit var onImageSelected: ImageSelectListener
 
     init {
         changeCursor(cursor)
@@ -38,7 +38,7 @@ class PicturesAdapter(cursor: Cursor, private val context: Context) : RecyclerVi
             selectedPosition = holder.adapterPosition
             notifyItemChanged(oldPosition)
             notifyItemChanged(selectedPosition)
-            onImageSelected(images[selectedPosition].uri)
+            onImageSelected.onNext(images[selectedPosition].uri)
         }
 
         if (selectedPosition == position) {
@@ -71,10 +71,5 @@ class PicturesAdapter(cursor: Cursor, private val context: Context) : RecyclerVi
         notifyDataSetChanged()
     }
 
-    fun setOnImageSelectListener(imageSelectListener: ImageSelectListener) {
-        this.onImageSelected = imageSelectListener
-        if (images.isNotEmpty()) {
-            onImageSelected(images[selectedPosition].uri)
-        }
-    }
+    fun getOnImageSelected(): PublishSubject<Uri> = onImageSelected
 }

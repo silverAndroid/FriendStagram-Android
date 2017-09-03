@@ -6,8 +6,8 @@ import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import io.reactivex.subjects.PublishSubject
 import rbsoftware.friendstagram.R
-import rbsoftware.friendstagram.ToolbarManipulator
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.ui.viewholder.PostViewHolder
 
@@ -15,7 +15,8 @@ import rbsoftware.friendstagram.ui.viewholder.PostViewHolder
  * Created by Rushil on 8/18/2017.
  */
 class PostFragment: Fragment() {
-    private lateinit var setToolbar: ToolbarManipulator
+    private val setToolbar: PublishSubject<Toolbar> = PublishSubject.create()
+
     private var toolbar: Toolbar? = null
     private var post: Post? = null
 
@@ -36,13 +37,10 @@ class PostFragment: Fragment() {
         val picture = PostViewHolder(pictureView)
 
         post?.let { picture.init(it) }
-        toolbar?.let { setToolbar(it) }
+        toolbar?.let { setToolbar.onNext(it) }
     }
 
-    fun setToolbarManipulator(toolbarManipulator: ToolbarManipulator) {
-        this.setToolbar = toolbarManipulator
-        toolbar?.let { setToolbar(it) }
-    }
+    fun getToolbarManipulator() = setToolbar
 
     companion object {
         private const val ARG_POST = "post"

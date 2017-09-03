@@ -2,6 +2,7 @@ package rbsoftware.friendstagram.ui.activity
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -75,6 +76,7 @@ class LoginRegisterActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("RxLeakedSubscription")
     private fun login(username: String, password: String) {
         showProgress(true)
         userViewModel.login(username, password)
@@ -114,6 +116,7 @@ class LoginRegisterActivity : AppCompatActivity() {
         loadLoginBackground()
     }
 
+    @SuppressLint("RxLeakedSubscription")
     private fun register(name: String, email: String, username: String, password: String) {
         showProgress(true)
         userViewModel.register(name, email, username, password)
