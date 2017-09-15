@@ -36,4 +36,8 @@ class UserViewModel @Inject constructor() : ViewModel() {
     fun getUser(username: String): Single<Response<NetResponse<User>>> {
         return usersService.api.getUser(username)
     }
+
+    fun updateUser(username: String, data: Map<String, Any>): Single<Response<NetResponse<String>>> {
+        return usersService.api.updateUser(username, data)
+    }
 }

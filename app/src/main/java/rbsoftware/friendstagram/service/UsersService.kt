@@ -6,10 +6,7 @@ import rbsoftware.friendstagram.model.NetResponse
 import rbsoftware.friendstagram.model.User
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 import javax.inject.Inject
 
 /**
@@ -32,6 +29,9 @@ class UsersService @Inject constructor(retrofit: Retrofit) {
 
         @GET("/users/{username}")
         fun getUser(@Path("username") username: String): Single<Response<NetResponse<User>>>
+
+        @PUT("/users/{username}")
+        fun updateUser(@Path("username") username: String, @Body updateJSON: Map<String, @JvmSuppressWildcards Any>): Single<Response<NetResponse<String>>>
 
         @POST("/users/logoff")
         fun logout(): Single<User>

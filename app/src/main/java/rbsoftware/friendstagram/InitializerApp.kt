@@ -17,7 +17,6 @@ import rbsoftware.friendstagram.service.AuthenticationService
  */
 
 class InitializerApp : Application() {
-
     override fun onCreate() {
         super.onCreate()
         val requestListeners = setOf<RequestListener>(RequestLoggingListener())

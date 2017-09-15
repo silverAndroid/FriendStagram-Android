@@ -2,9 +2,7 @@ package rbsoftware.friendstagram.ui.viewholder
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-
 import com.facebook.drawee.view.SimpleDraweeView
-
 import rbsoftware.friendstagram.R
 
 /**
