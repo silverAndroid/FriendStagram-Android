@@ -12,6 +12,7 @@ import rbsoftware.friendstagram.Constants
 import rbsoftware.friendstagram.GenericDiffCallback
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.databinding.HeaderProfileBinding
+import rbsoftware.friendstagram.model.Action
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.ui.viewholder.PictureViewHolder
@@ -21,7 +22,7 @@ import rbsoftware.friendstagram.ui.viewholder.PictureViewHolder
  */
 class ProfileAdapter(private var posts: List<Post>, private var user: User) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val onPostSelected: PublishSubject<Post> = PublishSubject.create()
-    private val onActionExecuted: PublishSubject<String> = PublishSubject.create()
+    private val onActionExecuted: PublishSubject<Action> = PublishSubject.create()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == ITEM_VIEW_TYPE_HEADER) {
@@ -69,7 +70,7 @@ class ProfileAdapter(private var posts: List<Post>, private var user: User) : Re
 
     fun getOnPostSelected(): PublishSubject<Post> = onPostSelected
 
-    fun getOnActionExecuted(): PublishSubject<String> = onActionExecuted
+    fun getOnActionExecuted(): PublishSubject<Action> = onActionExecuted
 
     private fun setPosts(posts: List<Post>) {
         val diffResult = DiffUtil.calculateDiff(GenericDiffCallback(this.posts, posts))
@@ -89,7 +90,12 @@ class ProfileAdapter(private var posts: List<Post>, private var user: User) : Re
             this.profileBinding.executePendingBindings()
             editProfile = profileBinding.root.findViewById(R.id.edit_profile)
             editProfile.setOnClickListener {
-                onActionExecuted.onNext(Constants.Action.EDIT_PROFILE)
+                onActionExecuted.onNext(Action(
+                        Constants.Action.EDIT_PROFILE,
+                        mapOf(
+                                "user" to user
+                        )
+                ))
             }
         }
     }

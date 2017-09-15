@@ -18,6 +18,7 @@ import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.dagger.component.DaggerServicesComponent
 import rbsoftware.friendstagram.dagger.module.AppModule
 import rbsoftware.friendstagram.dagger.module.ServicesModule
+import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.service.AuthenticationService
 import rbsoftware.friendstagram.service.NetworkService
 import rbsoftware.friendstagram.ui.adapter.EditProfileAdapter
@@ -27,11 +28,18 @@ import rbsoftware.friendstagram.viewmodel.UserViewModel
  * Created by Rushil on 8/23/2017.
  */
 class EditProfileFragment : Fragment() {
-    private val adapter = EditProfileAdapter()
     private val updateComplete: CompletableSubject = CompletableSubject.create()
 
+    private lateinit var user: User
+    private lateinit var adapter: EditProfileAdapter
     private lateinit var userViewModel: UserViewModel
     private lateinit var authService: AuthenticationService
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        user = arguments.getParcelable(ARG_USER)
+        adapter = EditProfileAdapter(user)
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_edit_profile, container, false)
@@ -92,9 +100,14 @@ class EditProfileFragment : Fragment() {
 
     companion object {
         private const val TAG = "EditProfileFragment"
+        private const val ARG_USER = "user"
 
-        fun newInstance(): EditProfileFragment {
-            return EditProfileFragment()
+        fun newInstance(user: User): EditProfileFragment {
+            val fragment = EditProfileFragment()
+            val args = Bundle()
+            args.putParcelable(ARG_USER, user)
+            fragment.arguments = args
+            return fragment
         }
     }
 }

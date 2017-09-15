@@ -21,7 +21,7 @@
             app:titleEnabled="false">
 
             <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/backdrop"
+                android:id="@+id/background"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:fitsSystemWindows="true"

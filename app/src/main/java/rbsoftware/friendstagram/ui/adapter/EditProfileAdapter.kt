@@ -9,8 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import com.facebook.drawee.view.SimpleDraweeView
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.Validators
+import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.model.Validator
 import rbsoftware.friendstagram.validate
 import java.util.concurrent.atomic.AtomicInteger
@@ -18,43 +20,66 @@ import java.util.concurrent.atomic.AtomicInteger
 /**
  * Created by Rushil on 8/23/2017.
  */
-class EditProfileAdapter : RecyclerView.Adapter<EditProfileAdapter.EditProfileRow>() {
+class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val ITEM_VIEW_TYPE_PICTURES = 0
+    private val ITEM_VIEW_TYPE_INPUT = 1
     private val editableItems: List<EditProfileItem>
 
     init {
         editableItems = listOf(
-                EditProfileItem("Name", R.drawable.ic_account, InputType.TYPE_TEXT_VARIATION_PERSON_NAME, listOf(Validator.empty())),
-                EditProfileItem("Username", inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS, validators = listOf(Validator.empty())),
-                EditProfileItem("Biography", R.drawable.ic_note_text, InputType.TYPE_TEXT_FLAG_MULTI_LINE, maxLines = 3, key = "bio"),
-                EditProfileItem("Current Password", R.drawable.ic_lock, InputType.TYPE_TEXT_VARIATION_PASSWORD, listOf(Validator.empty(), Validator.passwordValid()), key = "password.old"),
+                EditProfileItem("Name", user.name, R.drawable.ic_account, InputType.TYPE_TEXT_VARIATION_PERSON_NAME, listOf(Validator.empty())),
+                EditProfileItem("Username", user.username, inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS, validators = listOf(Validator.empty())),
+                EditProfileItem("Biography", user.biography ?: "", R.drawable.ic_note_text, InputType.TYPE_TEXT_FLAG_MULTI_LINE, maxLines = 3, key = "bio"),
+                EditProfileItem("Current Password", icon = R.drawable.ic_lock, inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = "password.old"),
                 EditProfileItem("New Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = "password.new"),
                 EditProfileItem("Verify Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = null)
         )
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): EditProfileRow {
-        val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_edit_profile, parent, false)
-        return EditProfileRow(view)
-    }
-
-    override fun onBindViewHolder(holder: EditProfileRow?, position: Int) {
-        val item: EditProfileItem = editableItems[position]
-
-        with(item) {
-            holder?.hint?.hint = hint
-            holder?.input?.inputType = inputType
-            holder?.input?.maxLines = maxLines
-            holder?.hint?.id = uniqueID
-        }
-
-        item.icon?.let { holder?.icon?.setImageResource(it) }
-        holder?.hint?.let { editableItems[position].input = it }
-        item.validators.forEach {
-            Validators.addValidation(item.uniqueID, it)
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == ITEM_VIEW_TYPE_PICTURES) {
+            val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_edit_picture, parent, false)
+            EditPictureRow(view)
+        } else {
+            val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_edit_profile, parent, false)
+            EditProfileRow(view)
         }
     }
 
-    override fun getItemCount(): Int = editableItems.size
+    override fun onBindViewHolder(holderParent: RecyclerView.ViewHolder?, position: Int) {
+        val inputPosition = position - 1
+
+        if (holderParent is EditProfileRow) {
+            val item: EditProfileItem = editableItems[inputPosition]
+            val holder: EditProfileRow = holderParent
+            with(item) {
+                holder.hint?.hint = hint
+                holder.input?.setText(value)
+                holder.input?.inputType = inputType
+                holder.input?.maxLines = maxLines
+                holder.hint?.id = uniqueID
+            }
+
+            item.icon?.let { holder.icon?.setImageResource(it) }
+            holder.hint?.let { editableItems[inputPosition].input = it }
+            item.validators.forEach {
+                Validators.addValidation(item.uniqueID, it)
+            }
+        } else if (holderParent is EditPictureRow) {
+            val holder: EditPictureRow = holderParent
+
+            holder.background?.setImageURI(user.backgroundPictureURL)
+            holder.profilePicture?.setImageURI(user.profilePictureURL)
+        }
+    }
+
+    override fun getItemCount(): Int = editableItems.size + 1
+
+    override fun getItemViewType(position: Int): Int = if (position == 0) {
+        ITEM_VIEW_TYPE_PICTURES
+    } else {
+        ITEM_VIEW_TYPE_INPUT
+    }
 
     fun getData(): Map<String, Any>? {
         var isValid = true
@@ -105,13 +130,18 @@ class EditProfileAdapter : RecyclerView.Adapter<EditProfileAdapter.EditProfileRo
         }
     }
 
+    inner class EditPictureRow(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+        val background: SimpleDraweeView? = itemView?.findViewById(R.id.background)
+        val profilePicture: SimpleDraweeView? = itemView?.findViewById(R.id.profile)
+    }
+
     inner class EditProfileRow(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         val icon: ImageView? = itemView?.findViewById(R.id.icon)
         val input: EditText? = itemView?.findViewById(R.id.input)
         val hint: TextInputLayout? = itemView?.findViewById(R.id.input_hint)
     }
 
-    data class EditProfileItem(val hint: String, @DrawableRes val icon: Int? = null, val inputType: Int = InputType.TYPE_CLASS_TEXT, val validators: List<Validator> = listOf(), private val key: String? = hint.toLowerCase(), val maxLines: Int = 1) {
+    data class EditProfileItem(val hint: String, val value: String = "", @DrawableRes val icon: Int? = null, val inputType: Int = InputType.TYPE_CLASS_TEXT, val validators: List<Validator> = listOf(), private val key: String? = hint.toLowerCase(), val maxLines: Int = 1) {
         val uniqueID: Int = generateViewId()
         lateinit var input: TextInputLayout
 

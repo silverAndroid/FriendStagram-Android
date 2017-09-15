@@ -25,6 +25,7 @@ import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.dagger.component.DaggerServicesComponent
 import rbsoftware.friendstagram.dagger.module.AppModule
 import rbsoftware.friendstagram.dagger.module.ServicesModule
+import rbsoftware.friendstagram.model.Action
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.ui.adapter.ProfileAdapter
@@ -63,7 +64,7 @@ class ProfileFragment : Fragment() {
         toolbar = view?.findViewById(R.id.toolbar)
         recyclerView = view?.findViewById(R.id.rv)
         profilePicture = view?.findViewById(R.id.profile)
-        backgroundPicture = view?.findViewById(R.id.backdrop)
+        backgroundPicture = view?.findViewById(R.id.background)
         updateViews = listOf(
                 UpdateView("posts", view?.findViewById(R.id.num_posts), { it.posts.size }),
                 UpdateView("followers", view?.findViewById(R.id.num_followers), { it.followerUserIDs.size }),
@@ -100,7 +101,7 @@ class ProfileFragment : Fragment() {
 
     fun getOnPostSelected(): PublishSubject<Post>? = adapter?.getOnPostSelected()
 
-    fun getOnActionExecuted(): PublishSubject<String>? = adapter?.getOnActionExecuted()
+    fun getOnActionExecuted(): PublishSubject<Action>? = adapter?.getOnActionExecuted()
 
     @SuppressLint("RxLeakedSubscription")
     private fun loadProfile() {

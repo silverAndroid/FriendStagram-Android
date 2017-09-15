@@ -16,7 +16,9 @@ import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.dagger.component.DaggerServicesComponent
 import rbsoftware.friendstagram.dagger.module.AppModule
 import rbsoftware.friendstagram.dagger.module.ServicesModule
+import rbsoftware.friendstagram.model.Action
 import rbsoftware.friendstagram.model.Post
+import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.service.AuthenticationService
 import rbsoftware.friendstagram.showFragment
 import rbsoftware.friendstagram.ui.fragment.HomeFragment
@@ -152,8 +154,9 @@ class MainActivity : AppCompatActivity() {
         showFragment(fragment, true, "PostFragment")
     }
 
-    private fun showEditProfileActivity() {
+    private fun showEditProfileActivity(user: User) {
         val intent = Intent(this, EditProfileActivity::class.java)
+        intent.putExtra("user", user)
         startActivity(intent)
     }
 
@@ -166,9 +169,11 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
-    private fun onActionExecution(action: String) {
-        when (action) {
-            Constants.Action.EDIT_PROFILE -> showEditProfileActivity()
+    private fun onActionExecution(action: Action) {
+        when (action.action) {
+            Constants.Action.EDIT_PROFILE -> {
+                showEditProfileActivity(action.data["user"] as User)
+            }
         }
     }
 

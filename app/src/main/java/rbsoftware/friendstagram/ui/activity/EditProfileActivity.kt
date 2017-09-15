@@ -9,17 +9,20 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rbsoftware.friendstagram.R
+import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.showFragment
 import rbsoftware.friendstagram.ui.fragment.EditProfileFragment
 
 class EditProfileActivity : AppCompatActivity() {
     private val subscriptions: CompositeDisposable = CompositeDisposable()
+    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
+        user = intent.getParcelableExtra("user")
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -46,7 +49,7 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun showEditProfileFragment() {
-        val fragment = EditProfileFragment.newInstance()
+        val fragment = EditProfileFragment.newInstance(user)
         subscriptions.add(
                 fragment.updateComplete()
                         .subscribeOn(Schedulers.trampoline())
