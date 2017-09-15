@@ -8,23 +8,26 @@ import com.google.gson.annotations.SerializedName
  * Created by Rushil on 8/18/2017.
  */
 data class User(val username: String, @SerializedName("profile_picture_url") val profilePictureURL: String?, val name: String = "", val description: String? = "") : Parcelable {
-    var posts: List<Post> = listOf()
+    var posts: MutableList<Post> = mutableListOf()
     @SerializedName("profile_background_url")
     var backgroundPictureURL: String? = null
     @SerializedName("following")
-    var followingUserIDs: List<String> = listOf()
+    var followingUserIDs: MutableList<String> = mutableListOf()
     @SerializedName("followers")
-    var followerUserIDs: List<String> = listOf()
+    var followerUserIDs: MutableList<String> = mutableListOf()
+    var biography: String? = ""
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
-            parcel.readString()) {
+            parcel.readString()
+    ) {
         parcel.readTypedList(posts, Post.CREATOR)
         backgroundPictureURL = parcel.readString()
         parcel.readStringList(followingUserIDs)
         parcel.readStringList(followerUserIDs)
+        biography = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -36,6 +39,7 @@ data class User(val username: String, @SerializedName("profile_picture_url") val
         parcel.writeString(backgroundPictureURL)
         parcel.writeStringList(followingUserIDs)
         parcel.writeStringList(followerUserIDs)
+        parcel.writeString(biography)
     }
 
     override fun describeContents(): Int {
