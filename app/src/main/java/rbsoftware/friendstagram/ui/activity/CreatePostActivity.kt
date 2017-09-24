@@ -19,9 +19,8 @@ import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import rbsoftware.friendstagram.InitializerApp
 import rbsoftware.friendstagram.R
-import rbsoftware.friendstagram.dagger.component.DaggerServicesComponent
-import rbsoftware.friendstagram.dagger.module.AppModule
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.service.AuthenticationService
 import rbsoftware.friendstagram.service.NetworkService
@@ -53,10 +52,7 @@ class CreatePostActivity : AppCompatActivity() {
         val toolbar: Toolbar? = findViewById(R.id.toolbar)
         val closeIndicator = ContextCompat.getDrawable(this, R.drawable.ic_close)
 
-        val daggerComponent = DaggerServicesComponent
-                .builder()
-                .appModule(AppModule(this))
-                .build()
+        val daggerComponent = InitializerApp.servicesComponent
         daggerComponent.inject(this)
         authService = daggerComponent.authService()
         postViewModel = daggerComponent.postViewModel()

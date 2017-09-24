@@ -14,10 +14,8 @@ import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.CompletableSubject
+import rbsoftware.friendstagram.InitializerApp
 import rbsoftware.friendstagram.R
-import rbsoftware.friendstagram.dagger.component.DaggerServicesComponent
-import rbsoftware.friendstagram.dagger.module.AppModule
-import rbsoftware.friendstagram.dagger.module.ServicesModule
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.service.AuthenticationService
 import rbsoftware.friendstagram.service.NetworkService
@@ -52,11 +50,7 @@ class EditProfileFragment : Fragment() {
         val recyclerView: RecyclerView? = view?.findViewById(R.id.rv)
         val btnSubmit: Button? = view?.findViewById(R.id.submit)
 
-        val daggerComponent = DaggerServicesComponent
-                .builder()
-                .appModule(AppModule(context))
-                .servicesModule(ServicesModule())
-                .build()
+        val daggerComponent = InitializerApp.servicesComponent
         daggerComponent.inject(this)
         authService = daggerComponent.authService()
         userViewModel = daggerComponent.userViewModel()

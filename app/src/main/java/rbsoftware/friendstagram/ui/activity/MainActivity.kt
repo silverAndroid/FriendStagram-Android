@@ -12,10 +12,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rbsoftware.friendstagram.Constants
+import rbsoftware.friendstagram.InitializerApp
 import rbsoftware.friendstagram.R
-import rbsoftware.friendstagram.dagger.component.DaggerServicesComponent
-import rbsoftware.friendstagram.dagger.module.AppModule
-import rbsoftware.friendstagram.dagger.module.ServicesModule
 import rbsoftware.friendstagram.model.Action
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.model.User
@@ -57,11 +55,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val daggerComponent = DaggerServicesComponent
-                .builder()
-                .appModule(AppModule(this))
-                .servicesModule(ServicesModule())
-                .build()
+        val daggerComponent = InitializerApp.servicesComponent
         daggerComponent.inject(this)
         authService = daggerComponent.authService()
     }
