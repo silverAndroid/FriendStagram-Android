@@ -16,10 +16,8 @@ import android.widget.Toast
 import com.facebook.drawee.view.SimpleDraweeView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import rbsoftware.friendstagram.InitializerApp
 import rbsoftware.friendstagram.R
-import rbsoftware.friendstagram.dagger.component.DaggerServicesComponent
-import rbsoftware.friendstagram.dagger.module.AppModule
-import rbsoftware.friendstagram.dagger.module.ServicesModule
 import rbsoftware.friendstagram.service.AuthenticationService
 import rbsoftware.friendstagram.service.NetworkService
 import rbsoftware.friendstagram.showFragment
@@ -47,11 +45,7 @@ class LoginRegisterActivity : AppCompatActivity() {
         fragmentContainer = findViewById(R.id.container)
         progressView = findViewById(R.id.login_progress)
 
-        val daggerComponent = DaggerServicesComponent
-                .builder()
-                .appModule(AppModule(this))
-                .servicesModule(ServicesModule())
-                .build()
+        val daggerComponent = InitializerApp.servicesComponent
         daggerComponent.inject(this)
         authService = daggerComponent.authService()
         userViewModel = daggerComponent.userViewModel()

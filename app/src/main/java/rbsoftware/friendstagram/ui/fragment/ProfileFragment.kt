@@ -21,10 +21,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
+import rbsoftware.friendstagram.InitializerApp
 import rbsoftware.friendstagram.R
-import rbsoftware.friendstagram.dagger.component.DaggerServicesComponent
-import rbsoftware.friendstagram.dagger.module.AppModule
-import rbsoftware.friendstagram.dagger.module.ServicesModule
 import rbsoftware.friendstagram.model.Action
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.model.User
@@ -83,11 +81,7 @@ class ProfileFragment : Fragment() {
         }
         toolbar?.let { setToolbar.onNext(it) }
 
-        val daggerComponent = DaggerServicesComponent
-                .builder()
-                .appModule(AppModule(context))
-                .servicesModule(ServicesModule())
-                .build()
+        val daggerComponent = InitializerApp.servicesComponent
         daggerComponent.inject(this)
         userViewModel = daggerComponent.userViewModel()
 
