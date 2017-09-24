@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.fragment_picture.*
+import kotlinx.android.synthetic.main.layout_main_toolbar.*
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.ui.viewholder.PostViewHolder
@@ -17,7 +19,6 @@ import rbsoftware.friendstagram.ui.viewholder.PostViewHolder
 class PostFragment: Fragment() {
     private val setToolbar: PublishSubject<Toolbar> = PublishSubject.create()
 
-    private var toolbar: Toolbar? = null
     private var post: Post? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,12 +33,11 @@ class PostFragment: Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar = view?.findViewById(R.id.toolbar)
-        val pictureView: View? = view?.findViewById(R.id.picture)
-        val picture = PostViewHolder(pictureView)
+        val pictureView = picture
+        val postView = PostViewHolder(pictureView)
 
-        post?.let { picture.init(it) }
-        toolbar?.let { setToolbar.onNext(it) }
+        post?.let { postView.init(it) }
+        toolbar.let { setToolbar.onNext(it) }
     }
 
     fun getToolbarManipulator() = setToolbar

@@ -8,6 +8,7 @@ import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.layout_toolbar.*
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.showFragment
@@ -21,7 +22,6 @@ class EditProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
 
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
         user = intent.getParcelableExtra("user")
 
         setSupportActionBar(toolbar)

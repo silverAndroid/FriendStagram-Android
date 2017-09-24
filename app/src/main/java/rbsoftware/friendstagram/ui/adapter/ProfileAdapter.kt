@@ -1,17 +1,19 @@
 package rbsoftware.friendstagram.ui.adapter
 
-import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.header_profile.*
+import kotlinx.android.synthetic.main.item_image.*
 import rbsoftware.friendstagram.Constants
 import rbsoftware.friendstagram.GenericDiffCallback
 import rbsoftware.friendstagram.R
-import rbsoftware.friendstagram.databinding.HeaderProfileBinding
+import rbsoftware.friendstagram.inflate
 import rbsoftware.friendstagram.model.Action
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.model.User
@@ -26,10 +28,10 @@ class ProfileAdapter(private var posts: List<Post>, private var user: User) : Re
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == ITEM_VIEW_TYPE_HEADER) {
-            val dataBindingView: HeaderProfileBinding = DataBindingUtil.inflate(LayoutInflater.from(parent?.context), R.layout.header_profile, parent, false)
-            HeaderViewHolder(dataBindingView)
+            val view = parent?.inflate(R.layout.header_profile)
+            HeaderViewHolder(view)
         } else {
-            val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_image, parent, false)
+            val view = parent?.inflate(R.layout.item_image)
             PictureViewHolder(view)
         }
     }
@@ -37,7 +39,11 @@ class ProfileAdapter(private var posts: List<Post>, private var user: User) : Re
     override fun onBindViewHolder(parent: RecyclerView.ViewHolder?, position: Int) {
         if (isHeader(position)) {
             val holder = parent as HeaderViewHolder
-            holder.profileBinding.user = user
+            with(user) {
+                holder.name.text = name
+                holder.username.text = username
+                holder.description.text = description
+            }
         } else {
             val holder = parent as PictureViewHolder
             val post = posts[position - 1]
@@ -83,12 +89,10 @@ class ProfileAdapter(private var posts: List<Post>, private var user: User) : Re
         private const val ITEM_VIEW_TYPE_ITEM = 1
     }
 
-    inner class HeaderViewHolder internal constructor(internal val profileBinding: HeaderProfileBinding) : RecyclerView.ViewHolder(profileBinding.root) {
-        private val editProfile: ImageView
+    inner class HeaderViewHolder internal constructor(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+        private val editProfile: ImageView = edit_profile
 
         init {
-            this.profileBinding.executePendingBindings()
-            editProfile = profileBinding.root.findViewById(R.id.edit_profile)
             editProfile.setOnClickListener {
                 onActionExecuted.onNext(Action(
                         Constants.Action.EDIT_PROFILE,

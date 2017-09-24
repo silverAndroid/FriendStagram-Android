@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_main.*
 import rbsoftware.friendstagram.Constants
 import rbsoftware.friendstagram.InitializerApp
 import rbsoftware.friendstagram.R
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        bottomNav = findViewById(R.id.bottom_bar)
+        bottomNav = bottom_bar
 
         bottomNav?.setOnNavigationItemSelectedListener({ item ->
             val id = item.itemId

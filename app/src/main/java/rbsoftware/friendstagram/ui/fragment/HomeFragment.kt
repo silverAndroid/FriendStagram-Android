@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.layout_main_toolbar.*
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.model.User
@@ -73,9 +75,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView: RecyclerView? = view?.findViewById(R.id.rv)
-        val progressBar: ProgressBar? = view?.findViewById(R.id.post_progress)
-        val toolbar: Toolbar? = view?.findViewById(R.id.toolbar)
+        val recyclerView = rv
+        val progressBar = post_progress
         val adapter = HomeAdapter(posts)
 
         toolbar?.let { setToolbar.onNext(it) }

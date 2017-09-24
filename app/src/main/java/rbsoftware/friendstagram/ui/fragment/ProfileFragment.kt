@@ -21,6 +21,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.layout_main_toolbar.*
 import rbsoftware.friendstagram.InitializerApp
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.model.Action
@@ -37,7 +39,6 @@ class ProfileFragment : Fragment() {
     private val adapterInitialized: CompletableSubject = CompletableSubject.create()
     private val setToolbar: PublishSubject<Toolbar> = PublishSubject.create()
 
-    private var toolbar: Toolbar? = null
     private var adapter: ProfileAdapter? = null
     private var recyclerView: RecyclerView? = null
     private var profilePicture: SimpleDraweeView? = null
@@ -59,17 +60,16 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val layoutManager = GridLayoutManager(context, 3)
-        toolbar = view?.findViewById(R.id.toolbar)
-        recyclerView = view?.findViewById(R.id.rv)
-        profilePicture = view?.findViewById(R.id.profile)
-        backgroundPicture = view?.findViewById(R.id.background)
+        recyclerView = rv
+        profilePicture = profile
+        backgroundPicture = background
         updateViews = listOf(
-                UpdateView("posts", view?.findViewById(R.id.num_posts), { it.posts.size }),
-                UpdateView("followers", view?.findViewById(R.id.num_followers), { it.followerUserIDs.size }),
-                UpdateView("following", view?.findViewById(R.id.num_following), { it.followingUserIDs.size })
+                UpdateView("posts", num_posts, { it.posts.size }),
+                UpdateView("followers", num_followers, { it.followerUserIDs.size }),
+                UpdateView("following", num_following, { it.followingUserIDs.size })
         )
 
-        toolbar?.setBackgroundColor(0)
+        toolbar.setBackgroundColor(0)
         layoutManager.spanSizeLookup = object : SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 val adapter: ProfileAdapter = recyclerView?.adapter as ProfileAdapter

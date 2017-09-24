@@ -10,8 +10,12 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import com.facebook.drawee.view.SimpleDraweeView
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_edit_picture.*
+import kotlinx.android.synthetic.main.item_edit_profile.*
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.Validators
+import rbsoftware.friendstagram.inflate
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.model.Validator
 import rbsoftware.friendstagram.validate
@@ -38,10 +42,10 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == ITEM_VIEW_TYPE_PICTURES) {
-            val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_edit_picture, parent, false)
+            val view = parent?.inflate(R.layout.item_edit_picture)
             EditPictureRow(view)
         } else {
-            val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_edit_profile, parent, false)
+            val view = parent?.inflate(R.layout.item_edit_profile)
             EditProfileRow(view)
         }
     }
@@ -68,8 +72,8 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
         } else if (holderParent is EditPictureRow) {
             val holder: EditPictureRow = holderParent
 
-            holder.background?.setImageURI(user.backgroundPictureURL)
-            holder.profilePicture?.setImageURI(user.profilePictureURL)
+            holder.background.setImageURI(user.backgroundPictureURL)
+            holder.profile.setImageURI(user.profilePictureURL)
         }
     }
 
@@ -130,15 +134,12 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
         }
     }
 
-    inner class EditPictureRow(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        val background: SimpleDraweeView? = itemView?.findViewById(R.id.background)
-        val profilePicture: SimpleDraweeView? = itemView?.findViewById(R.id.profile)
-    }
+    inner class EditPictureRow(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer
 
-    inner class EditProfileRow(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        val icon: ImageView? = itemView?.findViewById(R.id.icon)
-        val input: EditText? = itemView?.findViewById(R.id.input)
-        val hint: TextInputLayout? = itemView?.findViewById(R.id.input_hint)
+    inner class EditProfileRow(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+        val hint: TextInputLayout? by lazy {
+            input_hint
+        }
     }
 
     data class EditProfileItem(val hint: String, val value: String = "", @DrawableRes val icon: Int? = null, val inputType: Int = InputType.TYPE_CLASS_TEXT, val validators: List<Validator> = listOf(), private val key: String? = hint.toLowerCase(), val maxLines: Int = 1) {

@@ -1,9 +1,13 @@
 package rbsoftware.friendstagram
 
+import android.support.annotation.LayoutRes
 import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import rbsoftware.friendstagram.model.Validator
 
 /**
@@ -28,3 +32,5 @@ fun TextInputLayout.validate(): Boolean {
     this.error = error
     return error == null
 }
+
+fun ViewGroup.inflate(@LayoutRes resource: Int, attachToRoot: Boolean = false): View = LayoutInflater.from(context).inflate(resource, this, attachToRoot)

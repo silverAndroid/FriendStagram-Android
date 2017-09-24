@@ -16,6 +16,7 @@ import android.widget.Toast
 import com.facebook.drawee.view.SimpleDraweeView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_login_register.*
 import rbsoftware.friendstagram.InitializerApp
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.service.AuthenticationService
@@ -42,8 +43,8 @@ class LoginRegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_register)
 
-        fragmentContainer = findViewById(R.id.container)
-        progressView = findViewById(R.id.login_progress)
+        fragmentContainer = container
+        progressView = login_progress
 
         val daggerComponent = InitializerApp.servicesComponent
         daggerComponent.inject(this)
@@ -137,13 +138,11 @@ class LoginRegisterActivity : AppCompatActivity() {
     }
 
     private fun loadLoginBackground() {
-        val background: SimpleDraweeView = findViewById(R.id.background)
         val backgroundURI = "res:/${R.drawable.bg_login}"
         background.setImageURI(Uri.parse(backgroundURI))
     }
 
     private fun loadRegisterBackground() {
-        val background: SimpleDraweeView = findViewById(R.id.background)
         val backgroundURI = "res:/${R.drawable.bg_register}"
         background.setImageURI(Uri.parse(backgroundURI))
     }

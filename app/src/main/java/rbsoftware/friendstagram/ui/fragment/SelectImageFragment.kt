@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.fragment_select_image.*
 import permissions.dispatcher.*
 import rbsoftware.friendstagram.ImageHandler
 import rbsoftware.friendstagram.R
@@ -46,8 +47,7 @@ class SelectImageFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerView = view?.findViewById(R.id.rv)
-        val fab: FloatingActionButton? = view?.findViewById(R.id.fab)
+        recyclerView = rv
 
         recyclerView?.layoutManager = GridLayoutManager(context, 3)
         adapter?.let { recyclerView?.adapter = it }

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_register.*
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.addValidation
 import rbsoftware.friendstagram.model.Validator
@@ -33,12 +34,12 @@ class RegisterFragment : Fragment(), ErrorDisplay {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val loginButton: Button? = view?.findViewById(R.id.login_button)
-        val registerButton: Button? = view?.findViewById(R.id.register_button)
-        nameInputLayout = view?.findViewById(R.id.name_layout)
-        emailInputLayout = view?.findViewById(R.id.email_layout)
-        usernameInputLayout = view?.findViewById(R.id.username_layout)
-        passwordInputLayout = view?.findViewById(R.id.password_layout)
+        val loginButton: Button? = login_button
+        val registerButton: Button? = register_button
+        nameInputLayout = name_layout
+        emailInputLayout = email_layout
+        usernameInputLayout = username_layout
+        passwordInputLayout = password_layout
         inputValidators = mapOf(
                 Pair(nameInputLayout,
                         listOf(
