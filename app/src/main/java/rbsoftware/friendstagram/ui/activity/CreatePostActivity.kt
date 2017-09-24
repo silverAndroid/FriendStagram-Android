@@ -68,8 +68,8 @@ class CreatePostActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(closeIndicator)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onPostResume() {
+        super.onPostResume()
         showImageSelectFragment()
     }
 

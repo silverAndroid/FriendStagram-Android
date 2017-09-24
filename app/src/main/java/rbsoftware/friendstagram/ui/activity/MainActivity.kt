@@ -66,8 +66,8 @@ class MainActivity : AppCompatActivity() {
         authService = daggerComponent.authService()
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onPostResume() {
+        super.onPostResume()
         bottomNav?.selectedItemId = bottomNavItems[currentTab].itemID
         showFragment(currentTab)
     }
