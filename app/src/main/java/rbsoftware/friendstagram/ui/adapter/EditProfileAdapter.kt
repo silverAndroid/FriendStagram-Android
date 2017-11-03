@@ -14,6 +14,7 @@ import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.Validators
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.model.Validator
+import rbsoftware.friendstagram.setInputView
 import rbsoftware.friendstagram.validate
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -30,8 +31,8 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
                 EditProfileItem("Name", user.name, R.drawable.ic_account, InputType.TYPE_TEXT_VARIATION_PERSON_NAME, listOf(Validator.empty())),
                 EditProfileItem("Username", user.username, inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS, validators = listOf(Validator.empty())),
                 EditProfileItem("Biography", user.biography ?: "", R.drawable.ic_note_text, InputType.TYPE_TEXT_FLAG_MULTI_LINE, maxLines = 3, key = "bio"),
-                EditProfileItem("Current Password", icon = R.drawable.ic_lock, inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = "password.old"),
-                EditProfileItem("New Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = "password.new"),
+                EditProfileItem("Current Password", icon = R.drawable.ic_lock, inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = "old_password"),
+                EditProfileItem("New Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = "new_password"),
                 EditProfileItem("Verify Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = null)
         )
     }
@@ -55,9 +56,9 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
             with(item) {
                 holder.hint?.hint = hint
                 holder.input?.setText(value)
-                holder.input?.inputType = inputType
                 holder.input?.maxLines = maxLines
                 holder.hint?.id = uniqueID
+                holder.input?.setInputView(inputType)
             }
 
             item.icon?.let { holder.icon?.setImageResource(it) }
