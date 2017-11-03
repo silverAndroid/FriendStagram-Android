@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.facebook.drawee.view.SimpleDraweeView
+import kotlinx.android.synthetic.main.fragment_select_filter.*
 import rbsoftware.friendstagram.R
 
 /**
@@ -27,9 +28,7 @@ class SelectFilterFragment: Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val image: SimpleDraweeView? = view?.findViewById(R.id.image)
-
-        image?.setImageURI(imageURI)
+        image.setImageURI(imageURI)
     }
 
     companion object {

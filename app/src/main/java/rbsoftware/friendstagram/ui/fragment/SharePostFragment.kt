@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import com.facebook.drawee.view.SimpleDraweeView
+import kotlinx.android.synthetic.main.fragment_share_post.*
 import rbsoftware.friendstagram.R
 
 /**
@@ -29,10 +30,9 @@ class SharePostFragment: Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val image: SimpleDraweeView? = view?.findViewById(R.id.image)
-        editCaption = view?.findViewById(R.id.caption)
+        editCaption = caption
 
-        image?.setImageURI(imageURI)
+        image.setImageURI(imageURI)
     }
 
     fun getCaption(): String {

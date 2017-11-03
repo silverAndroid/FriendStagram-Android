@@ -1,5 +1,6 @@
 package rbsoftware.friendstagram
 
+import android.support.annotation.LayoutRes
 import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
@@ -7,6 +8,9 @@ import android.support.v7.app.AppCompatActivity
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
 import android.widget.EditText
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import rbsoftware.friendstagram.model.Validator
 
 /**
@@ -40,3 +44,5 @@ fun EditText.setInputView(inputType: Int) {
         this.inputType = inputType
     }
 }
+
+fun ViewGroup.inflate(@LayoutRes resource: Int, attachToRoot: Boolean = false): View = LayoutInflater.from(context).inflate(resource, this, attachToRoot)

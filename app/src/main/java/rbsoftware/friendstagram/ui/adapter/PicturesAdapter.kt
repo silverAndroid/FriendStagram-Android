@@ -6,10 +6,11 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.item_image.*
 import rbsoftware.friendstagram.R
+import rbsoftware.friendstagram.inflate
 import rbsoftware.friendstagram.model.Picture
 import rbsoftware.friendstagram.ui.viewholder.PictureViewHolder
 
@@ -27,7 +28,7 @@ class PicturesAdapter(cursor: Cursor, private val context: Context) : RecyclerVi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PictureViewHolder {
-        val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_image, parent, false)
+        val view = parent?.inflate(R.layout.item_image)
         return PictureViewHolder(view)
     }
 

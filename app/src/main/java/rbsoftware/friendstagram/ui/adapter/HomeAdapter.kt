@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import rbsoftware.friendstagram.GenericDiffCallback
 import rbsoftware.friendstagram.R
+import rbsoftware.friendstagram.inflate
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.ui.viewholder.PostViewHolder
 
@@ -15,7 +16,7 @@ import rbsoftware.friendstagram.ui.viewholder.PostViewHolder
 class HomeAdapter(private var posts: List<Post>) : RecyclerView.Adapter<PostViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PostViewHolder {
-        val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_post, parent, false)
+        val view = parent?.inflate(R.layout.item_post)
         return PostViewHolder(view)
     }
 

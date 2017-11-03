@@ -3,27 +3,20 @@ package rbsoftware.friendstagram.ui.viewholder
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.TextView
-
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.backends.pipeline.PipelineDraweeController
-import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.common.ResizeOptions
-import com.facebook.imagepipeline.request.ImageRequest
 import com.facebook.imagepipeline.request.ImageRequestBuilder
-
-import rbsoftware.friendstagram.R
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_post.*
 import rbsoftware.friendstagram.model.Post
 
 /**
  * Created by silver_android on 17/10/16.
  */
 
-class PostViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-
-    private val username: TextView? = itemView?.findViewById(R.id.username)
-    private val image: SimpleDraweeView? = itemView?.findViewById(R.id.image)
-    private val profilePicture: SimpleDraweeView? = itemView?.findViewById(R.id.profile)
+class PostViewHolder(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    private val profilePicture = profile
 
     fun init(post: Post) {
         val imageURI = Uri.parse(post.imageURL)

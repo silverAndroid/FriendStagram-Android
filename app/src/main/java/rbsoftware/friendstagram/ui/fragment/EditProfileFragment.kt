@@ -14,6 +14,7 @@ import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.CompletableSubject
+import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import rbsoftware.friendstagram.InitializerApp
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.model.User
@@ -47,8 +48,8 @@ class EditProfileFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView: RecyclerView? = view?.findViewById(R.id.rv)
-        val btnSubmit: Button? = view?.findViewById(R.id.submit)
+        val recyclerView = rv
+        val btnSubmit = submit
 
         val daggerComponent = InitializerApp.servicesComponent
         daggerComponent.inject(this)
