@@ -148,7 +148,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun onError(error: Throwable, message: String? = null) {
-        Log.e(TAG, message ?: "Error", error)
+        Log.e(TAG, message ?: "ErrorResponse", error)
         Toast.makeText(context, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
     }
 

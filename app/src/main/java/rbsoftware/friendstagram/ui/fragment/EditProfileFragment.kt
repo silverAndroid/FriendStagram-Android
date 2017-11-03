@@ -94,7 +94,7 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun onNetworkError(error: Throwable) {
-        Log.e(TAG, "Network error", error)
+        Log.e(TAG, "Network errors", error)
         Toast.makeText(context, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
     }
 

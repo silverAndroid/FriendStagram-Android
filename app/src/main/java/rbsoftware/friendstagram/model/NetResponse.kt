@@ -5,6 +5,5 @@ package rbsoftware.friendstagram.model
  */
 
 class NetResponse<out T> {
-    val isError: Boolean = false
     val data: T? = null
 }

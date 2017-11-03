@@ -4,7 +4,7 @@ import java.io.IOException
 
 import okhttp3.ResponseBody
 import rbsoftware.friendstagram.Constants
-import rbsoftware.friendstagram.model.Error
+import rbsoftware.friendstagram.model.ErrorResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -18,10 +18,19 @@ class NetworkService {
             val retrofit = Retrofit.Builder()
                     .baseUrl(Constants.Application.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create()).build()
-            val converter = retrofit.responseBodyConverter<Error>(Error::class.java, arrayOfNulls(0))
+            val converter = retrofit.responseBodyConverter<ErrorResponse>(ErrorResponse::class.java, arrayOfNulls(0))
 
             return try {
-                converter.convert(error).data!!
+                if (error != null) {
+                    val errors = converter.convert(error).errors
+                    if (errors.isNotEmpty()) {
+                        errors[0].title
+                    } else {
+                        null
+                    }
+                } else {
+                    null
+                }
             } catch (e: IOException) {
                 null
             }
