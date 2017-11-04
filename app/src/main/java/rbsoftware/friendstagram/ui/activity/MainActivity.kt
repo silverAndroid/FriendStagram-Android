@@ -8,6 +8,7 @@ import android.support.annotation.IdRes
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.widget.ImageView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -155,6 +156,11 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun showSearchActivity() {
+        val intent = Intent(this, SearchActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun showFragment(currentTab: Int) {
         bottomNavItems[currentTab].loadFragment()
     }
@@ -162,6 +168,10 @@ class MainActivity : AppCompatActivity() {
     private fun setToolbar(toolbar: Toolbar) {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+        val searchIcon: ImageView? = toolbar.findViewById(R.id.left_icon)
+        searchIcon?.setOnClickListener {
+            showSearchActivity()
+        }
     }
 
     private fun onActionExecution(action: Action) {

@@ -3,12 +3,11 @@ package rbsoftware.friendstagram.ui.activity
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.layout_toolbar.*
+import kotlinx.android.synthetic.main.layout_alt_toolbar.*
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.showFragment
