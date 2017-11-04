@@ -73,8 +73,8 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
         } else if (holderParent is EditPictureRow) {
             val holder: EditPictureRow = holderParent
 
-            holder.background.setImageURI(user.backgroundPictureURL)
-            holder.profile.setImageURI(user.profilePictureURL)
+            holder.background?.setImageURI(user.backgroundPictureURL)
+            holder.profile?.setImageURI(user.profilePictureURL)
         }
     }
 
@@ -135,12 +135,15 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
         }
     }
 
-    inner class EditPictureRow(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer
+    inner class EditPictureRow(containerView: View?) : RecyclerView.ViewHolder(containerView) {
+        val profile: SimpleDraweeView? = containerView?.findViewById(R.id.profile)
+        val background: SimpleDraweeView? = containerView?.findViewById(R.id.background)
+    }
 
-    inner class EditProfileRow(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-        val hint: TextInputLayout? by lazy {
-            input_hint
-        }
+    inner class EditProfileRow(containerView: View?) : RecyclerView.ViewHolder(containerView) {
+        val icon: ImageView? = containerView?.findViewById(R.id.icon)
+        val input: EditText? = containerView?.findViewById(R.id.input)
+        val hint: TextInputLayout? = containerView?.findViewById(R.id.input_hint)
     }
 
     data class EditProfileItem(val hint: String, val value: String = "", @DrawableRes val icon: Int? = null, val inputType: Int = InputType.TYPE_CLASS_TEXT, val validators: List<Validator> = listOf(), private val key: String? = hint.toLowerCase(), val maxLines: Int = 1) {
