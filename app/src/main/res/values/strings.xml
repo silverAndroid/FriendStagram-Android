@@ -57,4 +57,8 @@
     <string name="description_settings">Open Settings</string>
     <string name="description_edit_profile">Edit Profile</string>
     <string name="btn_submit">Submit</string>
+
+    <!-- String related to search -->
+    <string name="search_hint">Search Friendstagram…</string>
+    <string name="action_search">Search</string>
 </resources>

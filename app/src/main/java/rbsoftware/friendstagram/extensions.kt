@@ -1,16 +1,18 @@
 package rbsoftware.friendstagram
 
+import android.content.Context
+import android.support.annotation.ColorRes
 import android.support.annotation.LayoutRes
 import android.support.design.widget.TextInputLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
+import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
+import android.view.*
 import android.widget.EditText
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import rbsoftware.friendstagram.model.Validator
 
 /**
@@ -46,3 +48,11 @@ fun EditText.setInputView(inputType: Int) {
 }
 
 fun ViewGroup.inflate(@LayoutRes resource: Int, attachToRoot: Boolean = false): View = LayoutInflater.from(context).inflate(resource, this, attachToRoot)
+
+fun MenuItem.setTint(context: Context, menu: Menu, @ColorRes color: Int) {
+    var drawable = menu.findItem(itemId).icon
+    drawable = DrawableCompat.wrap(drawable)
+
+    DrawableCompat.setTint(drawable, ContextCompat.getColor(context, color))
+    menu.findItem(itemId).icon = drawable
+}
