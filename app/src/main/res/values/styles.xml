@@ -16,7 +16,7 @@
         <item name="colorAccent">@color/colorLoginAccent</item>
     </style>
 
-    <style name="RegisterTheme"  parent="AppTheme">
+    <style name="RegisterTheme" parent="AppTheme">
         <item name="colorAccent">@color/colorRegisterAccent</item>
     </style>
 
@@ -25,23 +25,23 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="AppTheme.LoginButton" parent="Base.Widget.AppCompat.Button">
         <item name="colorButtonNormal">@color/colorLoginButton</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/colorWhite</item>
     </style>
 
     <style name="AppTheme.RegisterButton" parent="Base.Widget.AppCompat.Button">
         <item name="colorButtonNormal">@color/colorRegisterButton</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/colorWhite</item>
     </style>
 
     <style name="EditTextHint">
-        <item name="android:textColorHint">@android:color/white</item>
-        <item name="colorControlNormal">#fff</item>
-        <item name="colorControlHighlight">#fff</item>
+        <item name="android:textColorHint">@color/colorWhite</item>
+        <item name="colorControlNormal">@color/colorWhite</item>
+        <item name="colorControlHighlight">@color/colorWhite</item>
     </style>
 </resources>
