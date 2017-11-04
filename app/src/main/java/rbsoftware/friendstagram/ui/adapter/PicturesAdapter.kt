@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.item_image.*
 import rbsoftware.friendstagram.R
@@ -18,7 +19,7 @@ import rbsoftware.friendstagram.ui.viewholder.PictureViewHolder
  * Created by Rushil on 8/18/2017.
  */
 class PicturesAdapter(cursor: Cursor, private val context: Context) : RecyclerView.Adapter<PictureViewHolder>() {
-    private val onImageSelected: PublishSubject<Uri> = PublishSubject.create()
+    private val onImageSelected: BehaviorSubject<Uri> = BehaviorSubject.create()
 
     private var images: List<Picture> = listOf()
     private var selectedPosition: Int = 0
@@ -70,7 +71,10 @@ class PicturesAdapter(cursor: Cursor, private val context: Context) : RecyclerVi
         }
 
         notifyDataSetChanged()
+        if (images.isNotEmpty()) {
+            onImageSelected.onNext(images[selectedPosition].uri)
+        }
     }
 
-    fun getOnImageSelected(): PublishSubject<Uri> = onImageSelected
+    fun getOnImageSelected(): BehaviorSubject<Uri> = onImageSelected
 }
