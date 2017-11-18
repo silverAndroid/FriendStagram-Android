@@ -8,15 +8,14 @@ import rbsoftware.friendstagram.service.AuthenticationService
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
 /**
  * Created by Rushil on 8/19/2017.
  */
 @Module
 class ServicesModule {
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     @Provides
-    @Singleton
     fun provideRetrofit(authService: AuthenticationService): Retrofit {
         val builder = Retrofit.Builder()
                 .baseUrl(Constants.Application.BASE_URL)
