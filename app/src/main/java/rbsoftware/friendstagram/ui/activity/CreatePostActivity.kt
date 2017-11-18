@@ -200,7 +200,7 @@ class CreatePostActivity : AppCompatActivity() {
     }
 
     private fun onNetworkError(error: Throwable) {
-        Log.e(TAG, "Network errors", error)
+        Log.e(TAG, "Network error", error)
         Toast.makeText(applicationContext, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
     }
 

@@ -1,7 +1,7 @@
 package rbsoftware.friendstagram.service
 
 import io.reactivex.Single
-import rbsoftware.friendstagram.model.NetResponse
+import rbsoftware.friendstagram.model.ServerResponse
 import rbsoftware.friendstagram.model.Post
 import retrofit2.Call
 import retrofit2.Response
@@ -24,9 +24,9 @@ class PostsService @Inject constructor(retrofit: Retrofit) {
 
     interface PostAPI {
         @POST("/posts")
-        fun createPost(@Body postJSON: Post): Single<Response<NetResponse<Post>>>
+        fun createPost(@Body postJSON: Post): Single<Response<ServerResponse<Post>>>
 
         @GET("/posts/{username}")
-        fun getPosts(@Path("username") username: String): Call<NetResponse<List<Post>>>
+        fun getPosts(@Path("username") username: String): Call<ServerResponse<List<Post>>>
     }
 }

@@ -5,5 +5,5 @@ package rbsoftware.friendstagram.model
  */
 
 class ErrorResponse {
-    val errors: List<Error> = listOf()
+    val error: Error = Error()
 }

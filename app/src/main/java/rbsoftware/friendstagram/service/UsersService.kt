@@ -1,8 +1,7 @@
 package rbsoftware.friendstagram.service
 
-import io.reactivex.Observable
 import io.reactivex.Single
-import rbsoftware.friendstagram.model.NetResponse
+import rbsoftware.friendstagram.model.ServerResponse
 import rbsoftware.friendstagram.model.User
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -22,16 +21,16 @@ class UsersService @Inject constructor(retrofit: Retrofit) {
 
     interface UserAPI {
         @POST("/users")
-        fun register(@Body registerJSON: Map<String, String>): Single<Response<NetResponse<User>>>
+        fun register(@Body registerJSON: Map<String, String>): Single<Response<ServerResponse<User>>>
 
         @POST("/users/login")
-        fun login(@Body loginJSON: Map<String, String>): Single<Response<NetResponse<String>>>
+        fun login(@Body loginJSON: Map<String, String>): Single<Response<ServerResponse<String>>>
 
         @GET("/users/{username}")
-        fun getUser(@Path("username") username: String): Single<Response<NetResponse<User>>>
+        fun getUser(@Path("username") username: String): Single<Response<ServerResponse<User>>>
 
         @PUT("/users/{username}")
-        fun updateUser(@Path("username") username: String, @Body updateJSON: Map<String, @JvmSuppressWildcards Any>): Single<Response<NetResponse<String>>>
+        fun updateUser(@Path("username") username: String, @Body updateJSON: Map<String, @JvmSuppressWildcards Any>): Single<Response<ServerResponse<String>>>
 
         @POST("/users/logoff")
         fun logout(): Single<User>
