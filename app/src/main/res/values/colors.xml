@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF3D00</color>
     <color name="colorLoginAccent">#FF9100</color>
-    <color name="colorRegisterAccent">#1DE9B6</color>
+    <color name="colorRegisterAccent">#A8D1FF</color>
     <color name="colorLoginButton">#FF8A80</color>
     <color name="colorRegisterButton">#80D8FF</color>
     <color name="colorLike">#D50000</color>
@@ -16,4 +16,8 @@
     <color name="colorToolbarBlackDark">#131313</color>
     <color name="colorWhiteTrans">#99FFFFFF</color>
     <color name="colorMaterialGray">#737373</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorTransparent">#00000000</color>
+    <color name="colorBlack">#FF000000</color>
+    <color name="colorDarkerGray">#AAA</color>
 </resources>

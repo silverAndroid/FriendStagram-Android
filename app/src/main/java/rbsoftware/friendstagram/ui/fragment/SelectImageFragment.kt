@@ -22,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_select_image.*
@@ -70,7 +71,7 @@ class SelectImageFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 ),
                 null,
                 null,
-                MediaStore.Images.ImageColumns._ID + " DESC"
+                "${MediaStore.Images.ImageColumns._ID} DESC"
         )
     }
 
@@ -97,7 +98,7 @@ class SelectImageFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     fun isAdapterInitialized(): CompletableSubject = adapterInitialized
 
-    fun getOnImageSelected(): PublishSubject<Uri>? = adapter?.getOnImageSelected()
+    fun getOnImageSelected(): BehaviorSubject<Uri>? = adapter?.getOnImageSelected()
 
     @TargetApi(Build.VERSION_CODES.M)
     @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)

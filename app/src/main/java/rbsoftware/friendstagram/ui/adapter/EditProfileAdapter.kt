@@ -18,6 +18,7 @@ import rbsoftware.friendstagram.Validators
 import rbsoftware.friendstagram.inflate
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.model.Validator
+import rbsoftware.friendstagram.setInputView
 import rbsoftware.friendstagram.validate
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -34,8 +35,8 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
                 EditProfileItem("Name", user.name, R.drawable.ic_account, InputType.TYPE_TEXT_VARIATION_PERSON_NAME, listOf(Validator.empty())),
                 EditProfileItem("Username", user.username, inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS, validators = listOf(Validator.empty())),
                 EditProfileItem("Biography", user.biography ?: "", R.drawable.ic_note_text, InputType.TYPE_TEXT_FLAG_MULTI_LINE, maxLines = 3, key = "bio"),
-                EditProfileItem("Current Password", icon = R.drawable.ic_lock, inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = "password.old"),
-                EditProfileItem("New Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = "password.new"),
+                EditProfileItem("Current Password", icon = R.drawable.ic_lock, inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = "old_password"),
+                EditProfileItem("New Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = "new_password"),
                 EditProfileItem("Verify Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = null)
         )
     }
@@ -59,9 +60,9 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
             with(item) {
                 holder.hint?.hint = hint
                 holder.input?.setText(value)
-                holder.input?.inputType = inputType
                 holder.input?.maxLines = maxLines
                 holder.hint?.id = uniqueID
+                holder.input?.setInputView(inputType)
             }
 
             item.icon?.let { holder.icon?.setImageResource(it) }
@@ -72,8 +73,8 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
         } else if (holderParent is EditPictureRow) {
             val holder: EditPictureRow = holderParent
 
-            holder.background.setImageURI(user.backgroundPictureURL)
-            holder.profile.setImageURI(user.profilePictureURL)
+            holder.background?.setImageURI(user.backgroundPictureURL)
+            holder.profile?.setImageURI(user.profilePictureURL)
         }
     }
 
@@ -134,12 +135,15 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
         }
     }
 
-    inner class EditPictureRow(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer
+    inner class EditPictureRow(containerView: View?) : RecyclerView.ViewHolder(containerView) {
+        val profile: SimpleDraweeView? = containerView?.findViewById(R.id.profile)
+        val background: SimpleDraweeView? = containerView?.findViewById(R.id.background)
+    }
 
-    inner class EditProfileRow(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-        val hint: TextInputLayout? by lazy {
-            input_hint
-        }
+    inner class EditProfileRow(containerView: View?) : RecyclerView.ViewHolder(containerView) {
+        val icon: ImageView? = containerView?.findViewById(R.id.icon)
+        val input: EditText? = containerView?.findViewById(R.id.input)
+        val hint: TextInputLayout? = containerView?.findViewById(R.id.input_hint)
     }
 
     data class EditProfileItem(val hint: String, val value: String = "", @DrawableRes val icon: Int? = null, val inputType: Int = InputType.TYPE_CLASS_TEXT, val validators: List<Validator> = listOf(), private val key: String? = hint.toLowerCase(), val maxLines: Int = 1) {

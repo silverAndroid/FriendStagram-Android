@@ -1,10 +1,11 @@
 package rbsoftware.friendstagram.service
 
+import android.util.Log
 import java.io.IOException
 
 import okhttp3.ResponseBody
 import rbsoftware.friendstagram.Constants
-import rbsoftware.friendstagram.model.Error
+import rbsoftware.friendstagram.model.ErrorResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -14,15 +15,23 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class NetworkService {
     companion object {
-        fun parseError(error: ResponseBody?): String? {
+        private val TAG = "NetworkService"
+
+        fun parseError(errorBody: ResponseBody?): String? {
             val retrofit = Retrofit.Builder()
                     .baseUrl(Constants.Application.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create()).build()
-            val converter = retrofit.responseBodyConverter<Error>(Error::class.java, arrayOfNulls(0))
+            val converter = retrofit.responseBodyConverter<ErrorResponse>(ErrorResponse::class.java, arrayOfNulls(0))
 
             return try {
-                converter.convert(error).data!!
+                if (errorBody != null) {
+                    val error = converter.convert(errorBody).error
+                    error.getMessage()
+                } else {
+                    null
+                }
             } catch (e: IOException) {
+                Log.e(TAG, "An error occurred", e)
                 null
             }
         }

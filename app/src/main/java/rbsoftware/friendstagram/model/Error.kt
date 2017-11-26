@@ -1,10 +1,16 @@
 package rbsoftware.friendstagram.model
 
 /**
- * Created by silver_android on 1/6/2017.
+ * Created by Rushil on 11/3/2017.
  */
+data class Error(private val title: String = "", val code: String = "", val status: String = "") {
+    private val detail: String = ""
 
-class Error {
-    val error: Boolean = false
-    val data: String? = null
+    fun getMessage(): String {
+        return if (detail.isEmpty()) {
+            title
+        } else {
+            detail
+        }
+    }
 }

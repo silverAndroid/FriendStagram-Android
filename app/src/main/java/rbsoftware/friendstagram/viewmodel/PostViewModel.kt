@@ -2,7 +2,7 @@ package rbsoftware.friendstagram.viewmodel
 
 import android.arch.lifecycle.ViewModel
 import io.reactivex.Single
-import rbsoftware.friendstagram.model.NetResponse
+import rbsoftware.friendstagram.model.ServerResponse
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.service.ImageService
 import rbsoftware.friendstagram.service.PostsService
@@ -25,7 +25,7 @@ class PostViewModel @Inject constructor() : ViewModel() {
         return imageService.uploadImage(uploadFileStream, username)
     }
 
-    fun createPost(post: Post): Single<Response<NetResponse<Post>>> {
+    fun createPost(post: Post): Single<Response<ServerResponse<Post>>> {
         return postsService.api.createPost(post)
     }
 }

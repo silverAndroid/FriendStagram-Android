@@ -20,9 +20,9 @@
         android:layout_marginTop="64dp"
         android:fontFamily="@font/billabong"
         android:text="@string/app_name"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorWhite"
         android:textSize="56sp"
-        tools:textColor="@android:color/black" />
+        tools:textColor="@color/colorBlack" />
 
     <!-- Login progress -->
     <ProgressBar

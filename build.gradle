@@ -5,7 +5,7 @@ buildscript {
     ext.android_support_version = '26.1.0'
     ext.dagger_version = '2.11'
     ext.databinding_version = '3.0.0-beta2'
-    ext.kotlin_version = '1.1.50'
+    ext.kotlin_version = '1.1.61'
     ext.permission_dispatch_version = '2.4.0'
     ext.retrofit_version = '2.3.0'
     repositories {
@@ -16,7 +16,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-beta6'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong

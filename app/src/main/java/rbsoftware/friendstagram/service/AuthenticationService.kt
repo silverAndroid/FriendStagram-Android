@@ -24,17 +24,13 @@ class AuthenticationService @Inject constructor(context: Context) {
         token?.let { preferences.edit().putString(tokenKey, it).apply() }
     }
 
-    fun hasToken(): Boolean {
-        return preferences.contains(tokenKey)
-    }
+    fun hasToken(): Boolean = preferences.contains(tokenKey)
 
     fun saveUsername(username: String?) {
         username?.let { preferences.edit().putString(usernameKey, it).apply() }
     }
 
-    fun hasSavedUsername(): Boolean {
-        return preferences.contains(usernameKey)
-    }
+    fun hasSavedUsername(): Boolean = preferences.contains(usernameKey)
 
     fun logout() {
         deleteToken()

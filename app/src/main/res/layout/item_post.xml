@@ -85,7 +85,7 @@
                 android:drawableLeft="@drawable/ic_heart_outline"
                 android:drawablePadding="-15dp"
                 android:text="@string/action_post_like"
-                android:textColor="@android:color/darker_gray" />
+                android:textColor="@color/colorDarkerGray" />
 
             <Button
                 style="?attr/buttonBarButtonStyle"
@@ -95,7 +95,7 @@
                 android:drawableLeft="@drawable/ic_message_reply_text"
                 android:drawablePadding="-5dp"
                 android:text="@string/action_post_comment"
-                android:textColor="@android:color/darker_gray" />
+                android:textColor="@color/colorDarkerGray" />
 
             <Button
                 style="?attr/buttonBarButtonStyle"
@@ -105,7 +105,7 @@
                 android:drawableLeft="@drawable/ic_share"
                 android:drawablePadding="-10dp"
                 android:text="@string/action_post_send"
-                android:textColor="@android:color/darker_gray" />
+                android:textColor="@color/colorDarkerGray" />
         </LinearLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

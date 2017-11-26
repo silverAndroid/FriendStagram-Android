@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.header_profile.*
@@ -39,16 +40,16 @@ class ProfileAdapter(private var posts: List<Post>, private var user: User) : Re
     override fun onBindViewHolder(parent: RecyclerView.ViewHolder?, position: Int) {
         if (isHeader(position)) {
             val holder = parent as HeaderViewHolder
-            with(user) {
-                holder.name.text = name
-                holder.username.text = username
-                holder.description.text = description
+            with (user) {
+                holder.name?.text = name
+                holder.username?.text = username
+                holder.description?.text = description
             }
         } else {
             val holder = parent as PictureViewHolder
             val post = posts[position - 1]
-            holder.image.setImageURI(Uri.parse(post.imageURL))
-            holder.image.setOnClickListener { onPostSelected.onNext(post) }
+            holder.image?.setImageURI(Uri.parse(post.imageURL))
+            holder.image?.setOnClickListener { onPostSelected.onNext(post) }
         }
     }
 
@@ -89,11 +90,14 @@ class ProfileAdapter(private var posts: List<Post>, private var user: User) : Re
         private const val ITEM_VIEW_TYPE_ITEM = 1
     }
 
-    inner class HeaderViewHolder internal constructor(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer {
-        private val editProfile: ImageView = edit_profile
+    inner class HeaderViewHolder internal constructor(containerView: View?) : RecyclerView.ViewHolder(containerView) {
+        private val editProfile: ImageView? = containerView?.findViewById(R.id.edit_profile)
+        val name: TextView? = containerView?.findViewById(R.id.name)
+        val username: TextView? = containerView?.findViewById(R.id.username)
+        val description: TextView? = containerView?.findViewById(R.id.description)
 
         init {
-            editProfile.setOnClickListener {
+            editProfile?.setOnClickListener {
                 onActionExecuted.onNext(Action(
                         Constants.Action.EDIT_PROFILE,
                         mapOf(
