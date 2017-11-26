@@ -6,10 +6,9 @@ import android.view.View
 import android.widget.TextView
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.backends.pipeline.PipelineDraweeController
+import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.common.ResizeOptions
 import com.facebook.imagepipeline.request.ImageRequestBuilder
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_post.*
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.model.Post
 
