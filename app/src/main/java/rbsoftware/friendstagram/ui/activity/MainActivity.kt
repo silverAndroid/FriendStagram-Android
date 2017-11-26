@@ -1,6 +1,5 @@
 package rbsoftware.friendstagram.ui.activity
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -8,6 +7,7 @@ import android.support.annotation.IdRes
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.widget.ImageView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -65,7 +65,6 @@ class MainActivity : AppCompatActivity() {
     override fun onPostResume() {
         super.onPostResume()
         bottomNav?.selectedItemId = bottomNavItems[currentTab].itemID
-        showFragment(currentTab)
     }
 
     override fun onPause() {
@@ -103,38 +102,40 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    @SuppressLint("RxLeakedSubscription")
     private fun showProfileFragment() {
+        Log.d(TAG, "show profile fragment")
         currentTab = 2
         if (profileFragment == null)
             profileFragment = ProfileFragment.newInstance(authService.username)
 
         profileFragment?.let {
-            it.isAdapterInitialized()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.trampoline())
-                    .subscribe({
-                        uiSubscriptions.add(
-                                it.getToolbarManipulator()
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribeOn(Schedulers.trampoline())
-                                        .subscribe(this::setToolbar, this::onSubscriptionError)
-                        )
-                        it.getOnPostSelected()?.let { subject ->
-                            uiSubscriptions.add(
-                                    subject.observeOn(AndroidSchedulers.mainThread())
-                                            .subscribeOn(Schedulers.trampoline())
-                                            .subscribe(this::showPostFragment, this::onSubscriptionError)
-                            )
-                        }
-                        it.getOnActionExecuted()?.let { subject ->
-                            uiSubscriptions.add(
-                                    subject.observeOn(AndroidSchedulers.mainThread())
-                                            .subscribeOn(Schedulers.trampoline())
-                                            .subscribe(this::onActionExecution, this::onSubscriptionError)
-                            )
-                        }
-                    }, this::onSubscriptionError)
+            uiSubscriptions.add(
+                    it.isAdapterInitialized()
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.trampoline())
+                            .subscribe({
+                                uiSubscriptions.add(
+                                        it.getToolbarManipulator()
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribeOn(Schedulers.trampoline())
+                                                .subscribe(this::setToolbar, this::onSubscriptionError)
+                                )
+                                it.getOnPostSelected()?.let { subject ->
+                                    uiSubscriptions.add(
+                                            subject.observeOn(AndroidSchedulers.mainThread())
+                                                    .subscribeOn(Schedulers.trampoline())
+                                                    .subscribe(this::showPostFragment, this::onSubscriptionError)
+                                    )
+                                }
+                                it.getOnActionExecuted()?.let { subject ->
+                                    uiSubscriptions.add(
+                                            subject.observeOn(AndroidSchedulers.mainThread())
+                                                    .subscribeOn(Schedulers.trampoline())
+                                                    .subscribe(this::onActionExecution, this::onSubscriptionError)
+                                    )
+                                }
+                            }, this::onSubscriptionError)
+            )
             showFragment(it)
         }
     }
@@ -159,10 +160,6 @@ class MainActivity : AppCompatActivity() {
     private fun showSearchActivity() {
         val intent = Intent(this, SearchActivity::class.java)
         startActivity(intent)
-    }
-
-    private fun showFragment(currentTab: Int) {
-        bottomNavItems[currentTab].loadFragment()
     }
 
     private fun setToolbar(toolbar: Toolbar) {
