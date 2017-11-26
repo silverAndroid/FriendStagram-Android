@@ -53,8 +53,8 @@ class SelectImageFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         recyclerView?.layoutManager = GridLayoutManager(context, 3)
         adapter?.let { recyclerView?.adapter = it }
 
-        fab?.setOnClickListener { SelectImageFragmentPermissionsDispatcher.takePictureWithCheck(this) }
-        SelectImageFragmentPermissionsDispatcher.loadImagesWithCheck(this)
+        fab?.setOnClickListener { takePictureWithPermissionCheck() }
+        loadImagesWithPermissionCheck()
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor>? {
@@ -88,12 +88,6 @@ class SelectImageFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onLoaderReset(loader: Loader<Cursor>?) {
         adapter?.changeCursor(null)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        // NOTE: delegate the permission handling to generated method
-        SelectImageFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults)
     }
 
     fun isAdapterInitialized(): CompletableSubject = adapterInitialized
