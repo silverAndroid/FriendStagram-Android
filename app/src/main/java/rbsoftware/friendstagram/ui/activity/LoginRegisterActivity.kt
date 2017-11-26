@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.facebook.drawee.backends.pipeline.Fresco
+import com.facebook.imagepipeline.request.ImageRequest
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login_register.*
@@ -78,8 +80,13 @@ class LoginRegisterActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .subscribe({ response ->
                     if (response.isSuccessful) {
-                        val token: String? = response.body()?.data
-                        token?.let { authService.saveToken(it) }
+                        response.body()?.data?.let {
+                            val (token, verified, profilePictureURL) = it
+                            authService.saveToken(token)
+                            if (profilePictureURL == null) {
+//                                Fresco.getImagePipeline().prefetchToDiskCache(ImageRequest.fromUri())
+                            }
+                        }
                         authService.saveUsername(username)
                         Toast.makeText(applicationContext, getString(R.string.success_login), Toast.LENGTH_SHORT).show()
                         onLoginSuccess()

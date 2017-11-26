@@ -61,4 +61,9 @@
     <!-- String related to search -->
     <string name="search_hint">Search Friendstagram…</string>
     <string name="action_search">Search</string>
+    <string name="setup_profile_title">Choose Profile Picture</string>
+    <string name="setup_profile_subtitle">Choose the picture you would like to use as your profile picture.</string>
+    <string name="btn_default_picture">Use Default Picture</string>
+    <string name="btn_choose_photo">Choose photo...</string>
+    <string name="btn_next">Next</string>
 </resources>

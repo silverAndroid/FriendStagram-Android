@@ -2,6 +2,7 @@ package rbsoftware.friendstagram.viewmodel
 
 import android.arch.lifecycle.ViewModel
 import io.reactivex.Single
+import rbsoftware.friendstagram.model.LoginResponse
 import rbsoftware.friendstagram.model.ServerResponse
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.service.UsersService
@@ -17,7 +18,7 @@ class UserViewModel @Inject constructor() : ViewModel() {
     @Inject
     lateinit var usersService: UsersService
 
-    fun login(username: String, password: String): Single<Response<ServerResponse<String>>> {
+    fun login(username: String, password: String): Single<Response<ServerResponse<LoginResponse>>> {
         return usersService.api.login(mapOf(
                 "username" to username,
                 "password" to password

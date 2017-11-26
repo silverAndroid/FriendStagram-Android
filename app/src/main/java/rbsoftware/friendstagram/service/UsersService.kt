@@ -1,6 +1,7 @@
 package rbsoftware.friendstagram.service
 
 import io.reactivex.Single
+import rbsoftware.friendstagram.model.LoginResponse
 import rbsoftware.friendstagram.model.ServerResponse
 import rbsoftware.friendstagram.model.User
 import retrofit2.Response
@@ -24,7 +25,7 @@ class UsersService @Inject constructor(retrofit: Retrofit) {
         fun register(@Body registerJSON: Map<String, String>): Single<Response<ServerResponse<User>>>
 
         @POST("/users/login")
-        fun login(@Body loginJSON: Map<String, String>): Single<Response<ServerResponse<String>>>
+        fun login(@Body loginJSON: Map<String, String>): Single<Response<ServerResponse<LoginResponse>>>
 
         @GET("/users/{username}")
         fun getUser(@Path("username") username: String): Single<Response<ServerResponse<User>>>

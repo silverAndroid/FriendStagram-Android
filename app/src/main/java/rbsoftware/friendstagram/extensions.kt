@@ -47,7 +47,7 @@ fun EditText.setInputView(inputType: Int) {
     }
 }
 
-fun ViewGroup.inflate(@LayoutRes resource: Int, attachToRoot: Boolean = false): View = LayoutInflater.from(context).inflate(resource, this, attachToRoot)
+fun ViewGroup.inflate(@LayoutRes resource: Int, attachToRoot: Boolean = false, inflater: LayoutInflater = LayoutInflater.from(context)): View = inflater.inflate(resource, this, attachToRoot)
 
 fun MenuItem.setTint(context: Context, menu: Menu, @ColorRes color: Int) {
     var drawable = menu.findItem(itemId).icon
