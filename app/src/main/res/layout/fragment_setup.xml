@@ -10,36 +10,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/camera_icon_layout"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginBottom="30dp"
-            android:paddingTop="6dp">
-
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="top|center_horizontal"
-                android:layout_marginTop="18dp"
-                android:src="@drawable/ic_camera" />
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="top|center_horizontal"
-                android:layout_marginLeft="32dp"
-                android:src="@drawable/ic_plus" />
-
-        </FrameLayout>
-
         <TextView
             android:id="@+id/setup_profile_title"
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/setup_profile_title" />
+            android:layout_marginTop="150dp"
+            android:text="@string/setup_profile_title"
+            android:textColor="@color/colorWhite"
+            tools:textColor="@color/colorBlack" />
 
         <TextView
             android:id="@+id/setup_profile_subtitle"
@@ -49,7 +29,9 @@
             android:layout_gravity="center"
             android:layout_margin="16dp"
             android:gravity="center"
-            android:text="@string/setup_profile_subtitle" />
+            android:text="@string/setup_profile_subtitle"
+            android:textColor="@color/colorWhite"
+            tools:textColor="@color/colorBlack" />
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/profile"
@@ -62,37 +44,32 @@
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
             android:gravity="center|bottom"
-            android:orientation="vertical">
-
-            <LinearLayout
-                style="?android:attr/buttonBarStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btnDefaultPicture"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="@string/btn_default_picture" />
-
-                <Button
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="@string/btn_choose_photo" />
-            </LinearLayout>
+            android:orientation="horizontal">
 
             <Button
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="match_parent"
+                android:id="@+id/btnDefaultPicture"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_next" />
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/btn_default_picture"
+                android:theme="@style/AppTheme.SetupButton" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="@string/btn_choose_photo"
+                android:theme="@style/AppTheme.SetupButton" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:text="@string/btn_next"
+                android:theme="@style/AppTheme.SetupButton" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

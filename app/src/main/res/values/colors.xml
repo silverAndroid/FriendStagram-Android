@@ -7,6 +7,7 @@
     <color name="colorRegisterAccent">#A8D1FF</color>
     <color name="colorLoginButton">#FF8A80</color>
     <color name="colorRegisterButton">#80D8FF</color>
+    <color name="colorSetupButton">#2E7D32</color>
     <color name="colorLike">#D50000</color>
     <color name="colorTranslucentOverlay">#66000000</color>
     <color name="colorTranslucentOverlay2">#44000000</color>

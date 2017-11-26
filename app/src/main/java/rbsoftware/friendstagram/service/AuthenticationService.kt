@@ -17,24 +17,31 @@ class AuthenticationService @Inject constructor(context: Context) {
     var username: String
         get() = preferences.getString(usernameKey, null)
         set(value) = saveUsername(value)
+    var isSetup: Boolean
+        get() = preferences.contains(setupKey) && preferences.getBoolean(setupKey, false)
+        set(value) = setSetupBoolean(value)
     val isLoggedIn: Boolean
-        get() = hasToken()
-
-    fun saveToken(token: String?) {
-        token?.let { preferences.edit().putString(tokenKey, it).apply() }
-    }
-
-    fun hasToken(): Boolean = preferences.contains(tokenKey)
-
-    fun saveUsername(username: String?) {
-        username?.let { preferences.edit().putString(usernameKey, it).apply() }
-    }
-
-    fun hasSavedUsername(): Boolean = preferences.contains(usernameKey)
+        get() = hasToken() && isSetup
 
     fun logout() {
         deleteToken()
         deleteSavedUsername()
+    }
+
+    fun hasToken(): Boolean = preferences.contains(tokenKey)
+
+    fun hasSavedUsername(): Boolean = preferences.contains(usernameKey)
+
+    private fun saveToken(token: String?) {
+        token?.let { preferences.edit().putString(tokenKey, it).apply() }
+    }
+
+    private fun saveUsername(username: String?) {
+        username?.let { preferences.edit().putString(usernameKey, it).apply() }
+    }
+
+    private fun setSetupBoolean(hasSetup: Boolean) {
+        preferences.edit().putBoolean(setupKey, hasSetup).apply()
     }
 
     private fun deleteToken() {
@@ -48,5 +55,6 @@ class AuthenticationService @Inject constructor(context: Context) {
     companion object {
         private val tokenKey = "auth"
         private val usernameKey = "username"
+        private val setupKey = "setup"
     }
 }

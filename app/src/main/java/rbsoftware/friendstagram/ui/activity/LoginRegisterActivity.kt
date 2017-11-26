@@ -13,19 +13,21 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.request.ImageRequest
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login_register.*
+import rbsoftware.friendstagram.BuildConfig
 import rbsoftware.friendstagram.InitializerApp
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.service.AuthenticationService
+import rbsoftware.friendstagram.service.ImageService
 import rbsoftware.friendstagram.service.NetworkService
 import rbsoftware.friendstagram.showFragment
 import rbsoftware.friendstagram.ui.fragment.ErrorDisplay
 import rbsoftware.friendstagram.ui.fragment.LoginFragment
 import rbsoftware.friendstagram.ui.fragment.RegisterFragment
+import rbsoftware.friendstagram.ui.fragment.SetupFragment
 import rbsoftware.friendstagram.viewmodel.UserViewModel
 
 
@@ -81,15 +83,25 @@ class LoginRegisterActivity : AppCompatActivity() {
                 .subscribe({ response ->
                     if (response.isSuccessful) {
                         response.body()?.data?.let {
-                            val (token, verified, profilePictureURL) = it
-                            authService.saveToken(token)
+                            val (token, _, profilePictureURL) = it
+                            authService.token = token
                             if (profilePictureURL == null) {
-//                                Fresco.getImagePipeline().prefetchToDiskCache(ImageRequest.fromUri())
+                                ImageService.prefetchImage(
+                                        ImageRequest.fromUri(Uri.parse("${BuildConfig.BASE_URL}/users/default_profile_picture?username=$username"))
+                                )
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribeOn(Schedulers.io())
+                                        .subscribe({
+                                            Log.d(TAG, "Cached image successfully")
+                                            authService.username = username
+                                            Toast.makeText(applicationContext, getString(R.string.success_login), Toast.LENGTH_SHORT).show()
+                                            loadSetupPage()
+                                        }, {
+                                            onNetworkError(it)
+                                            authService.logout()
+                                        })
                             }
                         }
-                        authService.saveUsername(username)
-                        Toast.makeText(applicationContext, getString(R.string.success_login), Toast.LENGTH_SHORT).show()
-                        onLoginSuccess()
                     } else {
                         val error: String? = NetworkService.parseError(response.errorBody())
                         this.handleError(error)
@@ -143,6 +155,12 @@ class LoginRegisterActivity : AppCompatActivity() {
         loadRegisterBackground()
     }
 
+    private fun loadSetupPage() {
+        val fragment = SetupFragment.newInstance(authService.username)
+        showFragment(fragment, false, setAnimations = this::showFragmentAnimations)
+        loadSetupBackground()
+    }
+
     private fun loadLoginBackground() {
         val backgroundURI = "res:/${R.drawable.bg_login}"
         background.setImageURI(Uri.parse(backgroundURI))
@@ -150,6 +168,11 @@ class LoginRegisterActivity : AppCompatActivity() {
 
     private fun loadRegisterBackground() {
         val backgroundURI = "res:/${R.drawable.bg_register}"
+        background.setImageURI(Uri.parse(backgroundURI))
+    }
+
+    private fun loadSetupBackground() {
+        val backgroundURI = "res:/${R.drawable.bg_setup}"
         background.setImageURI(Uri.parse(backgroundURI))
     }
 

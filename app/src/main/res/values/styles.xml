@@ -39,6 +39,12 @@
         <item name="android:textColor">@color/colorWhite</item>
     </style>
 
+    <style name="AppTheme.SetupButton" parent="Base.Widget.AppCompat.Button">
+        <item name="colorButtonNormal">@color/colorSetupButton</item>
+        <item name="android:textColor">@color/colorWhite</item>
+
+    </style>
+
     <style name="EditTextHint">
         <item name="android:textColorHint">@color/colorWhite</item>
         <item name="colorControlNormal">@color/colorWhite</item>
