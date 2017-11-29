@@ -1,19 +1,18 @@
 package rbsoftware.friendstagram.service
 
+import android.net.Uri
 import android.os.Looper
 import android.util.Log
-import com.cloudinary.Cloudinary
+import com.cloudinary.android.MediaManager
+import com.cloudinary.android.callback.ErrorInfo
+import com.cloudinary.android.callback.UploadCallback
 import com.facebook.datasource.DataSource
 import com.facebook.datasource.DataSubscriber
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.request.ImageRequest
 import io.reactivex.Completable
 import io.reactivex.Single
-import rbsoftware.friendstagram.Constants
-import java.io.IOException
-import java.io.InputStream
 import java.util.concurrent.ArrayBlockingQueue
-import java.util.concurrent.Executor
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -22,33 +21,42 @@ import javax.inject.Inject
  * Created by rushil.perera on 2017-01-15.
  */
 class ImageService @Inject constructor() {
-    private val cloudinary: Cloudinary
-
-    init {
-        val config: Map<String, String> = mapOf(
-                "cloud_name" to Constants.Cloudinary.CLOUD_NAME,
-                "api_key" to Constants.Cloudinary.API_KEY,
-                "api_secret" to Constants.Cloudinary.API_SECRET
-        )
-        cloudinary = Cloudinary(config)
-    }
-
-    fun uploadImage(uploadFileStream: InputStream, username: String): Single<Map<*, *>> {
-        return Single.create({
+    fun uploadImage(imageUri: Uri, username: String): Single<String> {
+        return Single.create {
             try {
-                it.onSuccess(
-                        cloudinary.uploader().upload(
-                                uploadFileStream,
-                                mapOf(
-                                        "folder" to username,
-                                        "resource_type" to "image"
-                                )
-                        )
-                )
-            } catch (e: IOException) {
+                MediaManager
+                        .get()
+                        .upload(imageUri)
+                        .options(mapOf(
+                                "folder" to username,
+                                "resource_type" to "image"
+                        ))
+                        .callback(object : UploadCallback {
+                            override fun onSuccess(requestId: String, resultData: MutableMap<Any?, Any?>) {
+                                it.onSuccess(resultData["secure_url"] as String)
+                            }
+
+                            override fun onProgress(requestId: String, bytes: Long, totalBytes: Long) {
+                                Log.d(TAG, "Uploading image: $bytes/$totalBytes; ID: $requestId")
+                            }
+
+                            override fun onReschedule(requestId: String, error: ErrorInfo) {
+                                it.onError(Exception("Error ${error.code}: ${error.description}"))
+                            }
+
+                            override fun onError(requestId: String, error: ErrorInfo) {
+                                it.onError(Exception("Error ${error.code}: ${error.description}"))
+                            }
+
+                            override fun onStart(requestId: String) {
+                                Log.d(TAG, "Started image upload; ID: $requestId")
+                            }
+                        })
+                        .dispatch()
+            } catch (e: Exception) {
                 it.onError(e)
             }
-        })
+        }
     }
 
     companion object {

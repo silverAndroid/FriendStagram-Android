@@ -2,7 +2,6 @@ package rbsoftware.friendstagram.ui.activity
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -15,6 +14,7 @@ import android.view.View
 import android.widget.Toast
 import com.facebook.imagepipeline.request.ImageRequest
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login_register.*
 import rbsoftware.friendstagram.BuildConfig
@@ -36,6 +36,7 @@ import rbsoftware.friendstagram.viewmodel.UserViewModel
  */
 class LoginRegisterActivity : AppCompatActivity() {
     private val TAG: String = "LoginRegisterActivity"
+    private val subscriptions: CompositeDisposable = CompositeDisposable()
 
     private lateinit var fragmentContainer: View
     private lateinit var progressView: View
@@ -74,43 +75,46 @@ class LoginRegisterActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("RxLeakedSubscription")
     private fun login(username: String, password: String) {
         showProgress(true)
-        userViewModel.login(username, password)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ response ->
-                    if (response.isSuccessful) {
-                        response.body()?.data?.let {
-                            val (token, _, profilePictureURL) = it
-                            authService.token = token
-                            if (profilePictureURL == null) {
-                                ImageService.prefetchImage(
-                                        ImageRequest.fromUri(Uri.parse("${BuildConfig.BASE_URL}/users/default_profile_picture?username=$username"))
-                                )
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribeOn(Schedulers.io())
-                                        .subscribe({
-                                            Log.d(TAG, "Cached image successfully")
-                                            authService.username = username
-                                            Toast.makeText(applicationContext, getString(R.string.success_login), Toast.LENGTH_SHORT).show()
-                                            loadSetupPage()
-                                        }, {
-                                            onNetworkError(it)
-                                            authService.logout()
-                                        })
+        subscriptions.add(
+                userViewModel.login(username, password)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ response ->
+                            if (response.isSuccessful) {
+                                response.body()?.data?.let {
+                                    val (token, _, profilePictureURL) = it
+                                    authService.token = token
+                                    if (profilePictureURL == null) {
+                                        subscriptions.add(
+                                                ImageService.prefetchImage(
+                                                        ImageRequest.fromUri(Uri.parse("${BuildConfig.BASE_URL}/users/default_profile_picture?username=$username"))
+                                                )
+                                                        .observeOn(AndroidSchedulers.mainThread())
+                                                        .subscribeOn(Schedulers.io())
+                                                        .subscribe({
+                                                            Log.d(TAG, "Cached image successfully")
+                                                            authService.username = username
+                                                            loadSetupPage()
+                                                        }, {
+                                                            onNetworkError(it)
+                                                            authService.logout()
+                                                        })
+                                        )
+                                    }
+                                }
+                            } else {
+                                val error = NetworkService.parseError(response.errorBody())
+                                this.handleError(error)
                             }
-                        }
-                    } else {
-                        val error: String? = NetworkService.parseError(response.errorBody())
-                        this.handleError(error)
-                    }
-                    showProgress(false)
-                }, this::onNetworkError)
+                            showProgress(false)
+                        }, this::onNetworkError)
+        )
     }
 
     private fun onLoginSuccess() {
+        Toast.makeText(applicationContext, getString(R.string.success_login), Toast.LENGTH_SHORT).show()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
@@ -129,22 +133,23 @@ class LoginRegisterActivity : AppCompatActivity() {
         loadLoginBackground()
     }
 
-    @SuppressLint("RxLeakedSubscription")
     private fun register(name: String, email: String, username: String, password: String) {
         showProgress(true)
-        userViewModel.register(name, email, username, password)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ response ->
-                    if (response.isSuccessful) {
-                        Toast.makeText(applicationContext, getString(R.string.success_register), Toast.LENGTH_SHORT).show()
-                        loadLoginPage()
-                    } else {
-                        val error: String? = NetworkService.parseError(response.errorBody())
-                        this.handleError(error)
-                    }
-                    showProgress(false)
-                }, this::onNetworkError)
+        subscriptions.add(
+                userViewModel.register(name, email, username, password)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ response ->
+                            if (response.isSuccessful) {
+                                Toast.makeText(applicationContext, getString(R.string.success_register), Toast.LENGTH_SHORT).show()
+                                loadLoginPage()
+                            } else {
+                                val error: String? = NetworkService.parseError(response.errorBody())
+                                this.handleError(error)
+                            }
+                            showProgress(false)
+                        }, this::onNetworkError)
+        )
     }
 
     private fun loadRegisterPage() {
@@ -157,6 +162,20 @@ class LoginRegisterActivity : AppCompatActivity() {
 
     private fun loadSetupPage() {
         val fragment = SetupFragment.newInstance(authService.username)
+        subscriptions.addAll(
+                fragment.setupComplete
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.trampoline())
+                        .subscribe({
+                            onLoginSuccess()
+                        }, this::onNetworkError),
+                fragment.showLoading
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.trampoline())
+                        .subscribe({ show ->
+                            showProgress(show)
+                        }, this::onNetworkError)
+        )
         showFragment(fragment, false, setAnimations = this::showFragmentAnimations)
         loadSetupBackground()
     }

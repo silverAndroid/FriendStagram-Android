@@ -33,6 +33,9 @@ class UsersService @Inject constructor(retrofit: Retrofit) {
         @PUT("/users/{username}")
         fun updateUser(@Path("username") username: String, @Body updateJSON: Map<String, @JvmSuppressWildcards Any>): Single<Response<ServerResponse<String>>>
 
+        @PUT("/users/profile_picture")
+        fun updateUserProfilePicture(@Body imageURL: Pair<String, String>): Single<Response<ServerResponse<String>>>
+
         @POST("/users/logoff")
         fun logout(): Single<User>
     }

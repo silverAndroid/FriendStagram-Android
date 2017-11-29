@@ -1,9 +1,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="rbsoftware.friendstagram.ui.fragment.SetupFragment">
+            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context="rbsoftware.friendstagram.ui.fragment.SetupFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
             android:layout_marginTop="150dp"
             android:text="@string/setup_profile_title"
             android:textColor="@color/colorWhite"
-            tools:textColor="@color/colorBlack" />
+            tools:textColor="@color/colorBlack"/>
 
         <TextView
             android:id="@+id/setup_profile_subtitle"
@@ -31,13 +32,14 @@
             android:gravity="center"
             android:text="@string/setup_profile_subtitle"
             android:textColor="@color/colorWhite"
-            tools:textColor="@color/colorBlack" />
+            tools:textColor="@color/colorBlack"/>
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/profile"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            fresco:actualImageScaleType="fitCenter"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,23 +55,25 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@string/btn_default_picture"
-                android:theme="@style/AppTheme.SetupButton" />
+                android:theme="@style/AppTheme.SetupButton"/>
 
             <Button
+                android:id="@+id/btnSelectImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@string/btn_choose_photo"
-                android:theme="@style/AppTheme.SetupButton" />
+                android:theme="@style/AppTheme.SetupButton"/>
 
             <Button
+                android:id="@+id/btnNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:text="@string/btn_next"
-                android:theme="@style/AppTheme.SetupButton" />
+                android:theme="@style/AppTheme.SetupButton"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -41,4 +41,8 @@ class UserViewModel @Inject constructor() : ViewModel() {
     fun updateUser(username: String, data: Map<String, Any>): Single<Response<ServerResponse<String>>> {
         return usersService.api.updateUser(username, data)
     }
+
+    fun updateUserProfilePicture(imageURL: String): Single<Response<ServerResponse<String>>> {
+        return usersService.api.updateUserProfilePicture("imageURL" to imageURL)
+    }
 }

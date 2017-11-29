@@ -13,6 +13,15 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
 
+    <!-- Strings related to setup -->
+    <string name="setup_profile_title">Choose Profile Picture</string>
+    <string name="setup_profile_subtitle">Choose the picture you would like to use as your profile picture.</string>
+    <string name="btn_default_picture">Use Default Picture</string>
+    <string name="btn_choose_photo">Choose photo</string>
+    <string name="btn_next">Next</string>
+    <string name="action_select">Select</string>
+    <string name="setup_success">Successfully completed setting up your profile</string>
+
     <!-- Strings related to bottom bar -->
     <string name="tab_home">Home</string>
     <string name="tab_account">Profile</string>
@@ -37,7 +46,7 @@
 
     <!-- Strings related to login/register messages -->
     <string name="error_occurred">An error occurred</string>
-    <string name="success_register">Successfully registered user</string>
+    <string name="success_register">Successfully registered</string>
     <string name="success_login">Successfully logged in</string>
     <string name="error_login_invalid">Your login session is no longer valid. Please log in again!</string>
 
@@ -61,9 +70,4 @@
     <!-- String related to search -->
     <string name="search_hint">Search Friendstagram…</string>
     <string name="action_search">Search</string>
-    <string name="setup_profile_title">Choose Profile Picture</string>
-    <string name="setup_profile_subtitle">Choose the picture you would like to use as your profile picture.</string>
-    <string name="btn_default_picture">Use Default Picture</string>
-    <string name="btn_choose_photo">Choose photo</string>
-    <string name="btn_next">Next</string>
 </resources>
