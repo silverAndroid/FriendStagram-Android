@@ -11,10 +11,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.header_profile.*
 import kotlinx.android.synthetic.main.item_image.*
-import rbsoftware.friendstagram.Constants
-import rbsoftware.friendstagram.GenericDiffCallback
-import rbsoftware.friendstagram.R
-import rbsoftware.friendstagram.inflate
+import rbsoftware.friendstagram.*
 import rbsoftware.friendstagram.model.Action
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.model.User
@@ -99,7 +96,7 @@ class ProfileAdapter(private var posts: List<Post>, private var user: User) : Re
         init {
             editProfile?.setOnClickListener {
                 onActionExecuted.onNext(Action(
-                        Constants.Action.EDIT_PROFILE,
+                        Actions.EDIT_PROFILE,
                         mapOf(
                                 "user" to user
                         )

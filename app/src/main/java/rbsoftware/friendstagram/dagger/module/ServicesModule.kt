@@ -3,7 +3,7 @@ package rbsoftware.friendstagram.dagger.module
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
-import rbsoftware.friendstagram.Constants
+import rbsoftware.friendstagram.ApplicationConfig
 import rbsoftware.friendstagram.service.AuthenticationService
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -18,7 +18,7 @@ class ServicesModule {
     @Provides
     fun provideRetrofit(authService: AuthenticationService): Retrofit {
         val builder = Retrofit.Builder()
-                .baseUrl(Constants.Application.BASE_URL)
+                .baseUrl(ApplicationConfig.BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
         if (authService.hasToken()) {

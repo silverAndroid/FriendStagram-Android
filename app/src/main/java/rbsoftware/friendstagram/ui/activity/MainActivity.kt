@@ -13,7 +13,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import rbsoftware.friendstagram.Constants
+import rbsoftware.friendstagram.Actions
 import rbsoftware.friendstagram.InitializerApp
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.model.Action
@@ -173,7 +173,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onActionExecution(action: Action) {
         when (action.action) {
-            Constants.Action.EDIT_PROFILE -> {
+            Actions.EDIT_PROFILE -> {
                 showEditProfileActivity(action.data["user"] as User)
             }
         }
