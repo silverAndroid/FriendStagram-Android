@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.text.TextUtils
 import android.util.Log
 import android.view.Menu
@@ -30,9 +29,6 @@ import rbsoftware.friendstagram.ui.fragment.SelectFilterFragment
 import rbsoftware.friendstagram.ui.fragment.SelectImageFragment
 import rbsoftware.friendstagram.ui.fragment.SharePostFragment
 import rbsoftware.friendstagram.viewmodel.PostViewModel
-import java.io.File
-import java.io.FileInputStream
-import java.net.URI
 import java.net.URISyntaxException
 
 /**
@@ -41,7 +37,7 @@ import java.net.URISyntaxException
 class CreatePostActivity : AppCompatActivity() {
     private val uiSubscriptions: CompositeDisposable = CompositeDisposable()
 
-    private var imageURI: Uri? = null
+    private var imageUri: Uri? = null
     private var caption: String? = null
     private lateinit var authService: AuthenticationService
     private lateinit var postViewModel: PostViewModel
@@ -71,7 +67,7 @@ class CreatePostActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_create_post, menu)
-        return imageURI != null
+        return imageUri != null
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -109,7 +105,7 @@ class CreatePostActivity : AppCompatActivity() {
                                 subject.observeOn(AndroidSchedulers.mainThread())
                                         .subscribeOn(Schedulers.trampoline())
                                         .subscribe({ uri ->
-                                            imageURI = uri
+                                            imageUri = uri
                                             invalidateOptionsMenu()
                                         }, { e ->
                                             Log.e(TAG, getString(R.string.error_occurred), e)
@@ -121,11 +117,11 @@ class CreatePostActivity : AppCompatActivity() {
     }
 
     private fun showFilterSelectFragment() {
-        imageURI?.let { showFragment(SelectFilterFragment.newInstance(it), true, "SelectFilter") }
+        imageUri?.let { showFragment(SelectFilterFragment.newInstance(it), true, "SelectFilter") }
     }
 
     private fun showSharePostFragment() {
-        imageURI?.let { showFragment(SharePostFragment.newInstance(it), true, "SharePost") }
+        imageUri?.let { showFragment(SharePostFragment.newInstance(it), true, "SharePost") }
     }
 
     private fun isValidForm(fragment: Fragment): Boolean {
@@ -143,25 +139,25 @@ class CreatePostActivity : AppCompatActivity() {
 
     @SuppressLint("RxLeakedSubscription")
     private fun uploadImage() {
-        val dialog = ProgressDialog.show(this, "", "Uploading image...")
-        try {
-            val inputStream = FileInputStream(File(URI(imageURI.toString().replace(" ", "%20"))))
-            postViewModel.uploadImage(inputStream, authService.username)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({ response ->
-                        val publicURL = response["secure_url"] as String
-                        caption?.let { createPost(publicURL, it) }
-                        dialog.dismiss()
-                    }, { err ->
-                        Toast.makeText(applicationContext, getString(R.string.error_image_upload), Toast.LENGTH_SHORT).show()
-                        Log.e(TAG, "Failed to upload image", err)
-                        dialog.dismiss()
-                    })
-        } catch (e: URISyntaxException) {
-            Toast.makeText(applicationContext, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
-            Log.e(TAG, "uploadImage: Invalid URI", e)
-            dialog.dismiss()
+        imageUri?.let {
+            val dialog = ProgressDialog.show(this, "", "Uploading image...")
+            try {
+                postViewModel.uploadImage(it, authService.username)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ imageURL ->
+                            caption?.let { createPost(imageURL, it) }
+                            dialog.dismiss()
+                        }, { err ->
+                            Toast.makeText(applicationContext, getString(R.string.error_image_upload), Toast.LENGTH_SHORT).show()
+                            Log.e(TAG, "Failed to upload image", err)
+                            dialog.dismiss()
+                        })
+            } catch (e: URISyntaxException) {
+                Toast.makeText(applicationContext, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "uploadImage: Invalid URI", e)
+                dialog.dismiss()
+            }
         }
     }
 
