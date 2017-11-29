@@ -1,6 +1,7 @@
 package rbsoftware.friendstagram.ui.fragment
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Intent
 import android.database.Cursor
@@ -55,6 +56,13 @@ class SelectImageFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
         fab?.setOnClickListener { takePictureWithPermissionCheck() }
         loadImagesWithPermissionCheck()
+    }
+
+    @SuppressLint("NeedOnRequestPermissionsResult")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        // NOTE: delegate the permission handling to generated method
+        onRequestPermissionsResult(requestCode, grantResults)
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor>? {
