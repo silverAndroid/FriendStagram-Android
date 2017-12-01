@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -21,6 +20,7 @@ import rbsoftware.friendstagram.BuildConfig
 import rbsoftware.friendstagram.InitializerApp
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.inflate
+import rbsoftware.friendstagram.service.NetworkService
 import rbsoftware.friendstagram.ui.activity.SelectImageActivity
 import rbsoftware.friendstagram.viewmodel.PostViewModel
 import rbsoftware.friendstagram.viewmodel.UserViewModel
@@ -102,16 +102,26 @@ class SetupFragment : Fragment() {
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe({ response ->
+                .doFinally {
                     showLoading.onNext(false)
+                }
+                .subscribe({ response ->
                     if (response.isSuccessful) {
                         setupComplete.onComplete()
                         Log.d(TAG, "Uploaded profile successfully")
                         Toast.makeText(context, getString(R.string.setup_success), Toast.LENGTH_SHORT).show()
                     } else {
-                        TODO()
+                        val error = NetworkService.parseError(response.errorBody())
+                        this.handleError(error)
                     }
                 }, this::onNetworkError)
+    }
+
+    private fun handleError(error: String?) {
+        when (error) {
+            null -> Toast.makeText(context, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
+            else -> Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setDefaultProfilePicture() {
@@ -123,7 +133,6 @@ class SetupFragment : Fragment() {
     }
 
     private fun onNetworkError(err: Throwable) {
-        showLoading.onNext(false)
         Toast.makeText(context, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
         Log.e(TAG, "An error occurred", err)
     }
