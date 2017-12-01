@@ -86,22 +86,13 @@ class LoginRegisterActivity : AppCompatActivity() {
                                 response.body()?.data?.let {
                                     val (token, _, profilePictureURL) = it
                                     authService.token = token
+                                    authService.username = username
+                                    Toast.makeText(applicationContext, getString(R.string.success_login), Toast.LENGTH_SHORT).show()
+
                                     if (profilePictureURL == null) {
-                                        subscriptions.add(
-                                                ImageService.prefetchImage(
-                                                        ImageRequest.fromUri(Uri.parse("${BuildConfig.BASE_URL}/users/default_profile_picture?username=$username"))
-                                                )
-                                                        .observeOn(AndroidSchedulers.mainThread())
-                                                        .subscribeOn(Schedulers.io())
-                                                        .subscribe({
-                                                            Log.d(TAG, "Cached image successfully")
-                                                            authService.username = username
-                                                            loadSetupPage()
-                                                        }, {
-                                                            onNetworkError(it)
-                                                            authService.logout()
-                                                        })
-                                        )
+                                        cacheDefaultPicture(username)
+                                    } else {
+                                        onLoginSuccess()
                                     }
                                 }
                             } else {
@@ -113,8 +104,25 @@ class LoginRegisterActivity : AppCompatActivity() {
         )
     }
 
+    private fun cacheDefaultPicture(username: String) {
+        subscriptions.add(
+                ImageService.prefetchImage(
+                        ImageRequest.fromUri(Uri.parse("${BuildConfig.BASE_URL}/users/default_profile_picture?username=$username"))
+                )
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({
+                            Log.d(TAG, "Cached image successfully")
+                            loadSetupPage()
+                        }, {
+                            onNetworkError(it)
+                            authService.logout()
+                        })
+        )
+    }
+
     private fun onLoginSuccess() {
-        Toast.makeText(applicationContext, getString(R.string.success_login), Toast.LENGTH_SHORT).show()
+        authService.isSetup = true
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
