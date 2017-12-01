@@ -43,6 +43,6 @@ class UserViewModel @Inject constructor() : ViewModel() {
     }
 
     fun updateUserProfilePicture(imageURL: String): Single<Response<ServerResponse<String>>> {
-        return usersService.api.updateUserProfilePicture("imageURL" to imageURL)
+        return usersService.api.updateUserProfilePicture(mapOf("image_url" to imageURL))
     }
 }
