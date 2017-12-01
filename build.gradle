@@ -8,6 +8,8 @@ buildscript {
     ext.kotlin_version = '1.2.0'
     ext.permission_dispatch_version = '3.0.1'
     ext.retrofit_version = '2.3.0'
+    ext.mockito_version = '2.10.0'
+
     repositories {
         jcenter()
         maven {
