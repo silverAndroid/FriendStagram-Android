@@ -69,6 +69,11 @@ dependencies {
     })
     androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.1'
     androidTestImplementation "org.mockito:mockito-android:$mockito_version"
+    androidTestImplementation "com.google.dagger:dagger:$dagger_version"
+
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
+
+    kaptTest "com.google.dagger:dagger-compiler:$dagger_version"
 
     testImplementation "org.mockito:mockito-core:$mockito_version"
     testImplementation 'junit:junit:4.12'
