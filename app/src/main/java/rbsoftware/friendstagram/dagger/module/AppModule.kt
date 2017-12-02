@@ -9,7 +9,7 @@ import javax.inject.Singleton
  * Created by Rushil on 8/21/2017.
  */
 @Module
-class AppModule(private val context: Context) {
+open class AppModule(private val context: Context) {
     @Provides
     @Singleton
     fun provideContext(): Context = context

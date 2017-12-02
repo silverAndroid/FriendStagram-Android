@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Created by Rushil on 8/19/2017.
  */
 @Module
-class ServicesModule {
+open class ServicesModule {
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     @Provides
     fun provideRetrofit(authService: AuthenticationService): Retrofit {

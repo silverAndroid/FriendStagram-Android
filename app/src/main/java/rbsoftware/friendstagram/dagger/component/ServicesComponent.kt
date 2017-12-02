@@ -14,7 +14,7 @@ import javax.inject.Singleton
  * Created by Rushil on 8/19/2017.
  */
 @Singleton
-@Component(modules = arrayOf(AppModule::class, ServicesModule::class))
+@Component(modules = [(AppModule::class), (ServicesModule::class)])
 interface ServicesComponent {
     fun inject(activity: AppCompatActivity)
     fun inject(fragment: Fragment)
