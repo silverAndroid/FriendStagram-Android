@@ -14,18 +14,18 @@ import javax.inject.Singleton
  * Created by Rushil on 8/19/2017.
  */
 @Singleton
-class UserViewModel @Inject constructor() : ViewModel() {
+open class UserViewModel @Inject constructor() : ViewModel() {
     @Inject
     lateinit var usersService: UsersService
 
-    fun login(username: String, password: String): Single<Response<ServerResponse<LoginResponse>>> {
+    open fun login(username: String, password: String): Single<Response<ServerResponse<LoginResponse>>> {
         return usersService.api.login(mapOf(
                 "username" to username,
                 "password" to password
         ))
     }
 
-    fun register(name: String, email: String, username: String, password: String): Single<Response<ServerResponse<User>>> {
+    open fun register(name: String, email: String, username: String, password: String): Single<Response<ServerResponse<User>>> {
         return usersService.api.register(mapOf(
                 "name" to name,
                 "email" to email,
