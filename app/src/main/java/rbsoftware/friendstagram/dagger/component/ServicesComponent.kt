@@ -7,6 +7,7 @@ import rbsoftware.friendstagram.dagger.module.AppModule
 import rbsoftware.friendstagram.dagger.module.ServicesModule
 import rbsoftware.friendstagram.service.AuthenticationService
 import rbsoftware.friendstagram.viewmodel.PostViewModel
+import rbsoftware.friendstagram.viewmodel.SearchViewModel
 import rbsoftware.friendstagram.viewmodel.UserViewModel
 import javax.inject.Singleton
 
@@ -20,5 +21,6 @@ interface ServicesComponent {
     fun inject(fragment: Fragment)
     fun userViewModel(): UserViewModel
     fun postViewModel(): PostViewModel
+    fun searchViewModel(): SearchViewModel
     fun authService(): AuthenticationService
 }
