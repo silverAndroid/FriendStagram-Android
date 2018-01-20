@@ -28,6 +28,7 @@ import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.model.Action
 import rbsoftware.friendstagram.model.Post
 import rbsoftware.friendstagram.model.User
+import rbsoftware.friendstagram.onError
 import rbsoftware.friendstagram.ui.adapter.ProfileAdapter
 import rbsoftware.friendstagram.viewmodel.UserViewModel
 import retrofit2.HttpException
@@ -110,9 +111,9 @@ class ProfileFragment : Fragment() {
                             update(it)
                         }
                     } else {
-                        onError(HttpException(response), "Failed to load profile")
+                        onError(TAG, context, HttpException(response), "Failed to load profile")
                     }
-                }, { onError(it) })
+                }, { onError(TAG, context, it) })
     }
 
     private fun setAdapter(user: User) {
@@ -139,11 +140,6 @@ class ProfileFragment : Fragment() {
         }
         user.profilePictureURL?.let { profilePicture?.setImageURI(it) }
         user.backgroundPictureURL?.let { backgroundPicture?.setImageURI(it) }
-    }
-
-    private fun onError(error: Throwable, message: String? = null) {
-        Log.e(TAG, message ?: "ErrorResponse", error)
-        Toast.makeText(context, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
     }
 
     private data class UpdateView(var name: String, val textView: TextView?, val getValue: (User) -> Any) {
