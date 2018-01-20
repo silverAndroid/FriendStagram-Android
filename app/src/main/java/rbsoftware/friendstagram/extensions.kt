@@ -9,11 +9,14 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
 import android.view.*
 import android.widget.EditText
+import io.reactivex.Observable
 import rbsoftware.friendstagram.model.Validator
+import rbsoftware.friendstagram.ui.fragment.SearchFragment
 
 /**
  * Created by Rushil on 8/23/2017.
@@ -44,6 +47,27 @@ fun EditText.setInputView(inputType: Int) {
         this.transformationMethod = PasswordTransformationMethod.getInstance()
     } else {
         this.inputType = inputType
+    }
+}
+
+fun SearchView.listenForQueries(emitEmptyString: Boolean = true): Observable<String> {
+    var currentQuery = ""
+    return Observable.create {
+        this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String): Boolean {
+                currentQuery = newText
+                it.onNext(currentQuery)
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                if (currentQuery != query) {
+                    currentQuery = query
+                    it.onNext(query)
+                }
+                return true
+            }
+        })
     }
 }
 
