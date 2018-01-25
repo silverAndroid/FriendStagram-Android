@@ -173,9 +173,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onActionExecution(action: Action) {
         when (action.action) {
-            Actions.EDIT_PROFILE -> {
-                showEditProfileActivity(action.data["user"] as User)
-            }
+            Actions.EDIT_PROFILE -> showEditProfileActivity(action.data["user"] as User)
         }
     }
 

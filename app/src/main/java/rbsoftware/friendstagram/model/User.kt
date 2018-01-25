@@ -12,9 +12,9 @@ data class User(val username: String, @SerializedName("profile_picture_url") val
     @SerializedName("profile_background_url")
     var backgroundPictureURL: String? = null
     @SerializedName("following")
-    var followingUserIDs: MutableList<User> = mutableListOf()
+    var followingUsers: MutableList<User> = mutableListOf()
     @SerializedName("followers")
-    var followerUserIDs: MutableList<User> = mutableListOf()
+    var followerUsers: MutableList<User> = mutableListOf()
     var biography: String? = ""
 
     constructor(parcel: Parcel) : this(
@@ -25,8 +25,8 @@ data class User(val username: String, @SerializedName("profile_picture_url") val
     ) {
         parcel.readTypedList(posts, Post.CREATOR)
         backgroundPictureURL = parcel.readString()
-        parcel.readParcelableArray(followingUserIDs::class.java.classLoader)
-        parcel.readParcelableArray(followerUserIDs::class.java.classLoader)
+        parcel.readParcelableArray(followingUsers::class.java.classLoader)
+        parcel.readParcelableArray(followerUsers::class.java.classLoader)
         biography = parcel.readString()
     }
 
@@ -37,8 +37,8 @@ data class User(val username: String, @SerializedName("profile_picture_url") val
         parcel.writeString(description)
         parcel.writeTypedList(posts)
         parcel.writeString(backgroundPictureURL)
-        parcel.writeParcelableArray(followingUserIDs.toTypedArray(), 0)
-        parcel.writeParcelableArray(followerUserIDs.toTypedArray(), 0)
+        parcel.writeParcelableArray(followingUsers.toTypedArray(), 0)
+        parcel.writeParcelableArray(followerUsers.toTypedArray(), 0)
         parcel.writeString(biography)
     }
 

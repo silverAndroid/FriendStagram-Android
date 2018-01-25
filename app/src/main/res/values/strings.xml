@@ -65,6 +65,8 @@
     <string name="prompt_bio">Biography</string>
     <string name="description_settings">Open Settings</string>
     <string name="description_edit_profile">Edit Profile</string>
+    <string name="description_follow_user">Follow %1$s</string>
+    <string name="description_unfollow_user">Unfollow %1$s</string>
     <string name="btn_submit">Submit</string>
 
     <!-- String related to search -->
