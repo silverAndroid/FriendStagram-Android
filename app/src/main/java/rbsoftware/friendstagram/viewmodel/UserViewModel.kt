@@ -13,7 +13,7 @@ import javax.inject.Singleton
 /**
  * Created by Rushil on 8/19/2017.
  */
-@Singleton
+
 class UserViewModel @Inject constructor() : ViewModel() {
     @Inject
     lateinit var usersService: UsersService
