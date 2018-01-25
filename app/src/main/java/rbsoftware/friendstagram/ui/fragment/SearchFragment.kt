@@ -54,7 +54,7 @@ class SearchFragment : Fragment() {
                     .subscribe({ response ->
                         if (response.isSuccessful) {
                             val users = response.body()?.data!!
-                            recyclerView.adapter = SearchAdapter(users)
+                            recyclerView.adapter = SearchAdapter(users, context)
                             recyclerView.layoutManager = LinearLayoutManager(context)
                         } else {
                             onError(SearchFragment::class.java, context, HttpException(response), "Failed to load search results")

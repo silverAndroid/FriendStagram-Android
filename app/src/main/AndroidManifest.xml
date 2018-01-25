@@ -61,6 +61,8 @@
         <activity
             android:name=".ui.activity.SelectImageActivity"
             android:theme="@style/PicturesTheme"/>
+        <activity android:name=".ui.activity.UserProfileActivity">
+        </activity>
     </application>
 
 </manifest>
