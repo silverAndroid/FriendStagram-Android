@@ -56,8 +56,8 @@ class SearchActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
 
         if (!searchListenerDisposable.isDisposed) {
             searchListenerDisposable.dispose()
