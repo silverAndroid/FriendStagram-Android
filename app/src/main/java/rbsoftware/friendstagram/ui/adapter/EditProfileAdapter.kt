@@ -4,22 +4,14 @@ import android.support.annotation.DrawableRes
 import android.support.design.widget.TextInputLayout
 import android.support.v7.widget.RecyclerView
 import android.text.InputType
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import com.facebook.drawee.view.SimpleDraweeView
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_edit_picture.*
-import kotlinx.android.synthetic.main.item_edit_profile.*
-import rbsoftware.friendstagram.R
-import rbsoftware.friendstagram.Validators
-import rbsoftware.friendstagram.inflate
+import rbsoftware.friendstagram.*
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.model.Validator
-import rbsoftware.friendstagram.setInputView
-import rbsoftware.friendstagram.validate
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -34,10 +26,11 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
         editableItems = listOf(
                 EditProfileItem("Name", user.name, R.drawable.ic_account, InputType.TYPE_TEXT_VARIATION_PERSON_NAME, listOf(Validator.empty())),
                 EditProfileItem("Username", user.username, inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS, validators = listOf(Validator.empty())),
-                EditProfileItem("Biography", user.biography ?: "", R.drawable.ic_note_text, InputType.TYPE_TEXT_FLAG_MULTI_LINE, maxLines = 3, key = "bio"),
+                EditProfileItem("Biography", user.biography
+                        ?: "", R.drawable.ic_note_text, InputType.TYPE_TEXT_FLAG_MULTI_LINE, maxLines = 3, key = "description"),
                 EditProfileItem("Current Password", icon = R.drawable.ic_lock, inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = "old_password"),
-                EditProfileItem("New Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = "new_password"),
-                EditProfileItem("Verify Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.empty(), Validator.passwordValid()), key = null)
+                EditProfileItem("New Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.notRequired(), Validator.empty(), Validator.passwordValid()), key = "new_password"),
+                EditProfileItem("Verify Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.notRequired(), Validator.empty(), Validator.passwordValid()), key = null)
         )
     }
 
@@ -89,9 +82,10 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
     fun getData(): Map<String, Any>? {
         var isValid = true
         editableItems.forEach { editProfileItem ->
-            editProfileItem.validators.forEach {
-                isValid = editProfileItem.input.validate() && isValid
-            }
+            val validators = editProfileItem.validators
+            validators
+                    .takeWhile { !(it == Validator.notRequired() && editProfileItem.input.editText!!.text.isEmpty()) }
+                    .forEach { isValid = editProfileItem.input.validate() && isValid }
         }
         return if (isValid) {
             createNestedMap(editableItems.map { it.getMap() })
@@ -146,7 +140,7 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
         val hint: TextInputLayout? = containerView?.findViewById(R.id.input_hint)
     }
 
-    data class EditProfileItem(val hint: String, val value: String = "", @DrawableRes val icon: Int? = null, val inputType: Int = InputType.TYPE_CLASS_TEXT, val validators: List<Validator> = listOf(), private val key: String? = hint.toLowerCase(), val maxLines: Int = 1) {
+    data class EditProfileItem(val hint: String, val value: String = "", @DrawableRes val icon: Int? = null, val inputType: Int = InputType.TYPE_CLASS_TEXT, val validators: List<Validator> = emptyList(), private val key: String? = hint.toLowerCase(), val maxLines: Int = 1) {
         val uniqueID: Int = generateViewId()
         lateinit var input: TextInputLayout
 

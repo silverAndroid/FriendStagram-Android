@@ -55,7 +55,7 @@ class EditProfileActivity : AppCompatActivity() {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             finish()
-                            Log.d("EditProfileActivity", "Updated password")
+                            Log.d("EditProfileActivity", "Updated profile info")
                         }, this::onSubscriptionError)
         )
         showFragment(fragment)

@@ -4,12 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -18,10 +15,11 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import rbsoftware.friendstagram.InitializerApp
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.model.User
+import rbsoftware.friendstagram.onError
 import rbsoftware.friendstagram.service.AuthenticationService
-import rbsoftware.friendstagram.service.NetworkService
 import rbsoftware.friendstagram.ui.adapter.EditProfileAdapter
 import rbsoftware.friendstagram.viewmodel.UserViewModel
+import retrofit2.HttpException
 
 /**
  * Created by Rushil on 8/23/2017.
@@ -70,28 +68,15 @@ class EditProfileFragment : Fragment() {
                                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                 updateComplete.onComplete()
                             } else {
-                                val error = NetworkService.parseError(response.errorBody())
-                                handleError(error)
+                                onError(TAG, context, HttpException(response))
                             }
-                        }, this::onNetworkError)
+                        }, { onError(TAG, context, it, "Failed to update user") })
             }
 
         }
     }
 
     fun updateComplete() = updateComplete
-
-    private fun handleError(error: String?) {
-        when (error) {
-            null -> Toast.makeText(context, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
-            else -> Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun onNetworkError(error: Throwable) {
-        Log.e(TAG, "Network error", error)
-        Toast.makeText(context, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
-    }
 
     companion object {
         private const val TAG = "EditProfileFragment"
