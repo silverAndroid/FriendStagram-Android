@@ -17,12 +17,10 @@ import javax.inject.Singleton
 @Singleton
 class PostViewModel @Inject constructor() : ViewModel() {
     @Inject
-    lateinit var imageService: ImageService
-    @Inject
     lateinit var postsService: PostsService
 
     fun uploadImage(imageUri: Uri, username: String): Single<String> {
-        return imageService.uploadImage(imageUri, username)
+        return ImageService.uploadImage(imageUri, username)
     }
 
     fun createPost(post: Post): Single<Response<ServerResponse<Post>>> {

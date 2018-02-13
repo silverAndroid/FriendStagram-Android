@@ -1,7 +1,5 @@
 package rbsoftware.friendstagram.ui.activity
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -11,19 +9,17 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import com.facebook.imagepipeline.request.ImageRequest
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login_register.*
-import rbsoftware.friendstagram.BuildConfig
-import rbsoftware.friendstagram.InitializerApp
-import rbsoftware.friendstagram.R
+import rbsoftware.friendstagram.*
 import rbsoftware.friendstagram.service.AuthenticationService
 import rbsoftware.friendstagram.service.ImageService
 import rbsoftware.friendstagram.service.NetworkService
-import rbsoftware.friendstagram.showFragment
 import rbsoftware.friendstagram.ui.fragment.ErrorDisplay
 import rbsoftware.friendstagram.ui.fragment.LoginFragment
 import rbsoftware.friendstagram.ui.fragment.RegisterFragment
@@ -38,8 +34,14 @@ class LoginRegisterActivity : AppCompatActivity() {
     private val TAG: String = "LoginRegisterActivity"
     private val subscriptions: CompositeDisposable = CompositeDisposable()
 
+    private var loading: Boolean = false
+        set(value) {
+            showProgress(field, progressView, fragmentContainer)
+            field = value
+        }
+
     private lateinit var fragmentContainer: View
-    private lateinit var progressView: View
+    private lateinit var progressView: ProgressBar
     private lateinit var userViewModel: UserViewModel
     private lateinit var authService: AuthenticationService
 
@@ -76,7 +78,7 @@ class LoginRegisterActivity : AppCompatActivity() {
     }
 
     private fun login(username: String, password: String) {
-        showProgress(true)
+        loading = true
         subscriptions.add(
                 userViewModel.login(username, password)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -99,7 +101,7 @@ class LoginRegisterActivity : AppCompatActivity() {
                                 val error = NetworkService.parseError(response.errorBody())
                                 this.handleError(error)
                             }
-                            showProgress(false)
+                            loading = false
                         }, this::onNetworkError)
         )
     }
@@ -142,7 +144,7 @@ class LoginRegisterActivity : AppCompatActivity() {
     }
 
     private fun register(name: String, email: String, username: String, password: String) {
-        showProgress(true)
+        loading = true
         subscriptions.add(
                 userViewModel.register(name, email, username, password)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -155,7 +157,7 @@ class LoginRegisterActivity : AppCompatActivity() {
                                 val error: String? = NetworkService.parseError(response.errorBody())
                                 this.handleError(error)
                             }
-                            showProgress(false)
+                            loading = false
                         }, this::onNetworkError)
         )
     }
@@ -180,8 +182,8 @@ class LoginRegisterActivity : AppCompatActivity() {
                 fragment.showLoading
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.trampoline())
-                        .subscribe({ show ->
-                            showProgress(show)
+                        .subscribe({
+                            loading = it
                         }, this::onNetworkError)
         )
         showFragment(fragment, false, setAnimations = this::showFragmentAnimations)
@@ -209,15 +211,8 @@ class LoginRegisterActivity : AppCompatActivity() {
 
     private fun onNetworkError(error: Throwable) {
         Log.e(TAG, "Network error", error)
-        showProgress(false)
+        showProgress(false, progressView, fragmentContainer)
         Toast.makeText(applicationContext, getString(R.string.error_occurred), Toast.LENGTH_SHORT).show()
-    }
-
-    private fun showProgress(show: Boolean) {
-        val showView = if (show) progressView else fragmentContainer
-        val hideView = if (show) fragmentContainer else progressView
-
-        fadeAnimation(showView, hideView)
     }
 
     private fun handleError(error: String?) {
@@ -229,26 +224,5 @@ class LoginRegisterActivity : AppCompatActivity() {
             }
             else -> Toast.makeText(applicationContext, error, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun fadeAnimation(showView: View, hideView: View) {
-        val animTime: Long = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-
-        showView.alpha = 0f
-        showView.visibility = View.VISIBLE
-
-        showView.animate()
-                .alpha(1f)
-                .setDuration(animTime)
-                .setListener(null)
-
-        hideView.animate()
-                .alpha(0f)
-                .setDuration(animTime)
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        hideView.visibility = View.GONE
-                    }
-                })
     }
 }

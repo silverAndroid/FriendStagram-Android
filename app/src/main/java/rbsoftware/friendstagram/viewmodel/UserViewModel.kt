@@ -8,7 +8,6 @@ import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.service.UsersService
 import retrofit2.Response
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Created by Rushil on 8/19/2017.
