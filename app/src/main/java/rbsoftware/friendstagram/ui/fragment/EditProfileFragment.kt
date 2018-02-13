@@ -1,6 +1,9 @@
 package rbsoftware.friendstagram.ui.fragment
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -8,7 +11,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.CompletableSubject
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
@@ -17,6 +22,9 @@ import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.onError
 import rbsoftware.friendstagram.service.AuthenticationService
+import rbsoftware.friendstagram.service.ImageService
+import rbsoftware.friendstagram.showProgress
+import rbsoftware.friendstagram.ui.activity.SelectImageActivity
 import rbsoftware.friendstagram.ui.adapter.EditProfileAdapter
 import rbsoftware.friendstagram.viewmodel.UserViewModel
 import retrofit2.HttpException
@@ -26,7 +34,15 @@ import retrofit2.HttpException
  */
 class EditProfileFragment : Fragment() {
     private val updateComplete: CompletableSubject = CompletableSubject.create()
+    private val subscriptions = CompositeDisposable()
 
+    private var loading: Boolean = false
+        set(value) {
+            field = value
+            showProgress(value, loadingView, layoutView)
+        }
+
+    private var imageID = -1
     private lateinit var user: User
     private lateinit var adapter: EditProfileAdapter
     private lateinit var userViewModel: UserViewModel
@@ -36,6 +52,16 @@ class EditProfileFragment : Fragment() {
         super.onCreate(savedInstanceState)
         user = arguments.getParcelable(ARG_USER)
         adapter = EditProfileAdapter(user)
+        subscriptions.add(
+                adapter.imageClickListener
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.trampoline())
+                        .subscribe({
+                            imageID = it
+                            val intent = Intent(context, SelectImageActivity::class.java)
+                            startActivityForResult(intent, SelectImageActivity.REQUEST_URI)
+                        }, { onError(TAG, context, it) })
+        )
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,10 +85,30 @@ class EditProfileFragment : Fragment() {
         btnSubmit?.setOnClickListener {
             val adapterData = adapter.getData()
             adapterData?.let { data ->
-                userViewModel.updateUser(authService.username, data)
+                loading = true
+                val urls = listOf(
+                        data["profile_picture_url"] as String,
+                        data["profile_background_url"] as String
+                )
+                val uploadSingles = urls.map {
+                    if (it.startsWith("file://")) {
+                        ImageService.uploadImage(Uri.parse(it), authService.username)
+                    } else {
+                        Single.just(it)
+                    }
+                }
+
+                Single.zip(uploadSingles) {
+                    val map = data.toMutableMap()
+                    map["profile_picture_url"] = it[0] as String
+                    map["profile_background_url"] = it[1] as String
+                    map
+                }
+                        .flatMap { userViewModel.updateUser(authService.username, it) }
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({ response ->
+                            loading = false
                             if (response.isSuccessful) {
                                 val message = response.body()?.data
                                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -70,9 +116,23 @@ class EditProfileFragment : Fragment() {
                             } else {
                                 onError(TAG, context, HttpException(response))
                             }
-                        }, { onError(TAG, context, it, "Failed to update user") })
+                        }, {
+                            loading = false
+                            onError(TAG, context, it, "Failed to update user")
+                        })
             }
 
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == SelectImageActivity.REQUEST_URI) {
+            if (resultCode == Activity.RESULT_OK) {
+                data?.let {
+                    val imageURI: Uri = it.getParcelableExtra(SelectImageActivity.URI_RESULT_KEY)
+                    adapter.updateImage(imageURI, imageID)
+                }
+            }
         }
     }
 

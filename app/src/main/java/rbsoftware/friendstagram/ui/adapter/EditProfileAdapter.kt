@@ -1,5 +1,6 @@
 package rbsoftware.friendstagram.ui.adapter
 
+import android.net.Uri
 import android.support.annotation.DrawableRes
 import android.support.design.widget.TextInputLayout
 import android.support.v7.widget.RecyclerView
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import com.facebook.drawee.view.SimpleDraweeView
+import io.reactivex.subjects.PublishSubject
 import rbsoftware.friendstagram.*
 import rbsoftware.friendstagram.model.User
 import rbsoftware.friendstagram.model.Validator
@@ -22,6 +24,11 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
     private val ITEM_VIEW_TYPE_INPUT = 1
     private val editableItems: List<EditProfileItem>
 
+    private var profileURL: String?
+    private var backgroundURL: String?
+
+    val imageClickListener: PublishSubject<Int> = PublishSubject.create()
+
     init {
         editableItems = listOf(
                 EditProfileItem("Name", user.name, R.drawable.ic_account, InputType.TYPE_TEXT_VARIATION_PERSON_NAME, listOf(Validator.empty())),
@@ -32,6 +39,9 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
                 EditProfileItem("New Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.notRequired(), Validator.empty(), Validator.passwordValid()), key = "new_password"),
                 EditProfileItem("Verify Password", inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD, validators = listOf(Validator.notRequired(), Validator.empty(), Validator.passwordValid()), key = null)
         )
+
+        profileURL = user.profilePictureURL
+        backgroundURL = user.backgroundPictureURL
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
@@ -66,8 +76,8 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
         } else if (holderParent is EditPictureRow) {
             val holder: EditPictureRow = holderParent
 
-            holder.background?.setImageURI(user.backgroundPictureURL)
-            holder.profile?.setImageURI(user.profilePictureURL)
+            holder.background?.setImageURI(backgroundURL)
+            holder.profile?.setImageURI(profileURL)
         }
     }
 
@@ -79,6 +89,12 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
         ITEM_VIEW_TYPE_INPUT
     }
 
+    fun updateImage(uri: Uri, imageID: Int) {
+        if (imageID == R.id.profile) profileURL = uri.toString()
+        else if (imageID == R.id.background) backgroundURL = uri.toString()
+        notifyItemChanged(0)
+    }
+
     fun getData(): Map<String, Any>? {
         var isValid = true
         editableItems.forEach { editProfileItem ->
@@ -88,7 +104,10 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
                     .forEach { isValid = editProfileItem.input.validate() && isValid }
         }
         return if (isValid) {
-            createNestedMap(editableItems.map { it.getMap() })
+            val map = createNestedMap(editableItems.map { it.getMap() }).toMutableMap()
+            profileURL?.let { map["profile_picture_url"] = it }
+            backgroundURL?.let { map["profile_background_url"] = it }
+            map
         } else {
             null
         }
@@ -132,6 +151,15 @@ class EditProfileAdapter(private val user: User) : RecyclerView.Adapter<Recycler
     inner class EditPictureRow(containerView: View?) : RecyclerView.ViewHolder(containerView) {
         val profile: SimpleDraweeView? = containerView?.findViewById(R.id.profile)
         val background: SimpleDraweeView? = containerView?.findViewById(R.id.background)
+
+        init {
+            profile?.setOnClickListener {
+                imageClickListener.onNext(profile.id)
+            }
+            background?.setOnClickListener {
+                imageClickListener.onNext(background.id)
+            }
+        }
     }
 
     inner class EditProfileRow(containerView: View?) : RecyclerView.ViewHolder(containerView) {

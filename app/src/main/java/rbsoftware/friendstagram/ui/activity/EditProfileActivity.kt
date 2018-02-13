@@ -10,27 +10,23 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.layout_alt_toolbar.*
 import rbsoftware.friendstagram.R
 import rbsoftware.friendstagram.model.User
+import rbsoftware.friendstagram.onError
 import rbsoftware.friendstagram.showFragment
 import rbsoftware.friendstagram.ui.fragment.EditProfileFragment
 
 class EditProfileActivity : AppCompatActivity() {
     private val subscriptions: CompositeDisposable = CompositeDisposable()
-    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
 
-        user = intent.getParcelableExtra("user")
+        val user = intent.getParcelableExtra<User>("user")
 
+        showEditProfileFragment(user)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
-
-    override fun onPostResume() {
-        super.onPostResume()
-        showEditProfileFragment()
     }
 
     override fun onPause() {
@@ -47,7 +43,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun showEditProfileFragment() {
+    private fun showEditProfileFragment(user: User) {
         val fragment = EditProfileFragment.newInstance(user)
         subscriptions.add(
                 fragment.updateComplete()
@@ -56,12 +52,8 @@ class EditProfileActivity : AppCompatActivity() {
                         .subscribe({
                             finish()
                             Log.d("EditProfileActivity", "Updated profile info")
-                        }, this::onSubscriptionError)
+                        }, { onError(EditProfileActivity::class.java, this, it) })
         )
         showFragment(fragment)
-    }
-
-    private fun onSubscriptionError(e: Throwable) {
-        throw RuntimeException(e)
     }
 }

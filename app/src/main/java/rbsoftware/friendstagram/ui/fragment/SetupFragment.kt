@@ -67,7 +67,7 @@ class SetupFragment : Fragment() {
         }
         btnSelectImage.setOnClickListener {
             val intent = Intent(context, SelectImageActivity::class.java)
-            startActivityForResult(intent, REQUEST_IMAGE_URI)
+            startActivityForResult(intent, SelectImageActivity.REQUEST_URI)
         }
         btnNext.setOnClickListener {
             uploadProfilePicture(imageURI, username)
@@ -81,7 +81,7 @@ class SetupFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_IMAGE_URI) {
+        if (requestCode == SelectImageActivity.REQUEST_URI) {
             if (resultCode == Activity.RESULT_OK) {
                 data?.let {
                     imageURI = it.getParcelableExtra(SelectImageActivity.URI_RESULT_KEY)
@@ -141,7 +141,6 @@ class SetupFragment : Fragment() {
 
     companion object {
         private const val TAG = "SetupFragment"
-        private const val REQUEST_IMAGE_URI = 1
         private const val ARG_USERNAME: String = "username"
 
         fun newInstance(username: String): SetupFragment {

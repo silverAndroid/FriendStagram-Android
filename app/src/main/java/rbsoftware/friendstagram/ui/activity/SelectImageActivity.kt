@@ -94,6 +94,7 @@ class SelectImageActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "SelectImageActivity"
 
+        const val REQUEST_URI = 1
         const val URI_RESULT_KEY = "image_uri"
     }
 }
