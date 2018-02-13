@@ -20,7 +20,9 @@ import javax.inject.Inject
 /**
  * Created by rushil.perera on 2017-01-15.
  */
-class ImageService @Inject constructor() {
+object ImageService {
+    private const val TAG = "ImageService"
+
     fun uploadImage(imageUri: Uri, username: String): Single<String> {
         return Single.create {
             try {
@@ -59,50 +61,45 @@ class ImageService @Inject constructor() {
         }
     }
 
-    companion object {
-        private val TAG = "ImageService"
-        private val handler = Looper.getMainLooper()
+    fun prefetchImage(imageRequest: ImageRequest, prefetchToDisk: Boolean = true): Completable {
+        return Completable.create {
+            val dataSource = if (prefetchToDisk) {
+                Fresco.getImagePipeline().prefetchToDiskCache(
+                        imageRequest,
+                        null
+                )
+            } else {
+                Fresco.getImagePipeline().prefetchToBitmapCache(
+                        imageRequest,
+                        null
+                )
+            }
+            if (!dataSource.isFinished) {
+                dataSource.subscribe(object : DataSubscriber<Void> {
+                    override fun onNewResult(dataSource: DataSource<Void>) {
+                        it.onComplete()
+                    }
 
-        fun prefetchImage(imageRequest: ImageRequest, prefetchToDisk: Boolean = true): Completable {
-            return Completable.create {
-                val dataSource = if (prefetchToDisk) {
-                    Fresco.getImagePipeline().prefetchToDiskCache(
-                            imageRequest,
-                            null
-                    )
-                } else {
-                    Fresco.getImagePipeline().prefetchToBitmapCache(
-                            imageRequest,
-                            null
-                    )
-                }
-                if (!dataSource.isFinished) {
-                    dataSource.subscribe(object : DataSubscriber<Void> {
-                        override fun onNewResult(dataSource: DataSource<Void>) {
-                            it.onComplete()
-                        }
+                    override fun onCancellation(dataSource: DataSource<Void>) {
+                        it.onComplete()
+                    }
 
-                        override fun onCancellation(dataSource: DataSource<Void>) {
-                            it.onComplete()
-                        }
+                    override fun onProgressUpdate(dataSource: DataSource<Void>) {
+                        Log.v(TAG, "progress: ${dataSource.progress}")
+                    }
 
-                        override fun onProgressUpdate(dataSource: DataSource<Void>) {
-                            Log.v(TAG, "progress: ${dataSource.progress}")
-                        }
-
-                        override fun onFailure(dataSource: DataSource<Void>) {
-                            it.onError(Throwable(dataSource.failureCause))
-                        }
-                    }, ThreadPoolExecutor(
-                            1,
-                            Runtime.getRuntime().availableProcessors(),
-                            120,
-                            TimeUnit.SECONDS,
-                            ArrayBlockingQueue<Runnable>(1)
-                    ))
-                } else {
-                    it.onComplete()
-                }
+                    override fun onFailure(dataSource: DataSource<Void>) {
+                        it.onError(Throwable(dataSource.failureCause))
+                    }
+                }, ThreadPoolExecutor(
+                        1,
+                        Runtime.getRuntime().availableProcessors(),
+                        120,
+                        TimeUnit.SECONDS,
+                        ArrayBlockingQueue<Runnable>(1)
+                ))
+            } else {
+                it.onComplete()
             }
         }
     }
